@@ -1,0 +1,41 @@
+import type { EventBridgeEvent } from "aws-lambda";
+import { z } from "zod/v3";
+import type { CodeBuildBuildPhaseChange } from "./schemas/aws.codebuild@CodeBuildBuildPhaseChange-v1.json.zod";
+import type { CodeBuildBuildStateChange } from "./schemas/aws.codebuild@CodeBuildBuildStateChange-v1.json.zod";
+export type { CodeBuildBuildPhaseChange } from "./schemas/aws.codebuild@CodeBuildBuildPhaseChange-v1.json.zod";
+export type { CodeBuildBuildStateChange } from "./schemas/aws.codebuild@CodeBuildBuildStateChange-v1.json.zod";
+export type CodeBuildChangeEvent = EventBridgeEvent<"CodeBuild Build State Change" | "CodeBuild Build Phase Change", CodeBuildBuildStateChange | CodeBuildBuildPhaseChange>;
+export type CodeBuildBuildStateChangeEvent = EventBridgeEvent<"CodeBuild Build State Change", CodeBuildBuildStateChange>;
+export declare const codeBuildTriggerDetailSchema: z.ZodObject<{
+    deploymentProjectId: z.ZodString;
+    deploymentProject: z.ZodString;
+    deploymentNumber: z.ZodString;
+    deploymentTrigger: z.ZodString;
+    commitSHA: z.ZodString;
+    commitDate: z.ZodString;
+    commitMessage: z.ZodString;
+    commitAuthor: z.ZodString;
+    workloads: z.ZodRecord<z.ZodString, z.ZodAny>;
+}, "strip", z.ZodTypeAny, {
+    deploymentProjectId: string;
+    deploymentProject: string;
+    deploymentNumber: string;
+    deploymentTrigger: string;
+    commitSHA: string;
+    commitDate: string;
+    commitMessage: string;
+    commitAuthor: string;
+    workloads: Record<string, any>;
+}, {
+    deploymentProjectId: string;
+    deploymentProject: string;
+    deploymentNumber: string;
+    deploymentTrigger: string;
+    commitSHA: string;
+    commitDate: string;
+    commitMessage: string;
+    commitAuthor: string;
+    workloads: Record<string, any>;
+}>;
+export type CodeBuildTriggerEventDetail = z.output<typeof codeBuildTriggerDetailSchema>;
+export type CodeBuildTriggerEvent = EventBridgeEvent<"CodeBuildTrigger", z.output<typeof codeBuildTriggerDetailSchema>>;

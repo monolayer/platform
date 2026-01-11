@@ -1,0 +1,25 @@
+import type { DynamoDBTable } from "@awboost/cfn-resource-types/AWS-DynamoDB-Table";
+import { LambdaFunction } from "@awboost/cfn-resource-types/AWS-Lambda-Function";
+import type { FormattedProject } from "../../../../db/src/entities";
+import type { InventoryMap } from "../../../../db/src/inventory";
+import type { IAMRole, ParameterInstance, S3Bucket, Stack } from "../../types";
+import type { EnvVar } from "../types";
+export declare function lambdaFn(opts: {
+    project: FormattedProject;
+    role: IAMRole;
+    projectName: string;
+    environment: string;
+    stack: Stack;
+    inventoryMap: InventoryMap;
+    vpcId: ParameterInstance;
+    vpcCidrBlock: ParameterInstance;
+    privateSubnets: ParameterInstance;
+    envVars: EnvVar[];
+    appRegistryParameter: ParameterInstance;
+    sourceVersion: string;
+    cloudfrontDomainNameParameter: ParameterInstance;
+    cacheBucket: S3Bucket;
+    cacheTagsTable: DynamoDBTable;
+    artifactsBucket: ParameterInstance;
+    realtimeHost: ParameterInstance | undefined;
+}): LambdaFunction;

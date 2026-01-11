@@ -15,4 +15,6 @@ const WorkflowPaths: Record<keyof Workflows, string> = {
 	deploy: "src/workflows/deploy-app-environment.ts",
 };
 
-export const controlPlaneSDK = buildSDK<Workflows>(WorkflowPaths);
+export const sdk = buildSDK<Workflows>(WorkflowPaths);
+
+export default sdk;
