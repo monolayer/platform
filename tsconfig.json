@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"rootDir": "./",
+		"sourceRoot": "./",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"moduleResolution": "nodenext",
+		"module": "nodenext",
+		"skipLibCheck": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"skipDefaultLibCheck": true,
+
+		"paths": {
+			"@control-plane/*": ["../../apps/control-plane/src/*"]
+		}
+	},
+	"include": ["*.ts", "**/*.ts", "**/*.tsx"],
+	"exclude": ["node_modules", "../../node_modules/**/*"]
+}

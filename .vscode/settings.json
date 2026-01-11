@@ -1,0 +1,15 @@
+{
+	"aws.telemetry": false,
+	"explorer.excludeGitIgnore": true,
+	"tailwindCSS.experimental.classRegex": [
+		["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		["cx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+	],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"typescript.preferences.importModuleSpecifierEnding": "minimal",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "explicit"
+	}
+}
