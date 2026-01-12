@@ -19,6 +19,9 @@
     "publish:local": "npm publish --registry http://localhost:4873",
     "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
   },
+  "dependencies": {
+    "next": "^16.1.1"
+  },
   "devDependencies": {
     "@aws-sdk/client-eventbridge": "^3.966.0",
     "@effect-aws/client-eventbridge": "^1.10.3",
@@ -42,7 +45,6 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-turbo": "^2.6.1",
-    "next": "^16.0.4",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.7.2",

@@ -14,7 +14,6 @@
 		"emitDeclarationOnly": true,
 		"declaration": true,
 		"skipDefaultLibCheck": true,
-
 		"paths": {
 			"@control-plane/*": ["../../apps/control-plane/src/*"]
 		}
