@@ -16,5 +16,4 @@ const WorkflowPaths: Record<keyof Workflows, string> = {
 };
 
 export const sdk = buildSDK<Workflows>(WorkflowPaths);
-
 export default sdk;
