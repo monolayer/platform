@@ -16,7 +16,18 @@
 		"skipDefaultLibCheck": true,
 		"paths": {
 			"@control-plane/*": ["../../apps/control-plane/src/*"]
-		}
+		},
+		"plugins": [
+			{
+				"name": "next"
+			},
+			{
+				"name": "workflow"
+			},
+			{
+				"name": "@effect/language-service"
+			}
+		]
 	},
 	"include": ["src/*.ts", "src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["node_modules", "../../node_modules/**/*"]

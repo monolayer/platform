@@ -1,6 +1,6 @@
 {
   "name": "@monolayer/control-plane-sdk",
-  "version": "1.0.0-canary.3",
+  "version": "1.0.0-canary.4",
   "type": "module",
   "description": "",
   "exports": {
@@ -54,6 +54,7 @@
     "vitest": "^4.0.16",
     "zod": "^4.1.13",
     "workflow": "^4.0.1-beta.44",
-    "@typescript/native-preview": "^7.0.0-dev.20260111.1"
+    "@typescript/native-preview": "^7.0.0-dev.20260111.1",
+    "devalue": "^5.1.1"
   }
 }
