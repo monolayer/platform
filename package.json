@@ -53,7 +53,7 @@
     "typescript-eslint": "^8.48.0",
     "vitest": "^4.0.17",
     "zod": "^4.3.6",
-    "workflow": "^4.0.1-beta.44",
+    "workflow": "^4.0.1-beta.50",
     "@typescript/native-preview": "^7.0.0-dev.20260111.1",
     "devalue": "^5.1.1"
   }
