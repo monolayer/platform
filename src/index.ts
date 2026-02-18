@@ -1,9 +1,10 @@
-export { runCli } from "./main.js";
 export {
 	buildHelloMessage,
 	type SayHelloResult,
 } from "./commands/say-hello.js";
+export { runCli } from "./main.js";
 export { createClient } from "./sdk/client.js";
+export { normalizeBaseUrl, resolveAuthToken } from "./sdk/config.js";
 export {
 	ApiError,
 	AuthError,
@@ -14,10 +15,6 @@ export {
 	ValidationError,
 	type SdkError,
 } from "./sdk/errors.js";
-export {
-	normalizeBaseUrl,
-	resolveAuthToken,
-} from "./sdk/config.js";
 export type {
 	CreateClientOptions,
 	CreateDeploymentInput,
@@ -36,3 +33,8 @@ export type {
 	SecretsApi,
 	SetSecretInput,
 } from "./sdk/types.js";
+
+export * from "./configuration.js";
+export * from "./introspection.js";
+export * from "./test-helpers.js";
+export * from "./workloads.js";

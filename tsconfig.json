@@ -17,12 +17,24 @@
 		"types": ["node", "vitest/globals"],
 		"noEmit": true,
 		"rootDir": ".",
+		"baseUrl": ".",
 		"plugins": [
 			{
 				"name": "@effect/language-service"
 			}
-		]
+		],
+		"paths": {
+			"~/*": ["./src/*"],
+			"~test/*": ["./test/*"]
+		},
+		"jsx": "react-jsx",
+		"jsxImportSource": "react"
 	},
-	"include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.ts"],
+	"include": [
+		"src/**/*.ts",
+		"test/**/*.ts",
+		"vitest.config.ts",
+		"test/__setup__/**/*.ts"
+	],
 	"exclude": ["dist", "node_modules"]
 }
