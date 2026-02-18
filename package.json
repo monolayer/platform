@@ -1,66 +1,63 @@
 {
-  "name": "@monolayer/control-plane-sdk",
-  "version": "1.0.0-canary.4",
-  "type": "module",
-  "description": "Control plane SDK and CLI",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "oclif": {
-    "bin": "control-plane",
-    "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
-  },
-  "bin": {
-    "control-plane": "./dist/cli.js"
-  },
-  "files": [
-    "dist/**"
-  ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "keywords": [],
-  "license": "MIT",
-  "scripts": {
-    "clean": "rm -rf dist",
-    "build": "pnpm run clean && tsc -p tsconfig.build.json",
-    "check-types": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint .",
-    "test": "vitest --run",
-    "test:watch": "vitest --watch",
-    "publish:local": "npm publish --registry http://localhost:4873",
-    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
-  },
-  "dependencies": {
-    "@oclif/core": "^4.0.0",
-    "@oclif/plugin-help": "^6.2.31",
-    "effect": "^3.19.14"
-  },
-  "devDependencies": {
-    "@effect/language-service": "^0.64.1",
-    "@eslint/js": "^9.17.0",
-    "@repo/eslint-config": "workspace:",
-    "@repo/prettier-config": "workspace:",
-    "@repo/typescript-config": "workspace:",
-    "@types/node": "^22.10.7",
-    "@vitest/coverage-istanbul": "^4.0.17",
-    "@vitest/coverage-v8": "^4.0.17",
-    "@vitest/ui": "^4.0.17",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "eslint-plugin-turbo": "^2.6.1",
-    "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.0",
-    "vitest": "^4.0.17",
-    "zod": "^4.3.6"
-  }
+	"name": "@monolayer/control-plane-sdk",
+	"version": "1.0.0-canary.4",
+	"type": "module",
+	"description": "Control plane SDK and CLI",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"oclif": {
+		"bin": "control-plane",
+		"commands": "./dist/commands",
+		"plugins": [
+			"@oclif/plugin-help"
+		]
+	},
+	"bin": {
+		"control-plane": "./dist/cli.js"
+	},
+	"files": [
+		"dist/**"
+	],
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"keywords": [],
+	"license": "MIT",
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "pnpm run clean && tsc -p tsconfig.build.json",
+		"check-types": "tsc -p tsconfig.json --noEmit",
+		"lint": "eslint .",
+		"test": "vitest --run",
+		"test:watch": "vitest --watch",
+		"publish:local": "npm publish --registry http://localhost:4873",
+		"unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
+	},
+	"dependencies": {
+		"@oclif/core": "^4.0.0",
+		"@oclif/plugin-help": "^6.2.31",
+		"effect": "^3.19.14"
+	},
+	"devDependencies": {
+		"@effect/language-service": "^0.64.1",
+		"@eslint/js": "^9.17.0",
+		"@types/node": "^22.10.7",
+		"@vitest/coverage-istanbul": "^4.0.17",
+		"@vitest/coverage-v8": "^4.0.17",
+		"@vitest/ui": "^4.0.17",
+		"eslint": "^9.39.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-only-warn": "^1.1.0",
+		"eslint-plugin-turbo": "^2.6.1",
+		"prettier": "^3.6.2",
+		"prettier-plugin-organize-imports": "^4.3.0",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.48.0",
+		"vitest": "^4.0.17",
+		"zod": "^4.3.6"
+	}
 }
