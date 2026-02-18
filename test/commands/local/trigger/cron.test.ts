@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import prompts from "prompts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { importWorkloads } from "~/scan/workload-imports.js";
-import TriggerCron from "../../../src/commands/trigger/cron.js";
+import TriggerCron from "../../../../src/commands/local/trigger/cron.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("prompts");

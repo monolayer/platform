@@ -6,9 +6,9 @@ import {
 } from "~/containers/admin/update-dotenv-file.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
 import { Redis } from "~/workloads/stateful/redis.js";
-import StartTest from "../../src/commands/start/test.js";
-import StatusTest from "../../src/commands/status/test.js";
-import StopTest from "../../src/commands/stop/test.js";
+import StartTest from "../../src/commands/local/start/test.js";
+import StatusTest from "../../src/commands/local/status/test.js";
+import StopTest from "../../src/commands/local/stop/test.js";
 
 // Mock imports to control the workload being tested
 vi.mock("~/scan/workload-imports.js");

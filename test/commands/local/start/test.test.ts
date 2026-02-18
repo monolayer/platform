@@ -3,7 +3,7 @@ import { startContainer } from "~/containers/admin/container.js";
 import { updateDotenvFile } from "~/containers/admin/update-dotenv-file.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
 import { PostgresDatabase } from "~/workloads.js";
-import StartDev from "../../../src/commands/start/dev.js";
+import StartTest from "../../../../src/commands/local/start/test.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("~/containers/admin/container.js");
@@ -17,7 +17,6 @@ vi.mock("ora", () => ({
 	}),
 }));
 
-// Mock workloads to avoid loading complex dependencies
 vi.mock("~/workloads.js", () => ({
 	PostgresDatabase: class {
 		constructor(public id: string) {}
@@ -25,17 +24,14 @@ vi.mock("~/workloads.js", () => ({
 			return `${this.id.toUpperCase()}_DATABASE_URL`;
 		}
 	},
-	Bucket: class {
-		constructor(public id: string) {}
-	},
 }));
 
-describe("start dev command", () => {
+describe("start test command", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("starts workloads in dev mode", async () => {
+	it("starts workloads in test mode", async () => {
 		const mockWorkloads = [new PostgresDatabase("test_db")];
 
 		// Simulate startContainer setting the environment variable
@@ -52,12 +48,12 @@ describe("start dev command", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
-		await StartDev.run([]);
+		await StartTest.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
 		expect(startContainer).toHaveBeenCalledTimes(1);
 		expect(startContainer).toHaveBeenCalledWith(mockWorkloads[0], {
-			mode: "dev",
+			mode: "test",
 			waitForHealthcheck: true,
 		});
 		expect(updateDotenvFile).toHaveBeenCalledWith(
@@ -67,7 +63,7 @@ describe("start dev command", () => {
 					value: "postgres://localhost:5432/test_db",
 				},
 			],
-			"dev",
+			"test",
 		);
 	});
 });

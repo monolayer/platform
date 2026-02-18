@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { stopContainer } from "~/containers/admin/container.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
-import StopTest from "../../../src/commands/stop/test.js";
+import StopDev from "../../../../src/commands/local/stop/dev.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("~/containers/admin/container.js");
@@ -20,12 +20,12 @@ vi.mock("~/workloads.js", () => ({
 	},
 }));
 
-describe("stop test command", () => {
+describe("stop dev command", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("stops workloads in test mode", async () => {
+	it("stops workloads in dev mode", async () => {
 		const mockWorkload = {
 			constructor: { name: "PostgresDatabase" },
 			id: "test-db",
@@ -36,10 +36,10 @@ describe("stop test command", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
-		await StopTest.run([]);
+		await StopDev.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
 		expect(stopContainer).toHaveBeenCalledTimes(1);
-		expect(stopContainer).toHaveBeenCalledWith(mockWorkload, "test");
+		expect(stopContainer).toHaveBeenCalledWith(mockWorkload, "dev");
 	});
 });

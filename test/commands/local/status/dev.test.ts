@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { printStatus } from "~/cli/print-status.js";
 import { workloadContainerStatus } from "~/containers/admin/introspection.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
-import StatusDev from "../../../src/commands/status/dev.js";
+import StatusDev from "../../../../src/commands/local/status/dev.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("~/containers/admin/introspection.js");
