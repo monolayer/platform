@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import prompts from "prompts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import AddPostgresDatabase from "../../../src/commands/add/postgres-database.js";
+import AddPostgresDatabase from "../../../../src/commands/workloads/add/postgres-database.js";
 
 vi.mock("prompts");
 vi.mock("node:child_process");

@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import prompts from "prompts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import AddAfterRollout from "../../../src/commands/add/after-rollout.js";
-import AddBeforeRollout from "../../../src/commands/add/before-rollout.js";
-import AddBootstrap from "../../../src/commands/add/bootstrap.js";
+import AddAfterRollout from "../../../../src/commands/workloads/add/after-rollout.js";
+import AddBeforeRollout from "../../../../src/commands/workloads/add/before-rollout.js";
+import AddBootstrap from "../../../../src/commands/workloads/add/bootstrap.js";
 
 vi.mock("prompts");
 vi.mock("ora", () => ({

@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import AddBucket from "../../../src/commands/add/bucket.js";
+import AddBucket from "../../../../src/commands/workloads/add/bucket.js";
 
 vi.mock("prompts");
 vi.mock("node:child_process");

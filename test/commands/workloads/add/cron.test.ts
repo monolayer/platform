@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import prompts from "prompts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import AddCron from "../../../src/commands/add/cron.js";
+import AddCron from "../../../../src/commands/workloads/add/cron.js";
 
 vi.mock("prompts");
 vi.mock("ora", () => ({
