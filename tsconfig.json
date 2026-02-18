@@ -1,34 +1,19 @@
 {
+	"extends": "@repo/typescript-config/base.json",
 	"compilerOptions": {
 		"target": "ES2022",
-		"rootDir": "./src",
-		"outDir": "./dist",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"moduleResolution": "nodenext",
-		"module": "nodenext",
-		"skipLibCheck": true,
-		"strict": true,
-		"esModuleInterop": true,
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"emitDeclarationOnly": true,
-		"declaration": true,
-		"skipDefaultLibCheck": true,
-		"paths": {
-			"@control-plane/*": ["../../apps/control-plane/src/*"]
-		},
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"lib": ["ES2022"],
+		"types": ["node", "vitest/globals"],
+		"noEmit": true,
+		"rootDir": ".",
 		"plugins": [
-			{
-				"name": "next"
-			},
-			{
-				"name": "workflow"
-			},
 			{
 				"name": "@effect/language-service"
 			}
 		]
 	},
-	"include": ["src/*.ts", "src/**/*.ts", "src/**/*.tsx"],
-	"exclude": ["node_modules", "../../node_modules/**/*"]
+	"include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.ts"],
+	"exclude": ["dist", "node_modules", "../../node_modules/**/*"]
 }
