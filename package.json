@@ -15,7 +15,7 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
-    "build": "pnpm tsgo -p tsconfig.json && cp -r src/types dist/types",
+    "build": "pnpm tsgo -p tsconfig.json",
     "publish:local": "npm publish --registry http://localhost:4873",
     "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
   },
