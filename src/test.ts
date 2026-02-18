@@ -1,5 +1,4 @@
 import { sdk } from "./index.js";
-// eslint-disable-next-line turbo/no-undeclared-env-vars
 process.env.WORKFLOW_APP_HOST = "http://localhost:3000";
 
 async function main() {
