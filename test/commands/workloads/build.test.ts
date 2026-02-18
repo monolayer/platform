@@ -38,6 +38,6 @@ describe("workloads build command", () => {
 		expect(Make).toHaveBeenCalledWith(mockImports);
 		// Get the instance created by the mock
 		const makeInstance = vi.mocked(Make).mock.instances[0];
-		expect(makeInstance.build).toHaveBeenCalled();
+		expect(makeInstance?.build).toHaveBeenCalled();
 	});
 });
