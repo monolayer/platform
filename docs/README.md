@@ -5,9 +5,19 @@ This folder is a continuation guide for developing `@monolayer/control-plane-sdk
 ## What exists today
 
 - Oclif-powered CLI entrypoint (`src/cli.ts`, `src/main.ts`)
-- One sample command: `say-hello` (`src/commands/say-hello.ts`)
-- Effect runtime usage inside command logic (`buildHelloMessage`)
-- Vitest coverage for command behavior (`test/commands/say-hello.test.ts`)
+- SDK client factory with mock transport-backed modules:
+  - `projects.list`
+  - `deployments.create|get|list`
+  - `secrets.set|list`
+- CLI commands:
+  - `projects:list`
+  - `deployments:create`
+  - `deployments:get`
+  - `deployments:list`
+  - `secrets:set`
+  - `secrets:list`
+- Effect-first SDK methods with Promise wrappers
+- Vitest coverage for SDK and command behavior (`test/sdk/*`, `test/commands/*`)
 
 ## Read this first
 

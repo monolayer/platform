@@ -101,4 +101,28 @@ describe("createClient", () => {
 			expect(result.left).toBeInstanceOf(NotFoundError);
 		}
 	});
+
+	it("sets and lists secret metadata without exposing values", async () => {
+		const client = createClient({
+			baseUrl: "https://api.monolayer.com",
+			authToken: "test-token",
+		});
+
+		const updatedSecret = await client.secrets.setPromise({
+			projectId: "proj-1",
+			key: "DATABASE_URL",
+			value: "postgres://new-connection-string",
+		});
+
+		expect(updatedSecret.key).toBe("DATABASE_URL");
+		expect(updatedSecret.version).toBeGreaterThanOrEqual(1);
+		expect(updatedSecret).not.toHaveProperty("value");
+
+		const list = await client.secrets.listPromise({
+			projectId: "proj-1",
+			limit: 10,
+		});
+		expect(list.items.some((item) => item.key === "DATABASE_URL")).toBe(true);
+		expect(list.items[0]).not.toHaveProperty("value");
+	});
 });

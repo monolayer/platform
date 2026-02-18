@@ -1,7 +1,12 @@
 import { Effect } from "effect";
 
 import { TransportError } from "./errors.js";
-import type { DeploymentDto, ListResult, ProjectDto } from "./types.js";
+import type {
+	DeploymentDto,
+	ListResult,
+	ProjectDto,
+	SecretDto,
+} from "./types.js";
 import type { HttpRequest, HttpResponse, Transport } from "./transport.js";
 
 const initialProjects: ReadonlyArray<ProjectDto> = [
@@ -34,6 +39,27 @@ const initialDeployments: ReadonlyArray<DeploymentDto> = [
 		sourceRef: "main",
 		status: "queued",
 		createdAt: "2026-02-16T11:10:00.000Z",
+	},
+];
+
+const initialSecrets: ReadonlyArray<SecretDto> = [
+	{
+		projectId: "proj-1",
+		key: "DATABASE_URL",
+		updatedAt: "2026-02-14T00:00:00.000Z",
+		version: 2,
+	},
+	{
+		projectId: "proj-1",
+		key: "SENTRY_DSN",
+		updatedAt: "2026-02-15T00:00:00.000Z",
+		version: 1,
+	},
+	{
+		projectId: "proj-2",
+		key: "API_KEY",
+		updatedAt: "2026-02-16T00:00:00.000Z",
+		version: 3,
 	},
 ];
 
@@ -87,7 +113,12 @@ const notFound = (message: string): HttpResponse => ({
 export const createMockTransport = (): Transport => {
 	const projects = [...initialProjects];
 	const deployments = [...initialDeployments];
+	const secrets = new Map<string, SecretDto>();
 	let deploymentSequence = deployments.length;
+
+	for (const secret of initialSecrets) {
+		secrets.set(`${secret.projectId}:${secret.key}`, secret);
+	}
 
 	return (request) =>
 		Effect.try({
@@ -188,7 +219,68 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				return notFound(`Route not implemented in mock transport: ${request.method} ${request.path}`);
+				const projectSecretsMatch = request.path.match(
+					/^\/v1\/projects\/([^/]+)\/secrets$/,
+				);
+				if (request.method === "GET" && projectSecretsMatch) {
+					const projectId = decodeURIComponent(projectSecretsMatch[1] ?? "");
+					const projectSecrets = [...secrets.values()].filter(
+						(secret) => secret.projectId === projectId,
+					);
+					return {
+						status: 200,
+						body: paginate(
+							projectSecrets,
+							request.query?.cursor,
+							request.query?.limit,
+						),
+					};
+				}
+
+				const setSecretMatch = request.path.match(
+					/^\/v1\/projects\/([^/]+)\/secrets\/([^/]+)$/,
+				);
+				if (request.method === "PUT" && setSecretMatch) {
+					const projectId = decodeURIComponent(setSecretMatch[1] ?? "");
+					const key = decodeURIComponent(setSecretMatch[2] ?? "");
+
+					const body =
+						typeof request.body === "object" && request.body !== null
+							? request.body
+							: undefined;
+					const value =
+						body &&
+						"value" in body &&
+						typeof body.value === "string" &&
+						body.value.length > 0
+							? body.value
+							: undefined;
+
+					if (!value) {
+						return {
+							status: 400,
+							body: { message: "Secret value is required" },
+						};
+					}
+
+					const existing = secrets.get(`${projectId}:${key}`);
+					const updated: SecretDto = {
+						projectId,
+						key,
+						updatedAt: "2026-02-18T00:00:00.000Z",
+						version: existing ? existing.version + 1 : 1,
+					};
+					secrets.set(`${projectId}:${key}`, updated);
+
+					return {
+						status: 200,
+						body: updated,
+					};
+				}
+
+				return notFound(
+					`Route not implemented in mock transport: ${request.method} ${request.path}`,
+				);
 			},
 			catch: (cause) =>
 				new TransportError({

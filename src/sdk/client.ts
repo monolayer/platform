@@ -21,6 +21,6 @@ export const createClient = (options: CreateClientOptions): MonolayerClient => {
 		config: { baseUrl },
 		projects: createProjectsApi(runtime),
 		deployments: createDeploymentsApi(runtime),
-		secrets: createSecretsApi(),
+		secrets: createSecretsApi(runtime),
 	};
 };

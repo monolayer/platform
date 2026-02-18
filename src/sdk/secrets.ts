@@ -1,18 +1,39 @@
 import { Effect } from "effect";
 
-import { ApiError } from "./errors.js";
-import type { SecretsApi } from "./types.js";
+import { sendJson } from "./request.js";
+import type { ClientRuntime } from "./runtime.js";
+import type {
+	ListResult,
+	ListSecretsInput,
+	SecretDto,
+	SecretsApi,
+	SetSecretInput,
+} from "./types.js";
 
-const notImplemented = <T>(operation: string): Effect.Effect<T, ApiError> =>
-	Effect.fail(
-		new ApiError({
-			message: `${operation} is not implemented yet`,
-		}),
-	);
+export const createSecretsApi = (runtime: ClientRuntime): SecretsApi => {
+	const set = (input: SetSecretInput) =>
+		sendJson<SecretDto>(runtime, {
+			method: "PUT",
+			path: `/v1/projects/${encodeURIComponent(input.projectId)}/secrets/${encodeURIComponent(input.key)}`,
+			body: {
+				value: input.value,
+			},
+		});
 
-export const createSecretsApi = (): SecretsApi => ({
-	set: () => notImplemented("secrets.set"),
-	setPromise: () => Effect.runPromise(notImplemented("secrets.set")),
-	list: () => notImplemented("secrets.list"),
-	listPromise: () => Effect.runPromise(notImplemented("secrets.list")),
-});
+	const list = (input: ListSecretsInput) =>
+		sendJson<ListResult<SecretDto>>(runtime, {
+			method: "GET",
+			path: `/v1/projects/${encodeURIComponent(input.projectId)}/secrets`,
+			query: {
+				cursor: input.cursor,
+				limit: input.limit,
+			},
+		});
+
+	return {
+		set,
+		setPromise: (input: SetSecretInput) => Effect.runPromise(set(input)),
+		list,
+		listPromise: (input: ListSecretsInput) => Effect.runPromise(list(input)),
+	};
+};
