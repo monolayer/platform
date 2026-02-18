@@ -31,6 +31,7 @@ describe("workload lifecycle (integration)", () => {
 		vi.clearAllMocks();
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [testRedis],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 	});
 
@@ -38,7 +39,7 @@ describe("workload lifecycle (integration)", () => {
 		// Ensure cleanup even if test fails
 		try {
 			await StopTest.run([]);
-		} catch (e) {
+		} catch {
 			// Ignore errors during cleanup
 		}
 	});
@@ -50,13 +51,12 @@ describe("workload lifecycle (integration)", () => {
 		// 2. Verify updateDotenvFile was called with a valid connection string
 		expect(updateDotenvFile).toHaveBeenCalledTimes(1);
 		const updateCall = vi.mocked(updateDotenvFile).mock.calls[0];
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const envUpdates = updateCall![0];
+		if (!updateCall) throw new Error("updateDotenvFile not called");
+		const envUpdates = updateCall[0];
+		if (!envUpdates) throw new Error("envUpdates is undefined");
 		expect(envUpdates).toHaveLength(1);
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		expect(envUpdates![0].name).toBe("ML_REDIS_INTEGRATION_TEST_REDIS_URL");
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		expect(envUpdates![0].value).toMatch(/^redis:\/\/.*:\d+$/);
+		expect(envUpdates[0]!.name).toBe("ML_REDIS_INTEGRATION_TEST_REDIS_URL");
+		expect(envUpdates[0]!.value).toMatch(/^redis:\/\/.*:\d+$/);
 
 		// 3. Verify container is actually running using docker ps
 		const dockerPs = execSync(

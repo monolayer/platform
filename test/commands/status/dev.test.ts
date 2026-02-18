@@ -32,8 +32,10 @@ describe("status dev command", () => {
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [mockWorkload],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(workloadContainerStatus).mockResolvedValue(mockStatus as any);
 
 		await StatusDev.run([]);
@@ -46,9 +48,10 @@ describe("status dev command", () => {
 	it("logs message when no workloads found", async () => {
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
-		const logSpy = vi.spyOn(process.stdout, "write");
+		// const logSpy = vi.spyOn(process.stdout, "write");
 
 		await StatusDev.run([]);
 

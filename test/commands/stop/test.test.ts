@@ -33,6 +33,7 @@ describe("stop test command", () => {
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [mockWorkload],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		await StopTest.run([]);

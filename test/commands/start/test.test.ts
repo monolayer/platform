@@ -36,13 +36,16 @@ describe("start test command", () => {
 
 		// Simulate startContainer setting the environment variable
 		vi.mocked(startContainer).mockImplementation(async (workload) => {
-			const name = workload.connectionStringEnvVar;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const name = (workload as any).connectionStringEnvVar;
 			process.env[name] = "postgres://localhost:5432/test_db";
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			return { containerId: "test-container" } as any;
 		});
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: mockWorkloads,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		await StartTest.run([]);
