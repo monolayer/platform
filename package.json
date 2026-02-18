@@ -9,6 +9,13 @@
       "default": "./dist/index.js"
     }
   },
+  "oclif": {
+    "bin": "control-plane",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
   "bin": {
     "control-plane": "./dist/cli.js"
   },
@@ -31,6 +38,8 @@
     "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
   },
   "dependencies": {
+    "@oclif/core": "^4.0.0",
+    "@oclif/plugin-help": "^6.2.31",
     "effect": "^3.19.14"
   },
   "devDependencies": {

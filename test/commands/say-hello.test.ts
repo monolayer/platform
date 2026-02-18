@@ -1,58 +1,52 @@
 import { Effect } from "effect";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import {
-	parseSayHelloArgs,
-	runSayHello,
-} from "../../src/commands/say-hello.js";
-import type { CliIo } from "../../src/io.js";
+process.env.NODE_ENV = "production";
 
-const createMockIo = () => {
-	const stdout: Array<string> = [];
-	const stderr: Array<string> = [];
+import SayHello, { buildHelloMessage } from "../../src/commands/say-hello.js";
 
-	const io: CliIo = {
-		stdout: (message) => Effect.sync(() => stdout.push(message)),
-		stderr: (message) => Effect.sync(() => stderr.push(message)),
-	};
+const captureStdout = async <T>(task: () => Promise<T>) => {
+	const chunks: Array<string> = [];
+	const writeSpy = vi
+		.spyOn(process.stdout, "write")
+		.mockImplementation(((chunk: string | Uint8Array) => {
+			chunks.push(
+				typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8"),
+			);
+			return true;
+		}) as typeof process.stdout.write);
 
-	return { io, stdout, stderr };
+	try {
+		const result = await task();
+		return { result, stdout: chunks.join("") };
+	} finally {
+		writeSpy.mockRestore();
+	}
 };
 
-describe("parseSayHelloArgs", () => {
-	it("parses the default invocation", () => {
-		const result = parseSayHelloArgs([]);
-		expect(result).toEqual({ ok: true, value: { help: false, name: "World" } });
+describe("say-hello command", () => {
+	it("builds the greeting message with Effect", async () => {
+		const message = await Effect.runPromise(buildHelloMessage("Codex"));
+		expect(message).toBe("Hello, Codex!");
 	});
 
-	it("parses custom names from short and long flags", () => {
-		const long = parseSayHelloArgs(["--name", "Marcos"]);
-		const short = parseSayHelloArgs(["-n", "Essindi"]);
+	it("prints the default greeting", async () => {
+		const { result, stdout } = await captureStdout(() => SayHello.run([]));
 
-		expect(long.ok && long.value.name).toBe("Marcos");
-		expect(short.ok && short.value.name).toBe("Essindi");
-	});
-});
-
-describe("runSayHello", () => {
-	it("writes the default greeting", async () => {
-		const { io, stdout, stderr } = createMockIo();
-
-		const exitCode = await Effect.runPromise(runSayHello([], io));
-
-		expect(exitCode).toBe(0);
-		expect(stdout).toEqual(["Hello, World!"]);
-		expect(stderr).toEqual([]);
+		expect(result).toEqual({ message: "Hello, World!", name: "World" });
+		expect(stdout).toContain("Hello, World!");
 	});
 
-	it("writes usage on parse errors", async () => {
-		const { io, stdout, stderr } = createMockIo();
+	it("supports --name and --json", async () => {
+		const { result, stdout } = await captureStdout(() =>
+			SayHello.run(["--name", "Marcos", "--json"]),
+		);
 
-		const exitCode = await Effect.runPromise(runSayHello(["--name"], io));
+		expect(result).toEqual({ message: "Hello, Marcos!", name: "Marcos" });
+		expect(stdout).toContain('"message": "Hello, Marcos!"');
+	});
 
-		expect(exitCode).toBe(1);
-		expect(stdout).toEqual([]);
-		expect(stderr[0]).toContain("Missing value for --name");
-		expect(stderr.join("\n")).toContain("Usage: control-plane say-hello");
+	it("fails on unknown flags via oclif parsing", async () => {
+		await expect(SayHello.run(["--nope"])).rejects.toThrow();
 	});
 });

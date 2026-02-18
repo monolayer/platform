@@ -1,11 +1,5 @@
+export { runCli } from "./main.js";
 export {
-	defaultCliIo,
-	rootUsage,
-	runCli,
-	type CliIo,
-} from "./program.js";
-export {
-	parseSayHelloArgs,
-	runSayHello,
-	sayHelloUsage,
+	buildHelloMessage,
+	type SayHelloResult,
 } from "./commands/say-hello.js";
