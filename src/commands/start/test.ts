@@ -8,9 +8,10 @@ export default class StartTest extends Command {
 
 	public async run(): Promise<void> {
 		const imports = await importWorkloads();
-		startWorkloads(imports.workloadsWithContainers, {
+		await startWorkloads(imports.workloadsWithContainers, {
 			mode: "test",
 			waitForHealthcheck: true,
+			// waitForHealthcheck: true,
 		});
 	}
 }

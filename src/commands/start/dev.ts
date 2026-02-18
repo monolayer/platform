@@ -8,7 +8,7 @@ export default class StartDev extends Command {
 
 	public async run(): Promise<void> {
 		const imports = await importWorkloads();
-		startWorkloads(imports.workloadsWithContainers, {
+		await startWorkloads(imports.workloadsWithContainers, {
 			mode: "dev",
 			waitForHealthcheck: true,
 		});
