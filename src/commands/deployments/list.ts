@@ -3,9 +3,7 @@ import { Flags } from "@oclif/core";
 import { BaseCommand } from "../../base-command.js";
 import type { DeploymentDto, ListResult } from "../../sdk/types.js";
 
-export default class DeploymentsList extends BaseCommand<
-	ListResult<DeploymentDto>
-> {
+export default class DeploymentsList extends BaseCommand {
 	static summary = "List deployments";
 	static description =
 		"List deployments with optional project filtering and cursor pagination.";

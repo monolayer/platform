@@ -1,6 +1,7 @@
 import { Effect } from "effect";
 import { describe, expect, it, vi } from "vitest";
 
+// eslint-disable-next-line turbo/no-undeclared-env-vars
 process.env.NODE_ENV = "production";
 
 import SayHello, { buildHelloMessage } from "../../src/commands/say-hello.js";

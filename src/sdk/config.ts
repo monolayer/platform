@@ -21,6 +21,7 @@ export const resolveAuthToken = (explicitAuthToken?: string): string => {
 		return explicitAuthToken.trim();
 	}
 
+	// eslint-disable-next-line turbo/no-undeclared-env-vars
 	const envToken = process.env.MONOLAYER_AUTH_TOKEN;
 	if (!isBlank(envToken)) {
 		return envToken.trim();

@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 
 import { createClient } from "./sdk/client.js";
 
-export abstract class BaseCommand<T> extends Command {
+export abstract class BaseCommand extends Command {
 	static baseFlags = {
 		"base-url": Flags.string({
 			required: true,

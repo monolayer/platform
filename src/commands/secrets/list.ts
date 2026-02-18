@@ -3,7 +3,7 @@ import { Flags } from "@oclif/core";
 import { BaseCommand } from "../../base-command.js";
 import type { ListResult, SecretDto } from "../../sdk/types.js";
 
-export default class SecretsList extends BaseCommand<ListResult<SecretDto>> {
+export default class SecretsList extends BaseCommand {
 	static summary = "List secrets";
 	static description =
 		"List project secret metadata (keys, version, updatedAt). Values are never returned.";

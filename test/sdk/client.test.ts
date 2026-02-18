@@ -5,13 +5,16 @@ import { createClient } from "../../src/sdk/client.js";
 import { Effect, Either } from "effect";
 
 describe("createClient", () => {
+	// eslint-disable-next-line turbo/no-undeclared-env-vars
 	const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
 
 	afterEach(() => {
 		if (originalToken) {
+			// eslint-disable-next-line turbo/no-undeclared-env-vars
 			process.env.MONOLAYER_AUTH_TOKEN = originalToken;
 			return;
 		}
+		// eslint-disable-next-line turbo/no-undeclared-env-vars
 		delete process.env.MONOLAYER_AUTH_TOKEN;
 	});
 
@@ -25,6 +28,7 @@ describe("createClient", () => {
 	});
 
 	it("fails fast when auth token is not provided", () => {
+		// eslint-disable-next-line turbo/no-undeclared-env-vars
 		delete process.env.MONOLAYER_AUTH_TOKEN;
 		expect(() =>
 			createClient({

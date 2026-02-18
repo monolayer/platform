@@ -1,9 +1,9 @@
-import { Args, Flags } from "@oclif/core";
+import { Args } from "@oclif/core";
 
 import { BaseCommand } from "../../base-command.js";
 import type { DeploymentDto } from "../../sdk/types.js";
 
-export default class DeploymentsGet extends BaseCommand<DeploymentDto> {
+export default class DeploymentsGet extends BaseCommand {
 	static summary = "Get deployment details";
 	static description = "Get a deployment by deploymentId.";
 	static enableJsonFlag = true;

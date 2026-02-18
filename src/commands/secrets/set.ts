@@ -3,7 +3,7 @@ import { Flags } from "@oclif/core";
 import { BaseCommand } from "../../base-command.js";
 import type { SecretDto } from "../../sdk/types.js";
 
-export default class SecretsSet extends BaseCommand<SecretDto> {
+export default class SecretsSet extends BaseCommand {
 	static summary = "Set a secret";
 	static description =
 		"Create or update a project secret. The response never includes secret values.";

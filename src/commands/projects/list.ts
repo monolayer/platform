@@ -3,7 +3,7 @@ import { Flags } from "@oclif/core";
 import { BaseCommand } from "../../base-command.js";
 import type { ListResult, ProjectDto } from "../../sdk/types.js";
 
-export default class ProjectsList extends BaseCommand<ListResult<ProjectDto>> {
+export default class ProjectsList extends BaseCommand {
 	static summary = "List projects";
 	static description = "List projects with cursor-based pagination.";
 	static enableJsonFlag = true;

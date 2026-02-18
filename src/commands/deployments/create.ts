@@ -3,7 +3,7 @@ import { Flags } from "@oclif/core";
 import { BaseCommand } from "../../base-command.js";
 import type { DeploymentDto } from "../../sdk/types.js";
 
-export default class DeploymentsCreate extends BaseCommand<DeploymentDto> {
+export default class DeploymentsCreate extends BaseCommand {
 	static summary = "Create a deployment";
 	static description = "Create a deployment for a project.";
 	static enableJsonFlag = true;
