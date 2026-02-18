@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { AuthError } from "../../src/sdk/errors.js";
+import { AuthError, NotFoundError } from "../../src/sdk/errors.js";
 import { createClient } from "../../src/sdk/client.js";
+import { Effect, Either } from "effect";
 
 describe("createClient", () => {
 	const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
@@ -32,20 +33,72 @@ describe("createClient", () => {
 		).toThrow(AuthError);
 	});
 
-	it("exposes placeholder SDK modules before transport implementation", async () => {
+	it("lists projects from mock transport", async () => {
 		const client = createClient({
 			baseUrl: "https://api.monolayer.com",
 			authToken: "test-token",
 		});
 
-		await expect(client.projects.listPromise()).rejects.toThrow(
-			"projects.list is not implemented yet",
+		const projects = await client.projects.listPromise();
+		expect(projects.items.length).toBeGreaterThan(0);
+		expect(projects.items[0]?.projectId).toBe("proj-1");
+	});
+
+	it("supports cursor pagination and filtering for deployment lists", async () => {
+		const client = createClient({
+			baseUrl: "https://api.monolayer.com",
+			authToken: "test-token",
+		});
+
+		const firstPage = await client.deployments.listPromise({ limit: 1 });
+		expect(firstPage.items).toHaveLength(1);
+		expect(firstPage.nextCursor).toBeDefined();
+
+		const secondPage = await client.deployments.listPromise({
+			cursor: firstPage.nextCursor,
+			limit: 1,
+		});
+		expect(secondPage.items).toHaveLength(1);
+
+		const filtered = await client.deployments.listPromise({
+			projectId: "proj-1",
+		});
+		expect(filtered.items.every((item) => item.projectId === "proj-1")).toBe(true);
+	});
+
+	it("creates and retrieves deployments from mock transport", async () => {
+		const client = createClient({
+			baseUrl: "https://api.monolayer.com",
+			authToken: "test-token",
+		});
+
+		const created = await client.deployments.createPromise({
+			projectId: "proj-2",
+			environmentId: "prod",
+			sourceRef: "main",
+		});
+
+		const fetched = await client.deployments.getPromise({
+			deploymentId: created.deploymentId,
+		});
+
+		expect(fetched.deploymentId).toBe(created.deploymentId);
+		expect(fetched.projectId).toBe("proj-2");
+	});
+
+	it("returns typed not-found error for missing deployment", async () => {
+		const client = createClient({
+			baseUrl: "https://api.monolayer.com",
+			authToken: "test-token",
+		});
+
+		const result = await Effect.runPromise(
+			Effect.either(client.deployments.get({ deploymentId: "dep-missing" })),
 		);
-		await expect(client.deployments.listPromise()).rejects.toThrow(
-			"deployments.list is not implemented yet",
-		);
-		await expect(
-			client.secrets.listPromise({ projectId: "proj-1" }),
-		).rejects.toThrow("secrets.list is not implemented yet");
+
+		expect(Either.isLeft(result)).toBe(true);
+		if (Either.isLeft(result)) {
+			expect(result.left).toBeInstanceOf(NotFoundError);
+		}
 	});
 });
