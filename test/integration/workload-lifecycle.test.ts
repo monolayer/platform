@@ -1,13 +1,14 @@
 import { execSync } from "child_process";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	removeFromDotenvfile,
 	updateDotenvFile,
 } from "~/containers/admin/update-dotenv-file.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
 import { Redis } from "~/workloads/stateful/redis.js";
-import StartTest from "../../../src/commands/start/test.js";
-import StopTest from "../../../src/commands/stop/test.js";
+import StartTest from "../../src/commands/start/test.js";
+import StatusTest from "../../src/commands/status/test.js";
+import StopTest from "../../src/commands/stop/test.js";
 
 // Mock imports to control the workload being tested
 vi.mock("~/scan/workload-imports.js");
@@ -23,7 +24,7 @@ vi.mock("ora", () => ({
 	}),
 }));
 
-describe("start/stop test command (integration)", () => {
+describe("workload lifecycle (integration)", () => {
 	const testRedis = new Redis("integration-test-redis");
 
 	beforeEach(() => {
@@ -33,22 +34,31 @@ describe("start/stop test command (integration)", () => {
 		} as any);
 	});
 
-	it("starts and stops a real redis container", async () => {
+	afterEach(async () => {
+		// Ensure cleanup even if test fails
+		try {
+			await StopTest.run([]);
+		} catch (e) {
+			// Ignore errors during cleanup
+		}
+	});
+
+	it("starts, checks status, and stops a real redis container", async () => {
 		// 1. Start the workload
 		await StartTest.run([]);
 
 		// 2. Verify updateDotenvFile was called with a valid connection string
 		expect(updateDotenvFile).toHaveBeenCalledTimes(1);
 		const updateCall = vi.mocked(updateDotenvFile).mock.calls[0];
-		const envUpdates = updateCall[0];
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const envUpdates = updateCall![0];
 		expect(envUpdates).toHaveLength(1);
-		expect(envUpdates[0].name).toBe("ML_REDIS_INTEGRATION_TEST_REDIS_URL");
-		expect(envUpdates[0].value).toMatch(/^redis:\/\/.*:\d+$/);
-
-		const port = new URL(envUpdates[0].value).port;
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		expect(envUpdates![0].name).toBe("ML_REDIS_INTEGRATION_TEST_REDIS_URL");
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		expect(envUpdates![0].value).toMatch(/^redis:\/\/.*:\d+$/);
 
 		// 3. Verify container is actually running using docker ps
-		// We look for a container with the expected label
 		const dockerPs = execSync(
 			`docker ps --filter "label=org.monolayer-workloads.workload-id=redis-integration-test-redis" --format "{{.ID}}"`,
 		)
@@ -56,16 +66,27 @@ describe("start/stop test command (integration)", () => {
 			.trim();
 		expect(dockerPs).toBeTruthy();
 
-		// 4. Stop the workload
+		// 4. Check Status
+		const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+		await StatusTest.run([]);
+
+		expect(consoleSpy).toHaveBeenCalled();
+		const statusOutput = consoleSpy.mock.calls.join("\n");
+		expect(statusOutput).toContain("integration-test-redis");
+		expect(statusOutput).toContain("Redis");
+		expect(statusOutput).toContain("running");
+		consoleSpy.mockRestore();
+
+		// 5. Stop the workload
 		await StopTest.run([]);
 
-		// 5. Verify removeFromDotenvfile was called
+		// 6. Verify removeFromDotenvfile was called
 		expect(removeFromDotenvfile).toHaveBeenCalledWith(
 			["ML_REDIS_INTEGRATION_TEST_REDIS_URL"],
 			"test",
 		);
 
-		// 6. Verify container is gone
+		// 7. Verify container is gone
 		const dockerPsAfter = execSync(
 			`docker ps --filter "label=org.monolayer-workloads.workload-id=redis-integration-test-redis" --format "{{.ID}}"`,
 		)
