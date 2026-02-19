@@ -3,13 +3,17 @@
 ## Current shape
 
 - CLI bootstrap:
-  - `src/cli.ts`: Node executable with shebang
+  - `src/cli.ts`: Node executable with shebang (supports CJS & ESM)
   - `src/main.ts`: delegates to Oclif `execute()`
 - Commands:
-  - `src/commands/*.ts`
-  - each file exports one default Oclif `Command` class
+  - `src/commands/**/*.ts`
+  - Commands are organized by directory structure (e.g., `src/commands/workloads/add/bucket.ts` -> `workloads add bucket`)
+  - Each file exports one default Oclif `Command` class
 - Shared exports:
   - `src/index.ts` exports reusable pieces for SDK consumers/tests
+- Build System:
+  - `tsup` builds both CommonJS (`.cjs`) and ESM (`.js`) outputs to `dist/`
+  - Bundles dependencies that are ESM-only (like `case-anything`) for CJS compatibility
 
 ## Design principles
 
@@ -24,7 +28,9 @@
   - `oclif.bin = "control-plane"`
   - `oclif.commands = "./dist/commands"`
   - `bin.control-plane = "./dist/cli.js"`
-- Build emits `dist/**` from `src/**` with TypeScript (`tsconfig.build.json`).
+  - `main = "./dist/index.cjs"`
+  - `module = "./dist/index.js"`
+- Build emits `dist/**` from `src/**` using `tsup`.
 
 ## Suggested module boundaries for future growth
 

@@ -2,7 +2,7 @@
 
 ## Command checklist
 
-1. Create a file in `src/commands/<name>.ts`.
+1. Create a file in `src/commands/<topic>/<action>.ts` (e.g., `src/commands/workloads/add/bucket.ts`).
 2. Export a default class that extends `Command` from `@oclif/core`.
 3. Define:
    - `summary`
@@ -11,7 +11,7 @@
    - `flags` / `args`
 4. Keep `run()` orchestration-focused.
 5. Return structured result when JSON output should be supported.
-6. Add Vitest coverage in `test/commands/<name>.test.ts`.
+6. Add Vitest coverage in `test/commands/<topic>/<action>.test.ts`.
 
 ## Template
 
@@ -41,8 +41,10 @@ export default class Example extends Command {
 
 ## Naming conventions
 
-- Use kebab-case filename for command id (`say-hello.ts` => `say-hello` command).
-- Keep alias list short and explicit (`aliases = ["hello"]`).
+- Use directory structure for topics and actions:
+  - `src/commands/workloads/add/bucket.ts` -> `workloads add bucket`
+  - `src/commands/local/start/dev.ts` -> `local start dev`
+- Keep alias list short and explicit (`aliases = ["alias"]`).
 - Prefer `summary` for command listings and `description` for detailed help.
 
 ## Output conventions
