@@ -1,10 +1,16 @@
 import path from "node:path";
 import { cwd } from "node:process";
-import { vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
 import { workloadsConfiguration } from "~/configuration.js";
 
 // Set NODE_ENV to production to silence Oclif dev plugin warnings
-process.env.NODE_ENV = "production";
+beforeEach(() => {
+	vi.stubEnv("NODE_ENV", "production");
+});
+
+afterEach(() => {
+	vi.unstubAllEnvs();
+});
 
 vi.mock("~/configuration.js", async (importOriginal) => {
 	const actual =
