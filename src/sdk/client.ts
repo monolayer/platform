@@ -1,5 +1,6 @@
 import { normalizeBaseUrl, resolveAuthToken } from "./config.js";
 import { createDeploymentsApi } from "./deployments.js";
+import { createLocalApi } from "./local.js";
 import { createMockTransport } from "./mock-transport.js";
 import { createProjectsApi } from "./projects.js";
 import type { ClientRuntime } from "./runtime.js";

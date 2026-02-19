@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { AuthError, NotFoundError } from "../../src/sdk/errors.js";
-import { createClient } from "../../src/sdk/client.js";
 import { Effect, Either } from "effect";
+import { createClient } from "../../src/sdk/client.js";
+import { AuthError, NotFoundError } from "../../src/sdk/errors.js";
 
 describe("createClient", () => {
 	// eslint-disable-next-line turbo/no-undeclared-env-vars
@@ -67,7 +67,9 @@ describe("createClient", () => {
 		const filtered = await client.deployments.listPromise({
 			projectId: "proj-1",
 		});
-		expect(filtered.items.every((item) => item.projectId === "proj-1")).toBe(true);
+		expect(filtered.items.every((item) => item.projectId === "proj-1")).toBe(
+			true,
+		);
 	});
 
 	it("creates and retrieves deployments from mock transport", async () => {
