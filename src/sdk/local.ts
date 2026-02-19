@@ -3,6 +3,7 @@ import { startContainer, stopContainer } from "~/containers/admin/container.js";
 import { workloadContainerStatus } from "~/containers/admin/introspection.js";
 import { updateDotenvFile } from "~/containers/admin/update-dotenv-file.js";
 import type { StatefulWorkload } from "~/workloads/stateful/stateful-workload.js";
+import type { Cron } from "~/workloads/stateless/cron.js";
 import { ApiError } from "./errors.js";
 import type { ClientRuntime } from "./runtime.js";
 import type {
@@ -10,6 +11,7 @@ import type {
 	StartWorkloadInput,
 	StatusWorkloadInput,
 	StopWorkloadInput,
+	TriggerWorkloadInput,
 } from "./types.js";
 
 export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
@@ -63,6 +65,15 @@ export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 			catch: (error) => new ApiError({ message: String(error) }),
 		});
 
+	const trigger = (input: TriggerWorkloadInput) =>
+		Effect.tryPromise({
+			try: async () => {
+				const cron = input.workload as Cron;
+				await cron.run();
+			},
+			catch: (error) => new ApiError({ message: String(error) }),
+		});
+
 	return {
 		start,
 		startPromise: (input) => Effect.runPromise(start(input)),
@@ -70,5 +81,7 @@ export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 		stopPromise: (input) => Effect.runPromise(stop(input)),
 		status,
 		statusPromise: (input) => Effect.runPromise(status(input)),
+		trigger,
+		triggerPromise: (input) => Effect.runPromise(trigger(input)),
 	};
 };

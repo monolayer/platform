@@ -91,6 +91,10 @@ export type WorkloadStatus = {
 	port?: number;
 };
 
+export type TriggerWorkloadInput = {
+	readonly workload: Workload;
+};
+
 export type LocalApi = {
 	start: (input: StartWorkloadInput) => Effect.Effect<void, SdkError>;
 	startPromise: (input: StartWorkloadInput) => Promise<void>;
@@ -100,6 +104,8 @@ export type LocalApi = {
 		input: StatusWorkloadInput,
 	) => Effect.Effect<WorkloadStatus, SdkError>;
 	statusPromise: (input: StatusWorkloadInput) => Promise<WorkloadStatus>;
+	trigger: (input: TriggerWorkloadInput) => Effect.Effect<void, SdkError>;
+	triggerPromise: (input: TriggerWorkloadInput) => Promise<void>;
 };
 
 export type ProjectsApi = {

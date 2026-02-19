@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { exit } from "node:process";
 import prompts from "prompts";
 import { importWorkloads } from "~/scan/workload-imports.js";
-import type { Cron } from "~/workloads/stateless/cron.js";
+import { createClient } from "~/sdk/client.js";
 
 export default class TriggerCron extends Command {
 	static summary = "Trigger a cron workload";
@@ -26,6 +26,7 @@ export default class TriggerCron extends Command {
 		dotenv.config({ path: flags["env-file"] });
 		const imports = await importWorkloads();
 		const cronId = flags["cron-id"];
+		const client = createClient({ baseUrl: "http://localhost" });
 
 		if (cronId !== undefined) {
 			const cronToTrigger = imports.Cron.find(
@@ -34,7 +35,7 @@ export default class TriggerCron extends Command {
 			if (cronToTrigger === undefined) {
 				this.error(`error: cron workload not found: ${cronId}`, { exit: 1 });
 			}
-			await cronToTrigger.workload.run();
+			await client.local.triggerPromise({ workload: cronToTrigger.workload });
 		} else {
 			const cronChoices = imports.Cron.map((cron) => ({
 				value: cron.workload,
@@ -56,7 +57,7 @@ export default class TriggerCron extends Command {
 			if (aborted) {
 				exit(1);
 			}
-			await (select.cron as Cron).run();
+			await client.local.triggerPromise({ workload: select.cron });
 		}
 	}
 }
