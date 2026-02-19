@@ -2,6 +2,8 @@ import { Effect } from "effect";
 
 import type { SdkError } from "./errors.js";
 import type { Transport } from "./transport.js";
+import type { WorkloadInfo } from "~/containers/admin/introspection.js";
+import type { Workload } from "~/workloads/workload.js";
 
 export type ListResult<T> = {
 	readonly items: ReadonlyArray<T>;
@@ -86,9 +88,8 @@ export type StatusWorkloadInput = {
 };
 
 export type WorkloadStatus = {
-	name: string;
-	status: string;
-	port?: number;
+	readonly workload: Workload;
+	readonly container: WorkloadInfo["container"];
 };
 
 export type TriggerWorkloadInput = {
