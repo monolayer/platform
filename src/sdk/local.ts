@@ -1,10 +1,14 @@
 import { Effect } from "effect";
-import { startContainer } from "~/containers/admin/container.js";
+import { startContainer, stopContainer } from "~/containers/admin/container.js";
 import { updateDotenvFile } from "~/containers/admin/update-dotenv-file.js";
 import type { StatefulWorkload } from "~/workloads/stateful/stateful-workload.js";
 import { ApiError } from "./errors.js";
 import type { ClientRuntime } from "./runtime.js";
-import type { LocalApi, StartWorkloadInput } from "./types.js";
+import type {
+	LocalApi,
+	StartWorkloadInput,
+	StopWorkloadInput,
+} from "./types.js";
 
 export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 	const start = (input: StartWorkloadInput) =>
@@ -39,8 +43,19 @@ export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 			catch: (error) => new ApiError({ message: String(error) }),
 		});
 
+	const stop = (input: StopWorkloadInput) =>
+		Effect.tryPromise({
+			try: async () => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				await stopContainer(input.workload as any, input.mode);
+			},
+			catch: (error) => new ApiError({ message: String(error) }),
+		});
+
 	return {
 		start,
 		startPromise: (input) => Effect.runPromise(start(input)),
+		stop,
+		stopPromise: (input) => Effect.runPromise(stop(input)),
 	};
 };

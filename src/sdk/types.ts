@@ -75,9 +75,16 @@ export type StartWorkloadInput = {
 	readonly waitForHealthcheck: boolean;
 };
 
+export type StopWorkloadInput = {
+	readonly workload: Workload;
+	readonly mode: "dev" | "test";
+};
+
 export type LocalApi = {
 	start: (input: StartWorkloadInput) => Effect.Effect<void, SdkError>;
 	startPromise: (input: StartWorkloadInput) => Promise<void>;
+	stop: (input: StopWorkloadInput) => Effect.Effect<void, SdkError>;
+	stopPromise: (input: StopWorkloadInput) => Promise<void>;
 };
 
 export type ProjectsApi = {

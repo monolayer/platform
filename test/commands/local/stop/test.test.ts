@@ -1,10 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { stopContainer } from "~/containers/admin/container.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
+import { createClient } from "~/sdk/client.js";
 import StopTest from "../../../../src/commands/local/stop/test.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("~/containers/admin/container.js");
+vi.mock("~/sdk/client.js", () => ({
+	createClient: vi.fn(),
+}));
 vi.mock("ora", () => ({
 	default: () => ({
 		start: vi.fn(),
@@ -36,10 +39,21 @@ describe("stop test command", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
+		const mockStopPromise = vi.fn().mockResolvedValue(undefined);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		vi.mocked(createClient).mockReturnValue({
+			local: {
+				stopPromise: mockStopPromise,
+			},
+		} as any);
+
 		await StopTest.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
-		expect(stopContainer).toHaveBeenCalledTimes(1);
-		expect(stopContainer).toHaveBeenCalledWith(mockWorkload, "test");
+		expect(createClient).toHaveBeenCalledWith({ baseUrl: "http://localhost" });
+		expect(mockStopPromise).toHaveBeenCalledWith({
+			workload: mockWorkload,
+			mode: "test",
+		});
 	});
 });
