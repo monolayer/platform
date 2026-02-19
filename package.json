@@ -22,14 +22,14 @@
 	"files": [
 		"dist/**"
 	],
-	"main": "./dist/index.js",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"keywords": [],
 	"license": "MIT",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"build": "pnpm run clean && tsc -p tsconfig.build.json",
+		"build": "tsup",
 		"postbuild": "npm run alias",
 		"alias": "tsc-alias -p tsconfig.alias.json --outDir dist --verbose",
 		"check-types": "tsc -p tsconfig.json --noEmit",
