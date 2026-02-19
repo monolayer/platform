@@ -1,12 +1,20 @@
 {
-	"name": "@monolayer/control-plane-sdk",
-	"version": "1.0.0-canary.4",
+	"name": "@monolayer/sdk",
+	"version": "1.3.0-canary.1",
+	"description": "monolayer SDK",
+	"author": "Marcos Essindi <marcessindi@me.com>",
+	"license": "MIT",
+	"homepage": "https://monolayer.dev/sdk-docs/",
+	"bugs": "https://github.com/monolayer/sdk/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/monolayer/sdk/",
+		"directory": "packages/sdk"
+	},
 	"type": "module",
-	"description": "Control plane SDK and CLI",
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"keywords": [],
-	"license": "MIT",
 	"bin": {
 		"control-plane": "./dist/cli.mjs"
 	},
