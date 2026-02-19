@@ -80,11 +80,26 @@ export type StopWorkloadInput = {
 	readonly mode: "dev" | "test";
 };
 
+export type StatusWorkloadInput = {
+	readonly workload: Workload;
+	readonly mode: "dev" | "test";
+};
+
+export type WorkloadStatus = {
+	name: string;
+	status: string;
+	port?: number;
+};
+
 export type LocalApi = {
 	start: (input: StartWorkloadInput) => Effect.Effect<void, SdkError>;
 	startPromise: (input: StartWorkloadInput) => Promise<void>;
 	stop: (input: StopWorkloadInput) => Effect.Effect<void, SdkError>;
 	stopPromise: (input: StopWorkloadInput) => Promise<void>;
+	status: (
+		input: StatusWorkloadInput,
+	) => Effect.Effect<WorkloadStatus, SdkError>;
+	statusPromise: (input: StatusWorkloadInput) => Promise<WorkloadStatus>;
 };
 
 export type ProjectsApi = {

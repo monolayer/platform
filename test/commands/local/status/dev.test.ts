@@ -1,12 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { printStatus } from "~/cli/print-status.js";
-import { workloadContainerStatus } from "~/containers/admin/introspection.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
+import { createClient } from "~/sdk/client.js";
 import StatusDev from "../../../../src/commands/local/status/dev.js";
 
 vi.mock("~/scan/workload-imports.js");
 vi.mock("~/containers/admin/introspection.js");
 vi.mock("~/cli/print-status.js");
+vi.mock("~/sdk/client.js", () => ({
+	createClient: vi.fn(),
+}));
 
 vi.mock("~/workloads.js", () => ({
 	PostgresDatabase: class {
@@ -35,13 +38,25 @@ describe("status dev command", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
+		const mockStatusPromise = vi.fn().mockResolvedValue(mockStatus);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		vi.mocked(workloadContainerStatus).mockResolvedValue(mockStatus as any);
+		vi.mocked(createClient).mockReturnValue({
+			local: {
+				statusPromise: mockStatusPromise,
+			},
+		} as any);
 
 		await StatusDev.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
-		expect(workloadContainerStatus).toHaveBeenCalledWith(mockWorkload, "dev");
+		expect(createClient).toHaveBeenCalledWith({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		});
+		expect(mockStatusPromise).toHaveBeenCalledWith({
+			workload: mockWorkload,
+			mode: "dev",
+		});
 		expect(printStatus).toHaveBeenCalledWith([mockStatus]);
 	});
 

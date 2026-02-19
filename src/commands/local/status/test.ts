@@ -1,7 +1,7 @@
 import { Command } from "@oclif/core";
 import { printStatus } from "~/cli/print-status.js";
-import { workloadContainerStatus } from "~/containers/admin/introspection.js";
 import { importWorkloads } from "~/scan/workload-imports.js";
+import { createClient } from "~/sdk/client.js";
 
 export default class StatusTest extends Command {
 	static summary = "List test workloads status";
@@ -10,9 +10,17 @@ export default class StatusTest extends Command {
 
 	public async run(): Promise<void> {
 		const imports = await importWorkloads();
+		const client = createClient({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		});
+
 		const statuses = await Promise.all(
-			imports.workloadsWithContainers.map(async (workload) =>
-				workloadContainerStatus(workload, "test"),
+			imports.workloadsWithContainers.map((workload) =>
+				client.local.statusPromise({
+					workload,
+					mode: "test",
+				}),
 			),
 		);
 		if (statuses.length === 0) {
