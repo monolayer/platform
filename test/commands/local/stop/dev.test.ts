@@ -50,7 +50,10 @@ describe("stop dev command", () => {
 		await StopDev.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
-		expect(createClient).toHaveBeenCalledWith({ baseUrl: "http://localhost" });
+		expect(createClient).toHaveBeenCalledWith({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		});
 		expect(mockStopPromise).toHaveBeenCalledWith({
 			workload: mockWorkload,
 			mode: "dev",

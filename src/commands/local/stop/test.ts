@@ -10,7 +10,10 @@ export default class StopTest extends Command {
 
 	public async run(): Promise<void> {
 		const imports = await importWorkloads();
-		const client = createClient({ baseUrl: "http://localhost" });
+		const client = createClient({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		});
 
 		for (const workload of imports.workloadsWithContainers) {
 			const spinner = ora();

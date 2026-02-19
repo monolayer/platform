@@ -56,7 +56,10 @@ describe("start dev command", () => {
 		await StartDev.run([]);
 
 		expect(importWorkloads).toHaveBeenCalled();
-		expect(createClient).toHaveBeenCalledWith({ baseUrl: "http://localhost" });
+		expect(createClient).toHaveBeenCalledWith({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		});
 		expect(mockStartPromise).toHaveBeenCalledWith({
 			workload: mockWorkloads[0],
 			mode: "dev",

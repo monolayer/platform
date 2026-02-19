@@ -10,7 +10,10 @@ export default class StartDev extends Command {
 
 	public async run(): Promise<void> {
 		const imports = await importWorkloads();
-		const client = createClient({ baseUrl: "http://localhost" }); // Base URL not used for local, but required
+		const client = createClient({
+			baseUrl: "http://localhost",
+			authToken: "local",
+		}); // Base URL not used for local, but required
 
 		for (const workload of imports.workloadsWithContainers) {
 			const spinner = ora();
