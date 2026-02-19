@@ -9,6 +9,7 @@ export default class StartTest extends Command {
 	static description = "Start workloads in test mode";
 
 	public async run(): Promise<void> {
+		await this.parse(StartTest);
 		const imports = await importWorkloads();
 		const client = createClient({
 			baseUrl: "http://localhost",

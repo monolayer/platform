@@ -9,6 +9,7 @@ export default class StatusDev extends Command {
 		"List the status of the dev workloads' Docker containers";
 
 	public async run(): Promise<void> {
+		await this.parse(StatusDev);
 		const imports = await importWorkloads();
 		const client = createClient({
 			baseUrl: "http://localhost",

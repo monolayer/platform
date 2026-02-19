@@ -10,6 +10,7 @@ export default class Build extends Command {
 	static description = "Build workloads and generate manifest";
 
 	public async run(): Promise<void> {
+		await this.parse(Build);
 		const imports = await importWorkloads();
 		const spinner = ora();
 		spinner.start("Build workloads");

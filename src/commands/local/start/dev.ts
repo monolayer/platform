@@ -9,6 +9,7 @@ export default class StartDev extends Command {
 	static description = "Start workloads in development mode";
 
 	public async run(): Promise<void> {
+		await this.parse(StartDev);
 		const imports = await importWorkloads();
 		const client = createClient({
 			baseUrl: "http://localhost",

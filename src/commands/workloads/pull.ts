@@ -23,6 +23,7 @@ export default class Pull extends Command {
 	static description = "Pull Docker images for all defined workloads";
 
 	public async run(): Promise<void> {
+		await this.parse(Pull);
 		const imports = await importWorkloads();
 		const images = (
 			await Promise.all(

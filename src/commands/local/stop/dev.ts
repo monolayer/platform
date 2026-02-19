@@ -9,6 +9,7 @@ export default class StopDev extends Command {
 	static description = "Stop dev workloads";
 
 	public async run(): Promise<void> {
+		await this.parse(StopDev);
 		const imports = await importWorkloads();
 		const client = createClient({
 			baseUrl: "http://localhost",

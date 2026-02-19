@@ -9,6 +9,7 @@ export default class StopTest extends Command {
 	static description = "Stop test workloads";
 
 	public async run(): Promise<void> {
+		await this.parse(StopTest);
 		const imports = await importWorkloads();
 		const client = createClient({
 			baseUrl: "http://localhost",
