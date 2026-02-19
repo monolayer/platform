@@ -30,6 +30,8 @@
 	"scripts": {
 		"clean": "rm -rf dist",
 		"build": "pnpm run clean && tsc -p tsconfig.build.json",
+		"postbuild": "npm run alias",
+		"alias": "tsc-alias -p tsconfig.alias.json --outDir dist --verbose",
 		"check-types": "tsc -p tsconfig.json --noEmit",
 		"lint": "eslint .",
 		"test": "vitest --run",
@@ -126,6 +128,7 @@
 		"react-dom": "^19",
 		"skott": "^0.33.2",
 		"std-env": "4.0.0-rc.1",
+		"tsc-alias": "^1.8.16",
 		"tsup": "^8.3.5",
 		"type-fest": "^4.10.1",
 		"type-testing": "^0.2.0",
