@@ -16,7 +16,8 @@
 	"module": "./dist/index.mjs",
 	"keywords": [],
 	"bin": {
-		"control-plane": "./dist/cli.mjs"
+		"monolayer": "./dist/cli.mjs",
+		"broadcast-server": "dist/broadcast-server.mjs"
 	},
 	"files": [
 		"dist/**",
@@ -56,9 +57,10 @@
 	},
 	"scripts": {
 		"prebuild": "rm -rf dist",
-		"build": "pnpm build:esm && pnpm build:cjs",
+		"build": "pnpm build:esm && pnpm build:cjs && pnpm build:broadcast-server",
 		"build:cjs": "tsdown --config tsdown.config.cjs.ts",
 		"build:esm": "tsdown --config tsdown.config.esm.ts",
+		"build:broadcast-server": "npx tsx build-broadcast-server.ts",
 		"docs:dev": "vitepress dev vitepress",
 		"docs:typedoc": "pnpm typedoc:watch",
 		"docs:build": "vitepress build vitepress",

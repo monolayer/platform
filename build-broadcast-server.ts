@@ -6,7 +6,7 @@ async function build() {
 			"./src/workloads/stateless/broadcast/server/broadcast-server.ts",
 		],
 		bundle: true,
-		outfile: "dist/bin/broadcast-server.mjs",
+		outfile: "dist/broadcast-server.mjs",
 		platform: "node",
 		format: "esm",
 		treeShaking: true,
