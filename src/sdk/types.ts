@@ -69,6 +69,17 @@ export type ListSecretsInput = {
 	readonly limit?: number;
 };
 
+export type StartWorkloadInput = {
+	readonly workload: Workload;
+	readonly mode: "dev" | "test";
+	readonly waitForHealthcheck: boolean;
+};
+
+export type LocalApi = {
+	start: (input: StartWorkloadInput) => Effect.Effect<void, SdkError>;
+	startPromise: (input: StartWorkloadInput) => Promise<void>;
+};
+
 export type ProjectsApi = {
 	list: (
 		input?: ListProjectsInput,
@@ -86,13 +97,17 @@ export type DeploymentsApi = {
 	list: (
 		input?: ListDeploymentsInput,
 	) => Effect.Effect<ListResult<DeploymentDto>, SdkError>;
-	listPromise: (input?: ListDeploymentsInput) => Promise<ListResult<DeploymentDto>>;
+	listPromise: (
+		input?: ListDeploymentsInput,
+	) => Promise<ListResult<DeploymentDto>>;
 };
 
 export type SecretsApi = {
 	set: (input: SetSecretInput) => Effect.Effect<SecretDto, SdkError>;
 	setPromise: (input: SetSecretInput) => Promise<SecretDto>;
-	list: (input: ListSecretsInput) => Effect.Effect<ListResult<SecretDto>, SdkError>;
+	list: (
+		input: ListSecretsInput,
+	) => Effect.Effect<ListResult<SecretDto>, SdkError>;
 	listPromise: (input: ListSecretsInput) => Promise<ListResult<SecretDto>>;
 };
 
@@ -103,6 +118,7 @@ export type MonolayerClient = {
 	readonly projects: ProjectsApi;
 	readonly deployments: DeploymentsApi;
 	readonly secrets: SecretsApi;
+	readonly local: LocalApi;
 };
 
 export type CreateClientOptions = {
