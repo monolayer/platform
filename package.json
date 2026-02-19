@@ -3,35 +3,57 @@
 	"version": "1.0.0-canary.4",
 	"type": "module",
 	"description": "Control plane SDK and CLI",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"default": "./dist/index.js"
-		}
-	},
-	"oclif": {
-		"bin": "control-plane",
-		"commands": "./dist/commands",
-		"plugins": [
-			"@oclif/plugin-help"
-		]
-	},
-	"bin": {
-		"control-plane": "./dist/cli.js"
-	},
-	"files": [
-		"dist/**"
-	],
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "./dist/index.mjs",
+	"module": "./dist/index.mjs",
 	"keywords": [],
 	"license": "MIT",
+	"bin": {
+		"control-plane": "./dist/cli.mjs"
+	},
+	"files": [
+		"dist/**",
+		"dist/cjs/**"
+	],
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/esm/index.d.mts",
+				"default": "./dist/esm/index.mjs"
+			},
+			"require": {
+				"types": "./dist/cjs/index.d.cts",
+				"default": "./dist/cjs/index.cjs"
+			}
+		},
+		"./test-helpers": {
+			"import": {
+				"types": "./dist/esm/test-helpers.d.mts",
+				"default": "./dist/esm/test-helpers.mjs"
+			},
+			"require": {
+				"types": "./dist/cjs/test-helpers.d.cts",
+				"default": "./dist/cjs/test-helpers.cjs"
+			}
+		},
+		"./introspection": {
+			"import": {
+				"types": "./dist/esm/introspection.d.mts",
+				"default": "./dist/esm/introspection.mjs"
+			},
+			"require": {
+				"types": "./dist/cjs/introspection.d.cts",
+				"default": "./dist/cjs/introspection.cjs"
+			}
+		}
+	},
 	"scripts": {
-		"clean": "rm -rf dist",
-		"build": "tsdown",
-		"postbuild": "npm run alias",
-		"alias": "tsc-alias -p tsconfig.alias.json --outDir dist --verbose",
+		"prebuild": "rm -rf dist",
+		"build": "pnpm build:esm && pnpm build:cjs",
+		"build:cjs": "tsdown --config tsdown.config.cjs.ts",
+		"build:esm": "tsdown --config tsdown.config.esm.ts",
+		"postbuild": "npm run makeexec && npm run makepackage",
+		"makeexec": "chmod +x dist/cli.mjs",
+		"makepackage": "echo '{\n  \"type\": \"module\"\n}' > dist/package.json && echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
 		"check-types": "tsc -p tsconfig.json --noEmit",
 		"lint": "eslint .",
 		"test": "vitest --run",
@@ -140,5 +162,12 @@
 		"vitest": "^4.0.17",
 		"ws": "^8.18.3",
 		"zod": "^4.3.6"
+	},
+	"oclif": {
+		"bin": "control-plane",
+		"commands": "./dist/commands",
+		"plugins": [
+			"@oclif/plugin-help"
+		]
 	}
 }
