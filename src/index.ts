@@ -1,7 +1,3 @@
-export {
-	buildHelloMessage,
-	type SayHelloResult,
-} from "./commands/say-hello.js";
 export { runCli } from "./main.js";
 export { createClient } from "./sdk/client.js";
 export { normalizeBaseUrl, resolveAuthToken } from "./sdk/config.js";
