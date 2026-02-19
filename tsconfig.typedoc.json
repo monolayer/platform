@@ -1,0 +1,40 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"incremental": false,
+		"isolatedModules": true,
+		"lib": ["ES2022"],
+		"module": "NodeNext",
+		"moduleDetection": "force",
+		"moduleResolution": "NodeNext",
+		"noUncheckedIndexedAccess": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ES2022",
+		"types": ["node", "vitest/globals"],
+		"noEmit": true,
+		"rootDir": ".",
+		"baseUrl": ".",
+		"plugins": [
+			{
+				"name": "@effect/language-service"
+			}
+		],
+		"paths": {
+			"~/*": ["./src/*"],
+			"~test/*": ["./test/*"]
+		},
+		"jsx": "react-jsx",
+		"jsxImportSource": "react"
+	},
+	"include": [
+		"src/**/*.ts",
+		"test/**/*.ts",
+		"vitest.config.ts",
+		"test/__setup__/**/*.ts"
+	],
+	"exclude": ["dist", "node_modules"]
+}

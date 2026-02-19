@@ -45,3 +45,8 @@ samconfig.toml
 .artifacts
 
 tsconfig.tsbuildinfo
+
+vitepress/.vitepress/cache
+vitepress/.vitepress/dist
+vitepress/reference
+
