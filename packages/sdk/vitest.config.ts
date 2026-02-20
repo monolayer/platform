@@ -4,7 +4,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
 	plugins: [tsconfigPaths()],
 	test: {
-		name: "control-plane-sdk",
+		name: "sdk",
 		disableConsoleIntercept: true,
 		setupFiles: ["test/__setup__/setup.ts"],
 

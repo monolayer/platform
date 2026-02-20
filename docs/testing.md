@@ -27,8 +27,8 @@
 ## Commands
 
 ```bash
-pnpm --filter @monolayer/control-plane-sdk test
-pnpm --filter @monolayer/control-plane-sdk test:watch
+pnpm --filter @monolayer/sdk test
+pnpm --filter @monolayer/sdk test:watch
 ```
 
 ## When to add integration tests

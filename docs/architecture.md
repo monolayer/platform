@@ -12,8 +12,8 @@
 - Shared exports:
   - `src/index.ts` exports reusable pieces for SDK consumers/tests
 - Build System:
-  - `tsup` builds both CommonJS (`.cjs`) and ESM (`.js`) outputs to `dist/`
-  - Bundles dependencies that are ESM-only (like `case-anything`) for CJS compatibility
+  - `tsdown` builds both CommonJS and ESM outputs to `dist/`
+  - Bundles dependencies that are ESM-only for CJS compatibility
 
 ## Design principles
 
@@ -25,12 +25,12 @@
 ## Package wiring
 
 - `package.json`:
-  - `oclif.bin = "control-plane"`
+  - `oclif.bin = "monolayer"`
   - `oclif.commands = "./dist/commands"`
-  - `bin.control-plane = "./dist/cli.js"`
-  - `main = "./dist/index.cjs"`
-  - `module = "./dist/index.js"`
-- Build emits `dist/**` from `src/**` using `tsup`.
+  - `bin.monolayer = "./dist/cli.mjs"`
+  - `main = "./dist/index.mjs"`
+  - `module = "./dist/index.mjs"`
+- Build emits `dist/**` from `src/**` using `tsdown`.
 
 ## Suggested module boundaries for future growth
 

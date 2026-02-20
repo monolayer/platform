@@ -77,7 +77,7 @@
     "typedoc": "typedoc --docsRoot vitepress/reference --name workloads",
     "typedoc:watch": "npm run typedoc -- --watch",
     "publish:local": "npm publish --registry http://localhost:4873",
-    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
+    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/sdk -f"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.992.0",
@@ -177,7 +177,7 @@
     "zod": "^4.3.6"
   },
   "oclif": {
-    "bin": "control-plane",
+    "bin": "monolayer",
     "commands": "./dist/commands",
     "plugins": [
       "@oclif/plugin-help"

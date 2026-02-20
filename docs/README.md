@@ -1,6 +1,6 @@
-# Control Plane SDK + CLI Docs
+# Platform SDK + CLI Docs
 
-This folder is a continuation guide for developing `@monolayer/control-plane-sdk`.
+This folder is a continuation guide for developing `@monolayer/sdk`.
 
 ## What exists today
 
@@ -20,7 +20,12 @@ This folder is a continuation guide for developing `@monolayer/control-plane-sdk
 - Vitest coverage:
   - Unit tests for commands (`test/commands/*`)
   - Integration tests for full workload lifecycle (`test/integration/*`)
-- Dual-build support (CJS + ESM) via `tsup`
+- Dual-build support (CJS + ESM) via `tsdown`
+
+## Project Structure
+
+- `packages/sdk`: The core SDK and CLI logic.
+- `packages/docs-vitepress`: The documentation website built with VitePress.
 
 ## Read this first
 
@@ -34,11 +39,19 @@ This folder is a continuation guide for developing `@monolayer/control-plane-sdk
 
 ## Fast local workflow
 
+### SDK Development
+
 ```bash
-pnpm --filter @monolayer/control-plane-sdk check-types
-pnpm --filter @monolayer/control-plane-sdk test
-pnpm --filter @monolayer/control-plane-sdk build
-node packages/control-plane-sdk/dist/cli.js --help
+pnpm --filter @monolayer/sdk check-types
+pnpm --filter @monolayer/sdk test
+pnpm --filter @monolayer/sdk build
+node packages/sdk/dist/cli.mjs --help
+```
+
+### Documentation Development
+
+```bash
+pnpm --filter @repo/docs-vitepress dev
 ```
 
 ## Short roadmap

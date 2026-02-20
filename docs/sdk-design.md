@@ -1,6 +1,6 @@
 # SDK Design (Pre-1.0)
 
-This document defines the target design for `@monolayer/control-plane-sdk` based on product decisions made on February 18, 2026.
+This document defines the target design for `@monolayer/sdk` based on product decisions made on February 18, 2026.
 
 ## Product intent
 
