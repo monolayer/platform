@@ -11,7 +11,9 @@ import type {
 	ListResult,
 } from "./types.js";
 
-export const createDeploymentsApi = (runtime: ClientRuntime): DeploymentsApi => {
+export const createDeploymentsApi = (
+	runtime: ClientRuntime,
+): DeploymentsApi => {
 	const create = (input: CreateDeploymentInput) =>
 		sendJson<DeploymentDto>(runtime, {
 			method: "POST",
@@ -38,10 +40,12 @@ export const createDeploymentsApi = (runtime: ClientRuntime): DeploymentsApi => 
 
 	return {
 		create,
-		createPromise: (input: CreateDeploymentInput) => Effect.runPromise(create(input)),
+		createPromise: (input: CreateDeploymentInput) =>
+			Effect.runPromise(create(input)),
 		get,
 		getPromise: (input: GetDeploymentInput) => Effect.runPromise(get(input)),
 		list,
-		listPromise: (input?: ListDeploymentsInput) => Effect.runPromise(list(input)),
+		listPromise: (input?: ListDeploymentsInput) =>
+			Effect.runPromise(list(input)),
 	};
 };

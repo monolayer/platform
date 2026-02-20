@@ -30,7 +30,7 @@ export class BroadcastClient<
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	C extends Record<string, ChannelData<any>>,
 > {
-	private declare _channels: C;
+	declare private _channels: C;
 
 	private connectionManager: ConnectionManager;
 	private subscriptionManager: SubscriptionManager;

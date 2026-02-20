@@ -5,7 +5,7 @@
 		["cx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
 		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"editor.formatOnSave": true,
 	"typescript.experimental.useTsgo": true,

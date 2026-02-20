@@ -31,7 +31,7 @@ You can stop it with [`npx monolayer stop dev`](./../reference/cli/stop-dev.md).
 After the container is started:
 
 - The `ML_AWS_ENDPOINT_URL` environment variable, containing the endpoint URL for the workload's Docker container
-will be written to `.env`.
+  will be written to `.env`.
 - The bucket will be created if it does not exist.
 
 See [examples](#examples) on how to configure a client for development.
@@ -47,7 +47,7 @@ A Docker container for the test environment is launched with [`npx monolayer sta
 You can stop it with [`npx monolayer stop test`](./../reference/cli/stop-test.md).
 
 - The `ML_AWS_ENDPOINT_URL` environment variable, containing the endpoint URL for the workload's Docker container
-will be written to `.env`.
+  will be written to `.env`.
 - The bucket will be created if it does not exist.
 
 See the [examples](#examples) on how to configure a client for testing.
@@ -58,7 +58,7 @@ Check your framework's documentation to see if the `.env.test` file is loaded au
 
 ## Examples
 
- ```ts
+```ts
 import { Bucket } from "@monolayer/sdk";
 
 const documents = new Bucket("documents");
@@ -70,15 +70,15 @@ export default documents;
 import { S3Client } from "@aws-sdk/client-s3";
 import { bucketLocalConfiguration } from "@monolayer/sdk";
 export const s3Client = new S3Client({
-  ...bucketLocalConfiguration(),
+	...bucketLocalConfiguration(),
 });
 
 // Get Object
 
 const response = await s3Client.send(
-  new GetObjectCommand({
-    Bucket: documents.name,
-    Key: "README.md",
-  }),
+	new GetObjectCommand({
+		Bucket: documents.name,
+		Key: "README.md",
+	}),
 );
 ```

@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { AuthError, ConfigError } from "../../src/sdk/errors.js";
-import {
-	normalizeBaseUrl,
-	resolveAuthToken,
-} from "../../src/sdk/config.js";
+import { normalizeBaseUrl, resolveAuthToken } from "../../src/sdk/config.js";
 
 describe("sdk config", () => {
 	// eslint-disable-next-line turbo/no-undeclared-env-vars

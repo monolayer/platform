@@ -9,14 +9,14 @@ import DeploymentsList from "../../src/commands/deployments/list.js";
 
 const captureStdout = async <T>(task: () => Promise<T>) => {
 	const chunks: Array<string> = [];
-	const writeSpy = vi
-		.spyOn(process.stdout, "write")
-		.mockImplementation(((chunk: string | Uint8Array) => {
-			chunks.push(
-				typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8"),
-			);
-			return true;
-		}) as typeof process.stdout.write);
+	const writeSpy = vi.spyOn(process.stdout, "write").mockImplementation(((
+		chunk: string | Uint8Array,
+	) => {
+		chunks.push(
+			typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8"),
+		);
+		return true;
+	}) as typeof process.stdout.write);
 
 	try {
 		const result = await task();
@@ -73,7 +73,9 @@ describe("deployments commands", () => {
 			]),
 		);
 
-		expect(result.items.every((item) => item.projectId === "proj-1")).toBe(true);
+		expect(result.items.every((item) => item.projectId === "proj-1")).toBe(
+			true,
+		);
 		expect(stdout).toContain('"items"');
 	});
 });

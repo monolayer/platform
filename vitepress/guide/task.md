@@ -24,21 +24,21 @@ You can provide a type parameter for the expected payload to use when sending an
 import { Task } from "@monolayer/sdk";
 
 const confirmationEmail = new Task<{ email: string }>(
-  "sendConfirmationEmail",
-  async ({ taskId, data }) => {
-    await mailer.client.sendMail({
-      from: "sender@example.com",
-      to: data.email,
-      subject: "Message in a bottle",
-      text: "I hope this message gets there!",
-    });
-  },
-  {
-    retry: {
-      times: 3,
-    },
-    onError: (error) => {},
-  }
+	"sendConfirmationEmail",
+	async ({ taskId, data }) => {
+		await mailer.client.sendMail({
+			from: "sender@example.com",
+			to: data.email,
+			subject: "Message in a bottle",
+			text: "I hope this message gets there!",
+		});
+	},
+	{
+		retry: {
+			times: 3,
+		},
+		onError: (error) => {},
+	},
 );
 
 export default confirmationEmail;
@@ -52,10 +52,10 @@ Tasks can be performed immediately with [performNow](./../reference/api/main/cla
 
 ```ts
 // Perform a task immediately
-confirmationEmail.performNow({ email: "text@example.com" })
+confirmationEmail.performNow({ email: "text@example.com" });
 
 // Enqueue a task
-confirmationEmail.performLater({ email: "text@example.com" })
+confirmationEmail.performLater({ email: "text@example.com" });
 confirmationEmail.performLater({ email: "text@example.com" }, { delay: 1000 });
 ```
 

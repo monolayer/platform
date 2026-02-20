@@ -16,7 +16,7 @@ An [`AfterRollout`](./../reference/api/main/classes/AfterRollout.md) workload is
 import { AfterRollout } from "@monolayer/sdk";
 
 const afterRollout = new AfterRollout("after-rollout", {
-  script: "notify", // Script name in package.json
+	script: "notify", // Script name in package.json
 });
 
 export default afterRollout;

@@ -10,7 +10,7 @@ You can change the location of your workloads with the `workloadsPath` property.
 import type { Configuration } from "@monolayer/sdk";
 
 const config: Configuration = {
-  workloadsPath: "lib/workloads",
+	workloadsPath: "lib/workloads",
 };
 
 export default config;
@@ -24,11 +24,11 @@ To change the dotenv file names, add the desired file name to the `envFileName` 
 import type { Configuration } from "@monolayer/sdk";
 
 const config: Configuration = {
-  workloadsPath: "lib/workloads",
-  envFileName: {
-    development: ".env.development",
-    test: ".env.test.local",
-  },
+	workloadsPath: "lib/workloads",
+	envFileName: {
+		development: ".env.development",
+		test: ".env.test.local",
+	},
 };
 
 export default config;
@@ -44,12 +44,12 @@ You can change this in the `containers` property.
 import type { Configuration } from "@monolayer/sdk";
 
 const config: Configuration = {
-  workloadsPath: "lib/workloads",
-  containers: {
-    postgresDatabase: {
-      imageName: "postgres:16.5-alpine3.20",
-    }
-  }
+	workloadsPath: "lib/workloads",
+	containers: {
+		postgresDatabase: {
+			imageName: "postgres:16.5-alpine3.20",
+		},
+	},
 };
 
 export default config;
@@ -65,15 +65,17 @@ You can change this in the `containers` property.
 import type { Configuration } from "@monolayer/sdk";
 
 const config: Configuration = {
-  workloadsPath: "lib/workloads",
-  containers: {
-    postgresDatabase: {
-      exposedPorts: [{
-        container: 5432,
-        host: 5543,
-      }]
-    }
-  }
+	workloadsPath: "lib/workloads",
+	containers: {
+		postgresDatabase: {
+			exposedPorts: [
+				{
+					container: 5432,
+					host: 5543,
+				},
+			],
+		},
+	},
 };
 
 export default config;

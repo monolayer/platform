@@ -16,7 +16,7 @@ A [`BeforeRollout`](./../reference/api/main/classes/BeforeRollout.md) workload i
 import { BeforeRollout } from "@monolayer/sdk";
 
 const beforeRollout = new BeforeRollout("before-rollout", {
-  script: "db:migrate", // Script name in package.json
+	script: "db:migrate", // Script name in package.json
 });
 
 export default beforeRollout;

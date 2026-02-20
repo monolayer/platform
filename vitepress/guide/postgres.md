@@ -38,7 +38,7 @@ You can stop it with [`npx monolayer stop dev`](./../reference/cli/stop-dev.md).
 After the container is started:
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.local`.
+  will be written to `.env.local`.
 - The database will be created on the database server if it does not already exist.
 
 :::info
@@ -52,7 +52,7 @@ A Docker container for the test environment is launched with [`npx monolayer sta
 You can stop it with [`npx monolayer stop test`](./../reference/cli/stop-test.md).
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.test.local`.
+  will be written to `.env.test.local`.
 - The database will be created on the database server if it does not already exist.
 
 :::info
@@ -70,8 +70,8 @@ import pg from "pg";
 export const productsDb = new PostgresDatabase("products");
 
 const client = new pg.Pool({
-  // Assumes the environment variable is set
-  connectionString: process.env[productsDb.connectionStringEnvVar],
+	// Assumes the environment variable is set
+	connectionString: process.env[productsDb.connectionStringEnvVar],
 });
 
 client.query("SELECT 1");

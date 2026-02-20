@@ -102,7 +102,9 @@ const unauthorized = (): HttpResponse => ({
 
 const validateAuth = (request: HttpRequest): boolean => {
 	const authorization = request.headers?.authorization;
-	return typeof authorization === "string" && authorization.startsWith("Bearer ");
+	return (
+		typeof authorization === "string" && authorization.startsWith("Bearer ")
+	);
 };
 
 const notFound = (message: string): HttpResponse => ({
@@ -157,7 +159,10 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (request.method === "GET" && request.path.startsWith("/v1/deployments/")) {
+				if (
+					request.method === "GET" &&
+					request.path.startsWith("/v1/deployments/")
+				) {
 					const deploymentId = decodeURIComponent(
 						request.path.replace("/v1/deployments/", ""),
 					);

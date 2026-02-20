@@ -16,7 +16,7 @@ A [`Bootstrap`](./../reference/api/main/classes/Bootstrap.md) workload is initia
 import { Bootstrap } from "@monolayer/sdk";
 
 const bootstrap = new Bootstrap("bootstrap", {
-  script: "db:create", // Script name in package.json
+	script: "db:create", // Script name in package.json
 });
 
 export default bootstrap;

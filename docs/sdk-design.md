@@ -72,9 +72,7 @@ type MonolayerClient = {
 	readonly secrets: SecretsApi;
 };
 
-declare const createClient: (
-	options: CreateClientOptions,
-) => MonolayerClient;
+declare const createClient: (options: CreateClientOptions) => MonolayerClient;
 ```
 
 Module shape:
@@ -94,7 +92,9 @@ interface DeploymentsApi {
 	list: (
 		input: ListDeploymentsInput,
 	) => Effect.Effect<ListResult<DeploymentDto>, DeploymentError>;
-	listPromise: (input: ListDeploymentsInput) => Promise<ListResult<DeploymentDto>>;
+	listPromise: (
+		input: ListDeploymentsInput,
+	) => Promise<ListResult<DeploymentDto>>;
 }
 ```
 

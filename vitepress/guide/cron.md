@@ -16,10 +16,10 @@ A [`Cron`](./../reference/api/main/classes/Cron.md) workload is initialized with
 import { Cron } from "@monolayer/sdk";
 
 const reports = new Cron("reports", {
-  schedule: "* * * * *",
-  run: async () => {
-    // Do something;
-  },
+	schedule: "* * * * *",
+	run: async () => {
+		// Do something;
+	},
 });
 
 export default reports;
@@ -47,10 +47,10 @@ However, you can test the `run` function of a `Cron` workload in your test suite
 import { Cron } from "@monolayer/sdk";
 
 const reports = new Cron("reports", {
-  schedule: "* * * * *",
-  run: async () => {
-    // Do something;
-  },
+	schedule: "* * * * *",
+	run: async () => {
+		// Do something;
+	},
 });
 
 export default reports;

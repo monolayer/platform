@@ -11,7 +11,11 @@ import {
 import type { ClientRuntime } from "./runtime.js";
 import type { HttpRequest } from "./transport.js";
 
-const toSdkError = (status: number, body: unknown, requestId?: string): SdkError => {
+const toSdkError = (
+	status: number,
+	body: unknown,
+	requestId?: string,
+): SdkError => {
 	const message =
 		typeof body === "object" &&
 		body !== null &&
@@ -60,6 +64,10 @@ export const sendJson = <T>(
 		}
 
 		return yield* Effect.fail(
-			toSdkError(response.status, response.body, response.headers?.["x-request-id"]),
+			toSdkError(
+				response.status,
+				response.body,
+				response.headers?.["x-request-id"],
+			),
 		);
 	});

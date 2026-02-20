@@ -11,8 +11,7 @@ export abstract class BaseCommand extends Command {
 		}),
 		"auth-token": Flags.string({
 			env: "MONOLAYER_AUTH_TOKEN",
-			summary:
-				"Auth token (falls back to MONOLAYER_AUTH_TOKEN when omitted)",
+			summary: "Auth token (falls back to MONOLAYER_AUTH_TOKEN when omitted)",
 		}),
 	};
 

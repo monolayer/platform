@@ -19,14 +19,14 @@ import type { Todos } from "@prisma/client";
 export type TodosData = Todos & { action: "add" | "delete" };
 
 const broadcast = new Broadcast(
-  async () => {
-    return {};
-  },
-  {
-    "/todos": {
-      channel: new Channel<TodosData>(),
-    },
-  },
+	async () => {
+		return {};
+	},
+	{
+		"/todos": {
+			channel: new Channel<TodosData>(),
+		},
+	},
 );
 
 export default broadcast;
@@ -45,19 +45,17 @@ Export the `Broadcast` workload as the `default` export, and ensure there is onl
 import { BroadcastProvider } from "@monolayer/sdk";
 
 export default function Layout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html>
-      <body>
-        <BroadcastProvider>
-          {children}
-        </BroadcastProvider>
-      </body>
-    </html>
-  );
+	return (
+		<html>
+			<body>
+				<BroadcastProvider>{children}</BroadcastProvider>
+			</body>
+		</html>
+	);
 }
 ```
 
@@ -67,26 +65,29 @@ import type { TodosData } from "@/workloads/broadcast";
 import { useSubscription } from "./client";
 
 interface TodosProps {
-  todos: Todos[] & { action?: TodosData["action"] }
+	todos: Todos[] & { action?: TodosData["action"] };
 }
 
 export function Todos({ todos }: TodosProps) {
-  const subscription = useSubscription("/todos", {});
-  const todosToDisplay = combineTodos(todos, subscription.all);
+	const subscription = useSubscription("/todos", {});
+	const todosToDisplay = combineTodos(todos, subscription.all);
 
-  return todosToDisplay.map((todo, idx) => <p key="idx">{todo.text}</p>)
+	return todosToDisplay.map((todo, idx) => <p key="idx">{todo.text}</p>);
 }
 
 function combineTodos(todos: Todos[], subscription: TodosData[]) {
-  const allTodos = todos.concat(subscription.all);
-  return Object.values(
-    allTodos.reduce<Record<string, TodosData>>((acc, val) => {
-      if (acc[val.id] === undefined || new Date(acc[val.id].updatedAt) <= new Date(val.updatedAt)) {
-        acc[val.id] = val;
-      }
-      return acc;
-    }, {}),
-  ).filter((i) => i.action === undefined || i.action !== "delete");
+	const allTodos = todos.concat(subscription.all);
+	return Object.values(
+		allTodos.reduce<Record<string, TodosData>>((acc, val) => {
+			if (
+				acc[val.id] === undefined ||
+				new Date(acc[val.id].updatedAt) <= new Date(val.updatedAt)
+			) {
+				acc[val.id] = val;
+			}
+			return acc;
+		}, {}),
+	).filter((i) => i.action === undefined || i.action !== "delete");
 }
 ```
 
@@ -109,15 +110,15 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db/prisma";
 
 export async function saveTodo(todo: Todos) {
-  const createdTodo = await prisma.todos.create({ data: { text } });
-  const publisher = new BroadcastPublisher<Channels>(); // [!code highlight]
-  revalidatePath("/");
-  await publisher.publishTo("/todos", {}, [{ ...createdTodo, action: "add" }]); // [!code highlight]
+	const createdTodo = await prisma.todos.create({ data: { text } });
+	const publisher = new BroadcastPublisher<Channels>(); // [!code highlight]
+	revalidatePath("/");
+	await publisher.publishTo("/todos", {}, [{ ...createdTodo, action: "add" }]); // [!code highlight]
 }
 
 async function publishBucketUpdate(items: TodosData[]) {
-  const publisher = new BroadcastPublisher<Channels>();
-  await publisher.publishTo("/todos", {}, items);
+	const publisher = new BroadcastPublisher<Channels>();
+	await publisher.publishTo("/todos", {}, items);
 }
 ```
 
@@ -132,7 +133,7 @@ You can stop it with [`npx monolayer stop dev`](./../reference/cli/stop-dev.md).
 After the container is started:
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.local`.
+  will be written to `.env.local`.
 
 :::info
 Check your framework's documentation to see if the `.env.local` file is loaded automatically.
@@ -145,7 +146,7 @@ A Docker container for the test environment is launched with [`npx monolayer sta
 You can stop it with [`npx monolayer stop test`](./../reference/cli/stop-test.md).
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.test.local`.
+  will be written to `.env.test.local`.
 
 :::info
 Check your framework's documentation to see if the `.env.test.local` file is loaded automatically.

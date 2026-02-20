@@ -11,9 +11,9 @@ with the following contents:
 import type { Configuration } from "@monolayer/sdk";
 
 const config: Configuration = {
-  // `workloadsPath` points to the folder where the workloads will be defined.
-  // Change it to a relative path of your choice within your project.
-  workloadsPath: "src/workloads",
+	// `workloadsPath` points to the folder where the workloads will be defined.
+	// Change it to a relative path of your choice within your project.
+	workloadsPath: "src/workloads",
 };
 
 export default config;
@@ -69,8 +69,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const client = new pg.Pool({
-  // The environment variable is set when you launch `npx monolayer start dev`
-  connectionString: process.env[productsDb.connectionStringEnvVar],
+	// The environment variable is set when you launch `npx monolayer start dev`
+	connectionString: process.env[productsDb.connectionStringEnvVar],
 });
 
 // Querying the products database.

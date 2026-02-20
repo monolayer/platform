@@ -34,7 +34,7 @@ You can stop it with [`npx monolayer stop dev`](./../reference/cli/stop-dev.md).
 After the container is started:
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.local`.
+  will be written to `.env.local`.
 
 :::info
 Check your framework's documentation to see if the `.env.local` file is loaded automatically.
@@ -47,7 +47,7 @@ A Docker container for the test environment is launched with [`npx monolayer sta
 You can stop it with [`npx monolayer stop test`](./../reference/cli/stop-test.md).
 
 - The environment variable with the connection string for the workload's Docker container
-will be written to `.env.test.local`.
+  will be written to `.env.test.local`.
 
 :::info
 Check your framework's documentation to see if the `.env.test.local` file is loaded automatically.
@@ -59,7 +59,8 @@ Check your framework's documentation to see if the `.env.test.local` file is loa
 import { Redis } from "@monolayer/sdk";
 import { Redis as IORedis } from "ioredis";
 
-const cache = new Redis("cache", (envVarName) =>
-  new IORedis(process.env[envVarName]!)
+const cache = new Redis(
+	"cache",
+	(envVarName) => new IORedis(process.env[envVarName]!),
 );
 ```

@@ -44,7 +44,8 @@ export default class SecretsList extends BaseCommand {
 
 		this.renderList(
 			result.items,
-			(item) => `${item.projectId}\t${item.key}\tv${item.version}\t${item.updatedAt}`,
+			(item) =>
+				`${item.projectId}\t${item.key}\tv${item.version}\t${item.updatedAt}`,
 			result.nextCursor,
 		);
 		return result;

@@ -4,12 +4,12 @@ The [test-helpers](./../reference/api/test-helpers/index.md#functions) module pr
 
 ## PostgresDatabase
 
-| Helper | Description|
-| - | - |
+| Helper                                                                                          | Description                       |
+| ----------------------------------------------------------------------------------------------- | --------------------------------- |
 | [`truncatePostgresTables`](./../reference/api/test-helpers/functions/truncatePostgresTables.md) | Empties all tables in a database. |
 
 ## Redis
 
-| Helper | Description |
-| - | - |
+| Helper                                                                  | Description                                              |
+| ----------------------------------------------------------------------- | -------------------------------------------------------- |
 | [`flushRedis`](./../reference/api/test-helpers/functions/flushRedis.md) | Deletes all the keys of the currently selected database. |
