@@ -46,7 +46,7 @@ describe("checkVersion", () => {
 			json: () => Promise.resolve({ version: "1.0.1" }),
 			ok: true,
 		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		(fetch as any).mockResolvedValue(mockResponse);
 
 		await checkVersion("1.0.0");
@@ -61,7 +61,7 @@ describe("checkVersion", () => {
 			json: () => Promise.resolve({ version: "1.0.0" }),
 			ok: true,
 		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		(fetch as any).mockResolvedValue(mockResponse);
 
 		await checkVersion("1.0.0");
@@ -70,7 +70,7 @@ describe("checkVersion", () => {
 	});
 
 	it("should handle network errors gracefully", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		(fetch as any).mockRejectedValue(new Error("Network error"));
 
 		await expect(checkVersion("1.0.0")).resolves.toBeUndefined();
@@ -82,7 +82,7 @@ describe("checkVersion", () => {
 			json: () => Promise.reject(new Error("Invalid JSON")),
 			ok: true,
 		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		(fetch as any).mockResolvedValue(mockResponse);
 
 		await expect(checkVersion("1.0.0")).resolves.toBeUndefined();

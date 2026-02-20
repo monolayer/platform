@@ -31,7 +31,7 @@ describe("workload lifecycle (integration)", () => {
 		vi.clearAllMocks();
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [testRedis],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 	});
 

@@ -21,7 +21,7 @@ type SubscriptionPromiseResolvers = {
  * It interacts with a connection manager to send subscription messages.
  */
 export class SubscriptionManager {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	private connectionManager: any; // Will be typed more strictly later
 	private subscribers: Map<string, SubscriberCallback>;
 	private subscriptionPromises: Map<string, SubscriptionPromiseResolvers>;
@@ -30,7 +30,7 @@ export class SubscriptionManager {
 	 * Creates an instance of SubscriptionManager.
 	 * @param connectionManager The connection manager responsible for sending messages.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	constructor(connectionManager: any, eventEmitter: EventEmitter) {
 		this.connectionManager = connectionManager;
 		this.subscribers = new Map();

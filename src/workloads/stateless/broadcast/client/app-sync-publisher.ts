@@ -26,7 +26,7 @@ export interface BroadcastPublisherConfig {
  */
 
 export class BroadcastPublisher<
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	C extends Record<string, ChannelData<any>>,
 > {
 	declare private _channels: C;

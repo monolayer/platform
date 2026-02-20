@@ -6,7 +6,7 @@ import { useWebSocket } from "~/workloads/stateless/broadcast/client/broadcast-p
 import type { RouteParams } from "~/workloads/stateless/broadcast/types.js";
 
 export function broadcastClient<
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	C extends Record<string, ChannelData<any>>,
 >() {
 	const useSubscription = <D extends keyof C & string>(
@@ -28,7 +28,7 @@ export function broadcastClient<
 
 		useEffect(() => {
 			if (client.connected && !subscribe) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 				client.subscribeTo(channel as any, params, (payload) => {
 					setLast(payload as StateType);
 					setAll(payload);

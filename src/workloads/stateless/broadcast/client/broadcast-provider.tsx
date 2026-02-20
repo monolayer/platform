@@ -11,7 +11,7 @@ import type { ChannelData } from "~/workloads/stateless/broadcast/channel-data.j
 import { BroadcastClient } from "./app-sync-client.js";
 
 export type BroadcastContext = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	ws: BroadcastClient<any>;
 	connected: boolean;
 } | null;
@@ -29,7 +29,7 @@ export function BroadcastContextProvider({
 }: BroadcastContextProviderProps) {
 	const [ws] = useState(
 		useMemo(() => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 			return new BroadcastClient<any>(urlAndHost);
 		}, [urlAndHost]),
 	);
@@ -52,7 +52,7 @@ export function BroadcastContextProvider({
 }
 
 export function useWebSocket<
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	T extends Record<string, ChannelData<any>>,
 >() {
 	const context = use(BroadcastProvider);

@@ -50,7 +50,7 @@ export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 	const stop = (input: StopWorkloadInput) =>
 		Effect.tryPromise({
 			try: async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 				await stopContainer(input.workload as any, input.mode);
 			},
 			catch: (error) => new ApiError({ message: String(error) }),
@@ -59,7 +59,7 @@ export const createLocalApi = (_runtime: ClientRuntime): LocalApi => {
 	const status = (input: StatusWorkloadInput) =>
 		Effect.tryPromise({
 			try: async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 				return await workloadContainerStatus(input.workload as any, input.mode);
 			},
 			catch: (error) => new ApiError({ message: String(error) }),

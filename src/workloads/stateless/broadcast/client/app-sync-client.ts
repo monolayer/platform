@@ -27,7 +27,7 @@ export interface BroadcastClientConfig {
  */
 
 export class BroadcastClient<
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	C extends Record<string, ChannelData<any>>,
 > {
 	declare private _channels: C;
@@ -101,7 +101,7 @@ export class BroadcastClient<
 	public subscribe(
 		channel: string,
 		authorization: object,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		callback: (payload: any) => void,
 	): string {
 		return this.subscriptionManager.subscribe(channel, authorization, callback); // Add a dummy callback
@@ -126,7 +126,7 @@ export class BroadcastClient<
 				host: this.host,
 				Authorization: "--",
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 			callback as (payload: any) => void,
 		); // Add a dummy callback
 
@@ -167,7 +167,7 @@ export class BroadcastClient<
 	 * @param eventName The name of the event to listen for (e.g., 'message', 'connected', 'disconnected').
 	 * @param listener The callback function to be invoked when the event is emitted.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	public on(eventName: string, listener: (...args: any[]) => void): void {
 		this.eventEmitter.on(eventName, listener);
 	}
@@ -177,7 +177,7 @@ export class BroadcastClient<
 	 * @param eventName The name of the event to remove the listener from.
 	 * @param listener The callback function to be removed.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	public off(eventName: string, listener: (...args: any[]) => void): void {
 		this.eventEmitter.off(eventName, listener);
 	}

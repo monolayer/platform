@@ -29,7 +29,7 @@ describe("workloads build command", () => {
 
 	it("builds workloads and generates manifest", async () => {
 		const mockImports = { workloadsWithContainers: [] };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(importWorkloads).mockResolvedValue(mockImports as any);
 
 		await Build.run([]);

@@ -5,7 +5,7 @@ import type { RouteParams } from "./types.js";
 
 // Recursive validator for dynamic segments
 export type IsValidSegment<S extends string> =
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 	S extends `${infer _Start}[${infer Param}]${infer After}`
 		? After extends `/${string}` | "" // Must end or be followed by `/`
 			? IsValidSegment<After> // Recurse
@@ -24,7 +24,7 @@ export type ExtractRouteParamsTuple<
 	? ExtractRouteParamsTuple<Rest, [...Acc, Param]>
 	: Acc;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export type HasDuplicates<T extends readonly any[]> = T extends [
 	infer F,
 	...infer R,
@@ -45,7 +45,7 @@ export type ValidateRoute<T extends string> =
 			? never
 			: T;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export type ValidateRoutes<T extends Record<string, any>> = {
 	[K in keyof T]: ValidateRoute<K & string> extends never ? never : T[K];
 };
@@ -107,7 +107,7 @@ export type Simplify<T> = DrainOuterGeneric<
  * export default broadcast;
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export class Broadcast<T extends Record<string, any>, S> extends Workload {
 	session: (opts: { cookies: Record<string, string> }) => Promise<S>;
 	channels: {
@@ -195,5 +195,5 @@ export class Broadcast<T extends Record<string, any>, S> extends Workload {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyBroadcast = Broadcast<any, any>;

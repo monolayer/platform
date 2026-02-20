@@ -6,20 +6,22 @@ import type { Task } from "~/workloads/stateless/task/task.js";
 import type { Workload } from "~/workloads/workload.js";
 import type { AnyBroadcast } from "./stateless/broadcast/router.js";
 
-export function assertRedis(workload: Workload): asserts workload is Redis {}
+export function assertRedis(_workload: Workload): asserts _workload is Redis {}
 
 export function assertPostgresDatabase(
-	workload: Workload,
-): asserts workload is PostgresDatabase {}
+  _workload: Workload,
+): asserts _workload is PostgresDatabase {}
 
-export function assertBucket(workload: Workload): asserts workload is Bucket {}
+export function assertBucket(
+  _workload: Workload,
+): asserts _workload is Bucket {}
 
-export function assertCron(workload: Workload): asserts workload is Cron {}
+export function assertCron(_workload: Workload): asserts _workload is Cron {}
 
 export function assertTask(
-	workload: Workload,
-): asserts workload is Task<unknown> {}
+  _workload: Workload,
+): asserts _workload is Task<unknown> {}
 
 export function assertBroadcast(
-	workload: Workload,
-): asserts workload is AnyBroadcast {}
+  _workload: Workload,
+): asserts _workload is AnyBroadcast {}

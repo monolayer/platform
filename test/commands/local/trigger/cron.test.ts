@@ -30,11 +30,11 @@ describe("trigger cron command", () => {
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			Cron: [{ workload: mockCron }],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		const mockTriggerPromise = vi.fn().mockResolvedValue(undefined);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(createClient).mockReturnValue({
 			local: {
 				triggerPromise: mockTriggerPromise,
@@ -56,13 +56,13 @@ describe("trigger cron command", () => {
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			Cron: [{ workload: mockCron1 }, { workload: mockCron2 }],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		vi.mocked(prompts).mockResolvedValueOnce({ cron: mockCron1 });
 
 		const mockTriggerPromise = vi.fn().mockResolvedValue(undefined);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(createClient).mockReturnValue({
 			local: {
 				triggerPromise: mockTriggerPromise,
@@ -78,7 +78,7 @@ describe("trigger cron command", () => {
 	it("errors when cron id not found", async () => {
 		vi.mocked(importWorkloads).mockResolvedValue({
 			Cron: [],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		// Oclif's this.error exits the process, so we expect it to reject/throw
@@ -90,7 +90,7 @@ describe("trigger cron command", () => {
 	it("errors when no crons available for prompt", async () => {
 		vi.mocked(importWorkloads).mockResolvedValue({
 			Cron: [],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		await expect(TriggerCron.run([])).rejects.toThrow();

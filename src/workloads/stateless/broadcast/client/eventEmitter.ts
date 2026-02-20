@@ -3,7 +3,7 @@
  * Implements a simple event emitter pattern for handling custom events.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 type Listener = (...args: any[]) => void;
 
 /**
@@ -45,7 +45,7 @@ export class EventEmitter {
 	 * @param eventName The name of the event to emit.
 	 * @param args Any arguments to pass to the listeners.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	emit(eventName: string, ...args: any[]): void {
 		if (this.listeners.has(eventName)) {
 			// Create a shallow copy to prevent issues if listeners modify the set during iteration

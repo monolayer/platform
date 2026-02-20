@@ -13,7 +13,7 @@ export function replaceString(opts: {
 			const newContent = content.replace(new RegExp(opts.from, "g"), opts.to);
 			writeFileSync(filePath, newContent);
 		} catch (e) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 			console.error((e as any).message);
 		}
 	}
@@ -34,7 +34,7 @@ export function replaceStringWithIdendentifier(opts: {
 			);
 			writeFileSync(filePath, newContent);
 		} catch (e) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 			console.error((e as any).message);
 		}
 	}

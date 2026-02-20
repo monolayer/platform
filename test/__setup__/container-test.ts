@@ -7,7 +7,7 @@ const startedContainers: (StartedTestContainer | Dockerode.Container)[] = [];
 
 export const test = base.extend({
 	containers: async (
-		// eslint-disable-next-line no-empty-pattern
+		// oxlint-disable-next-line no-empty-pattern
 		{},
 		use: (
 			value: (StartedTestContainer | Dockerode.Container)[],
@@ -19,7 +19,7 @@ export const test = base.extend({
 		for (const startedContainer of startedContainers) {
 			try {
 				await startedContainer.stop();
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (e: any) {
 				if (
 					e.reason !== "no such container" &&

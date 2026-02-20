@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-// eslint-disable-next-line turbo/no-undeclared-env-vars
+// oxlint-disable-next-line turbo/no-undeclared-env-vars
 process.env.NODE_ENV = "production";
 
 import DeploymentsCreate from "../../src/commands/deployments/create.js";

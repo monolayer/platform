@@ -35,11 +35,11 @@ describe("status dev command", () => {
 
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [mockWorkload],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		const mockStatusPromise = vi.fn().mockResolvedValue(mockStatus);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(createClient).mockReturnValue({
 			local: {
 				statusPromise: mockStatusPromise,
@@ -63,7 +63,7 @@ describe("status dev command", () => {
 	it("logs message when no workloads found", async () => {
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: [],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any);
 
 		// const logSpy = vi.spyOn(process.stdout, "write");

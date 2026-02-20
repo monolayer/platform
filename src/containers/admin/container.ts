@@ -43,11 +43,11 @@ export async function stopContainer(
 		try {
 			await startedTestContainer.stop();
 			await removeFromDotenvfile(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 				[(workload as any).connectionStringEnvVar],
 				mode,
 			);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (e: any) {
 			if (e.reason !== "container already stopped") {
 				throw e;

@@ -4,16 +4,16 @@ import { AuthError, ConfigError } from "../../src/sdk/errors.js";
 import { normalizeBaseUrl, resolveAuthToken } from "../../src/sdk/config.js";
 
 describe("sdk config", () => {
-	// eslint-disable-next-line turbo/no-undeclared-env-vars
+	// oxlint-disable-next-line turbo/no-undeclared-env-vars
 	const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
 
 	afterEach(() => {
 		if (originalToken) {
-			// eslint-disable-next-line turbo/no-undeclared-env-vars
+			// oxlint-disable-next-line turbo/no-undeclared-env-vars
 			process.env.MONOLAYER_AUTH_TOKEN = originalToken;
 			return;
 		}
-		// eslint-disable-next-line turbo/no-undeclared-env-vars
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
 		delete process.env.MONOLAYER_AUTH_TOKEN;
 	});
 
@@ -29,19 +29,19 @@ describe("sdk config", () => {
 	});
 
 	it("prefers explicit auth token over env token", () => {
-		// eslint-disable-next-line turbo/no-undeclared-env-vars
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
 		process.env.MONOLAYER_AUTH_TOKEN = "env-token";
 		expect(resolveAuthToken("explicit-token")).toBe("explicit-token");
 	});
 
 	it("uses env token when explicit token is missing", () => {
-		// eslint-disable-next-line turbo/no-undeclared-env-vars
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
 		process.env.MONOLAYER_AUTH_TOKEN = "env-token";
 		expect(resolveAuthToken(undefined)).toBe("env-token");
 	});
 
 	it("fails when no auth token source is available", () => {
-		// eslint-disable-next-line turbo/no-undeclared-env-vars
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
 		delete process.env.MONOLAYER_AUTH_TOKEN;
 		expect(() => resolveAuthToken(undefined)).toThrow(AuthError);
 	});

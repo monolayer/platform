@@ -9,7 +9,7 @@ import type { PerformOptions, Task } from "~/workloads/stateless/task/task.js";
 export async function developmentDispatch<P>(
 	task: Task<P>,
 	data: P | P[],
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 	options?: PerformOptions,
 ) {
 	if (Array.isArray(data)) {
@@ -27,7 +27,7 @@ export async function developmentDispatch<P>(
 export async function testDispatch<P>(
 	task: Task<P>,
 	data: P | P[],
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 	options?: PerformOptions,
 ) {
 	const testDispather = dispatcherForTask(task);

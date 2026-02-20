@@ -39,7 +39,7 @@ export interface SubscribeSuccessMessage extends AppSyncMessage {
 export interface SubscribeErrorMessage extends AppSyncMessage {
 	type: "subscribe_error";
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	errors: any[]; // Define a more specific error interface if needed
 }
 
@@ -58,7 +58,7 @@ export interface DataMessage extends AppSyncMessage {
 export interface BroadcastErrorMessage extends AppSyncMessage {
 	type: "broadcast_error";
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	errors: any[]; // Define a more specific error interface if needed
 }
 
@@ -68,9 +68,9 @@ export interface BroadcastErrorMessage extends AppSyncMessage {
 export interface PublishSuccessMessage extends AppSyncMessage {
 	type: "publish_success";
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	successful: any[]; // Define a more specific success interface if needed
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	failed: any[]; // Define a more specific failed interface if needed
 }
 
@@ -80,7 +80,7 @@ export interface PublishSuccessMessage extends AppSyncMessage {
 export interface PublishErrorMessage extends AppSyncMessage {
 	type: "publish_error";
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	errors: any[]; // Define a more specific error interface if needed
 }
 

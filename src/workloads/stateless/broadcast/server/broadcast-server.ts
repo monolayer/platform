@@ -135,7 +135,7 @@ class AppSyncTestServer<S> {
 		console.log("AppSync Test Server started");
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	private async handleMessage(client: AppSyncWebSocket<S>, message: any) {
 		switch (message.type) {
 			case "connection_init":
@@ -321,7 +321,7 @@ class AppSyncTestServer<S> {
 					JSON.stringify({
 						type: "publish_success",
 						id: message.id,
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 						successful: message.events.map((_: any, index: number) => ({
 							identifier: `event-${index}`,
 							index,

@@ -23,7 +23,7 @@ import {
 import type { StatefulWorkloadWithClient } from "~/workloads/stateful/stateful-workload.js";
 import type { AnyBroadcast } from "~/workloads/stateless/broadcast/router.js";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 type ModuleImport = Record<string, any>;
 
 export async function importWorkloads() {
@@ -139,7 +139,7 @@ export class WorkloadImports {
 		return this.#importsByWorkload.Broadcast;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	addBroadcast(src: string, workload: any) {
 		this.#importsByWorkload.Broadcast = [{ src, workload }];
 	}

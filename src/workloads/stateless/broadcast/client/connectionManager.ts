@@ -25,7 +25,7 @@ export class ConnectionManager {
 	private connectionTimeoutMs: number = 0;
 	private keepAliveTimer: ReturnType<typeof setTimeout> | null = null;
 	private connectPromiseResolve: (() => void) | null = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 	private connectPromiseReject: ((reason?: any) => void) | null = null;
 	private messageHandler: MessageHandler | null = null;
 	private closeHandler: CloseHandler | null = null;

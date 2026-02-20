@@ -12,7 +12,7 @@ describe("dev dispatcher", () => {
 	});
 
 	test("perform later performs now", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		let testData: any;
 		const testTask = new Task(
 			"Send emails",
@@ -28,7 +28,7 @@ describe("dev dispatcher", () => {
 
 	test("perform later performs now in bulk", async () => {
 		vi.stubEnv("NODE_ENV", "development");
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		let testData: any;
 		const testTask = new Task<Record<string, string>>(
 			"Send emails",

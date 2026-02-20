@@ -35,7 +35,7 @@ export async function addPrismaPosgres(opts: { id: string; name: string }) {
 		spinner.succeed();
 	} catch (e) {
 		spinner.fail("Failed to generate prisma client");
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		console.error(e as any);
 		exit(1);
 	}

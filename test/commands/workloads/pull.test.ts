@@ -47,13 +47,13 @@ describe("workloads pull command", () => {
 			{ constructor: { name: "Redis" } },
 		];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: mockWorkloads,
 		} as any);
 
 		const mockPull = vi.fn();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(getContainerRuntimeClient).mockResolvedValue({
 			image: { pull: mockPull },
 		} as any);
@@ -73,13 +73,13 @@ describe("workloads pull command", () => {
 			{ constructor: { name: "PostgresDatabase" } }, // Duplicate type, same image
 		];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(importWorkloads).mockResolvedValue({
 			workloadsWithContainers: mockWorkloads,
 		} as any);
 
 		const mockPull = vi.fn();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 		vi.mocked(getContainerRuntimeClient).mockResolvedValue({
 			image: { pull: mockPull },
 		} as any);

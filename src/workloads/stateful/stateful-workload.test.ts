@@ -7,7 +7,7 @@ import {
 
 test("StatefulWorkload flag", () => {
 	class TestStatefulWorkload extends StatefulWorkload {}
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 	const testInstance = new TestStatefulWorkload("one");
 
 	type StatefulType = typeof testInstance.stateful;

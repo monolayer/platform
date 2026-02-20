@@ -11,7 +11,7 @@ vi.mock(
 		return {
 			...actual,
 			dispatcher: vi.fn().mockImplementation(() =>
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 				async <P>(_task: Task<P>, _data: P, _options?: PerformOptions) => {
 				return "mockDispatch" as ExecutionId;
 			}),
