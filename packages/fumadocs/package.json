@@ -1,0 +1,40 @@
+{
+  "name": "fumadocs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "pnpm run typedoc",
+    "build": "next build",
+    "build:static": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typedoc": "typedoc --name workloads",
+    "posttypedoc": "rm -rf content/docs/reference/api/README.md content/docs/reference/api/**/README.md"
+  },
+  "dependencies": {
+    "@orama/orama": "^3.1.18",
+    "@types/mdx": "^2.0.13",
+    "fumadocs-core": "^16.6.4",
+    "fumadocs-mdx": "^14.2.7",
+    "fumadocs-typescript": "^5.1.3",
+    "fumadocs-ui": "^16.6.4",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-frontmatter": "^1.3.1",
+    "typedoc-plugin-markdown": "^4.10.0",
+    "typedoc-vitepress-theme": "^1.1.2",
+    "typescript": "^5"
+  }
+}
