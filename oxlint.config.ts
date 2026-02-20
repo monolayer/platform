@@ -1,13 +1,14 @@
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["unicorn", "typescript"],
-  "categories": {
-    "correctness": "off"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  plugins: ["unicorn", "typescript"],
+  categories: {
+    correctness: "off",
   },
-  "env": {
-    "builtin": true
+  env: {
+    builtin: true,
   },
-  "rules": {
+  rules: {
     "constructor-super": "error",
     "for-direction": "error",
     "getter-return": "error",
@@ -84,13 +85,13 @@
     "@typescript-eslint/no-wrapper-object-types": "error",
     "@typescript-eslint/prefer-as-const": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
-    "@typescript-eslint/triple-slash-reference": "error"
+    "@typescript-eslint/triple-slash-reference": "error",
   },
-  "ignorePatterns": ["dist/**"],
-  "overrides": [
+  ignorePatterns: ["dist/**"],
+  overrides: [
     {
-      "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
-      "rules": {
+      files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+      rules: {
         "constructor-super": "off",
         "getter-return": "off",
         "no-class-assign": "off",
@@ -111,15 +112,15 @@
         "no-with": "off",
         "prefer-const": "error",
         "prefer-rest-params": "error",
-        "prefer-spread": "error"
-      }
+        "prefer-spread": "error",
+      },
     },
     {
-      "files": ["test/**/*.ts", "**/*.test.ts"],
-      "rules": {
+      files: ["test/**/*.ts", "**/*.test.ts"],
+      rules: {
         "@typescript-eslint/no-explicit-any": "off",
-        "no-unused-vars": "off"
-      }
-    }
-  ]
-}
+        "no-unused-vars": "off",
+      },
+    },
+  ],
+});
