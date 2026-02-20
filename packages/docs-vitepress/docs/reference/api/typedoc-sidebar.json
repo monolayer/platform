@@ -1,0 +1,263 @@
+[
+  {
+    "text": "introspection",
+    "link": "/api/introspection/",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "Functions",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "packageVersion",
+            "link": "/api/introspection/functions/packageVersion.md"
+          },
+          {
+            "text": "projectDependencies",
+            "link": "/api/introspection/functions/projectDependencies.md"
+          },
+          {
+            "text": "projectDependency",
+            "link": "/api/introspection/functions/projectDependency.md"
+          },
+          {
+            "text": "projectFramework",
+            "link": "/api/introspection/functions/projectFramework.md"
+          },
+          {
+            "text": "projectName",
+            "link": "/api/introspection/functions/projectName.md"
+          }
+        ]
+      },
+      {
+        "text": "Interfaces",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "BucketInfo",
+            "link": "/api/introspection/interfaces/BucketInfo.md"
+          },
+          {
+            "text": "BuildManifest",
+            "link": "/api/introspection/interfaces/BuildManifest.md"
+          },
+          {
+            "text": "CronInto",
+            "link": "/api/introspection/interfaces/CronInto.md"
+          },
+          {
+            "text": "DatabaseWorkloadInfo",
+            "link": "/api/introspection/interfaces/DatabaseWorkloadInfo.md"
+          },
+          {
+            "text": "TaskInfo",
+            "link": "/api/introspection/interfaces/TaskInfo.md"
+          },
+          {
+            "text": "WorkloadInfo",
+            "link": "/api/introspection/interfaces/WorkloadInfo.md"
+          }
+        ]
+      },
+      {
+        "text": "Variables",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "manifestJsonSchema",
+            "link": "/api/introspection/variables/manifestJsonSchema.md"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "main",
+    "link": "/api/main/",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "Abstract Classes",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "Task",
+            "link": "/api/main/classes/Task.md"
+          },
+          {
+            "text": "Database",
+            "link": "/api/main/interfaces/Database.md"
+          },
+          {
+            "text": "LifecycleWorkload",
+            "link": "/api/main/interfaces/LifecycleWorkload.md"
+          },
+          {
+            "text": "StatefulWorkload",
+            "link": "/api/main/interfaces/StatefulWorkload.md"
+          },
+          {
+            "text": "StatefulWorkloadWithClient",
+            "link": "/api/main/interfaces/StatefulWorkloadWithClient.md"
+          },
+          {
+            "text": "StatelessWorkload",
+            "link": "/api/main/interfaces/StatelessWorkload.md"
+          },
+          {
+            "text": "Workload",
+            "link": "/api/main/interfaces/Workload.md"
+          }
+        ]
+      },
+      {
+        "text": "Classes",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "AfterRollout",
+            "link": "/api/main/classes/AfterRollout.md"
+          },
+          {
+            "text": "BeforeRollout",
+            "link": "/api/main/classes/BeforeRollout.md"
+          },
+          {
+            "text": "Bootstrap",
+            "link": "/api/main/classes/Bootstrap.md"
+          },
+          {
+            "text": "Broadcast",
+            "link": "/api/main/classes/Broadcast.md"
+          },
+          {
+            "text": "BroadcastPublisher",
+            "link": "/api/main/classes/BroadcastPublisher.md"
+          },
+          {
+            "text": "Bucket",
+            "link": "/api/main/classes/Bucket.md"
+          },
+          {
+            "text": "ChannelData",
+            "link": "/api/main/classes/ChannelData.md"
+          },
+          {
+            "text": "Cron",
+            "link": "/api/main/classes/Cron.md"
+          },
+          {
+            "text": "PostgresDatabase",
+            "link": "/api/main/classes/PostgresDatabase.md"
+          },
+          {
+            "text": "Redis",
+            "link": "/api/main/classes/Redis.md"
+          }
+        ]
+      },
+      {
+        "text": "Functions",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "broadcastClient",
+            "link": "/api/main/functions/broadcastClient.md"
+          },
+          {
+            "text": "BroadcastProvider",
+            "link": "/api/main/functions/BroadcastProvider.md"
+          },
+          {
+            "text": "bucketLocalConfiguration",
+            "link": "/api/main/functions/bucketLocalConfiguration.md"
+          }
+        ]
+      },
+      {
+        "text": "Interfaces",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "BucketOptions",
+            "link": "/api/main/interfaces/BucketOptions.md"
+          },
+          {
+            "text": "Configuration",
+            "link": "/api/main/interfaces/Configuration.md"
+          },
+          {
+            "text": "ContainerConfig",
+            "link": "/api/main/interfaces/ContainerConfig.md"
+          },
+          {
+            "text": "CronOptions",
+            "link": "/api/main/interfaces/CronOptions.md"
+          },
+          {
+            "text": "RetryOptions",
+            "link": "/api/main/interfaces/RetryOptions.md"
+          },
+          {
+            "text": "TaskOptions",
+            "link": "/api/main/interfaces/TaskOptions.md"
+          }
+        ]
+      },
+      {
+        "text": "Type Aliases",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "AccessGrant",
+            "link": "/api/main/type-aliases/AccessGrant.md"
+          },
+          {
+            "text": "PublicAccess",
+            "link": "/api/main/type-aliases/PublicAccess.md"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "test-helpers",
+    "link": "/api/test-helpers/",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "Functions",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "clearPerformedTasks",
+            "link": "/api/test-helpers/functions/clearPerformedTasks.md"
+          },
+          {
+            "text": "flushRedis",
+            "link": "/api/test-helpers/functions/flushRedis.md"
+          },
+          {
+            "text": "performedTasks",
+            "link": "/api/test-helpers/functions/performedTasks.md"
+          },
+          {
+            "text": "truncatePostgresTables",
+            "link": "/api/test-helpers/functions/truncatePostgresTables.md"
+          }
+        ]
+      },
+      {
+        "text": "Interfaces",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "PerformedTask",
+            "link": "/api/test-helpers/interfaces/PerformedTask.md"
+          }
+        ]
+      }
+    ]
+  }
+]

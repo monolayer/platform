@@ -1,0 +1,186 @@
+{
+  "name": "@monolayer/sdk",
+  "version": "1.3.0-canary.1",
+  "description": "monolayer SDK",
+  "author": "Marcos Essindi <marcessindi@me.com>",
+  "license": "MIT",
+  "homepage": "https://monolayer.dev/sdk-docs/",
+  "bugs": "https://github.com/monolayer/sdk/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monolayer/sdk/",
+    "directory": "packages/sdk"
+  },
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "keywords": [],
+  "bin": {
+    "monolayer": "./dist/cli.mjs",
+    "broadcast-server": "dist/broadcast-server.mjs"
+  },
+  "files": [
+    "dist/**",
+    "dist/cjs/**"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    },
+    "./test-helpers": {
+      "import": {
+        "types": "./dist/esm/test-helpers.d.mts",
+        "default": "./dist/esm/test-helpers.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/test-helpers.d.cts",
+        "default": "./dist/cjs/test-helpers.cjs"
+      }
+    },
+    "./introspection": {
+      "import": {
+        "types": "./dist/esm/introspection.d.mts",
+        "default": "./dist/esm/introspection.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/introspection.d.cts",
+        "default": "./dist/cjs/introspection.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "pnpm build:esm && pnpm build:cjs && pnpm build:broadcast-server",
+    "build:cjs": "tsdown --config tsdown.config.cjs.ts",
+    "build:esm": "tsdown --config tsdown.config.esm.ts",
+    "build:broadcast-server": "npx tsx build-broadcast-server.ts",
+    "docs:dev": "vitepress dev vitepress",
+    "docs:typedoc": "pnpm typedoc:watch",
+    "docs:build": "vitepress build vitepress",
+    "docs:preview": "vitepress preview vitepress",
+    "postbuild": "npm run makeexec && npm run makepackage",
+    "makeexec": "chmod +x dist/cli.mjs",
+    "makepackage": "echo '{\n  \"type\": \"module\"\n}' > dist/package.json && echo '{\n  \"type\": \"commonjs\"\n}' > dist/cjs/package.json",
+    "check-types": "tsgo -p tsconfig.json --noEmit",
+    "lint": "oxlint --type-aware",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
+    "typedoc": "typedoc --docsRoot vitepress/reference --name workloads",
+    "typedoc:watch": "npm run typedoc -- --watch",
+    "publish:local": "npm publish --registry http://localhost:4873",
+    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/control-plane-sdk -f"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.992.0",
+    "@aws-sdk/client-sqs": "^3.992.0",
+    "@aws-sdk/s3-request-presigner": "^3.992.0",
+    "@epic-web/remember": "^1.1.0",
+    "@oclif/core": "^4.0.0",
+    "@oclif/plugin-help": "^6.2.31",
+    "@vercel/frameworks": "^3.18.0",
+    "@vercel/fs-detectors": "^5.8.8",
+    "@vercel/nft": "^1.3.1",
+    "aws-sdk-client-mock": "^4.1.0",
+    "bullmq": "^5.69.3",
+    "case-anything": "^3.1.2",
+    "cli-table3": "^0.6.5",
+    "commander": "^14.0.3",
+    "cron-parser": "^4.9.0",
+    "dockerfile-utils": "^0.16.3",
+    "dockerode": "^4.0.9",
+    "dotenv": "^17.3.1",
+    "effect": "^3.19.14",
+    "esbuild": "^0.27.3",
+    "get-port": "^7.1.0",
+    "ioredis": "^5.9.3",
+    "mysql2": "^3.17.2",
+    "nodemailer": "^8.0.1",
+    "ora": "^9.3.0",
+    "pg": "^8.18.0",
+    "picocolors": "^1.1.1",
+    "prompts": "^2.4.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "skott": "^0.35.7",
+    "testcontainers": "^11.12.0",
+    "ts-morph": "^27.0.2",
+    "tsdown": "^0.20.3",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "uuid": "^13.0.0",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.699.0",
+    "@aws-sdk/client-sqs": "^3.699.0",
+    "@aws-sdk/s3-request-presigner": "^3.848.0",
+    "@commander-js/extra-typings": "^14.0.0",
+    "@effect/language-service": "^0.64.1",
+    "@hey-api/client-fetch": "^0.4.3",
+    "@hey-api/openapi-ts": "^0.56.1",
+    "@types/aws-lambda": "^8.10.146",
+    "@types/dockerode": "^4.0.1",
+    "@types/node": "^22.10.7",
+    "@types/nodemailer": "^6.4.16",
+    "@types/pg": "^8.16.0",
+    "@types/prompts": "^2.4.9",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
+    "@typescript/native-preview": "7.0.0-dev.20260220.1",
+    "@vercel/build-utils": "^13.4.2",
+    "@vitest/coverage-istanbul": "^4.0.17",
+    "@vitest/coverage-v8": "^4.0.17",
+    "@vitest/ui": "^4.0.17",
+    "aws-sdk-client-mock": "^4.1.0",
+    "bullmq": "^5.51.1",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.0.0",
+    "dockerfile-utils": "^0.16.1",
+    "dockerode": "^4.0.2",
+    "esbuild": "^0.25.6",
+    "ioredis": "^5.4.1",
+    "mysql2": "^3.11.4",
+    "nodemailer": "^6.9.16",
+    "npm-run-all": "^4.1.5",
+    "obug": "^2.1.1",
+    "ora": "^8.1.0",
+    "oxfmt": "^0.34.0",
+    "oxlint": "^1.49.0",
+    "oxlint-tsgolint": "^0.14.1",
+    "pg": "^8.13.1",
+    "picocolors": "^1.0.0",
+    "picomatch": "^4.0.3",
+    "prompts": "^2.4.2",
+    "react": "^19",
+    "react-dom": "^19",
+    "skott": "^0.33.2",
+    "std-env": "4.0.0-rc.1",
+    "tsc-alias": "^1.8.16",
+    "tsdown": "^0.20.3",
+    "type-fest": "^4.10.1",
+    "type-testing": "^0.2.0",
+    "typescript": "^5.9.3",
+    "uuid": "^11.1.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.17",
+    "ws": "^8.18.3",
+    "zod": "^4.3.6"
+  },
+  "oclif": {
+    "bin": "control-plane",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  }
+}
