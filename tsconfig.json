@@ -17,7 +17,6 @@
 		"types": ["node", "vitest/globals"],
 		"noEmit": true,
 		"rootDir": ".",
-		"baseUrl": ".",
 		"plugins": [
 			{
 				"name": "@effect/language-service"

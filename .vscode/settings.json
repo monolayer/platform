@@ -8,6 +8,7 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"editor.formatOnSave": true,
+	"typescript.experimental.useTsgo": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "explicit"
 	}
