@@ -25,7 +25,7 @@ This folder is a continuation guide for developing `@monolayer/sdk`.
 ## Project Structure
 
 - `packages/sdk`: The core SDK and CLI logic.
-- `packages/docs-vitepress`: The documentation website built with VitePress.
+- `packages/fumadocs`: The documentation website built with Fumadocs (Next.js).
 
 ## Read this first
 
@@ -51,7 +51,7 @@ node packages/sdk/dist/cli.mjs --help
 ### Documentation Development
 
 ```bash
-pnpm --filter @repo/docs-vitepress dev
+pnpm --filter fumadocs dev
 ```
 
 ## Short roadmap
