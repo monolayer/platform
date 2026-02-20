@@ -6,10 +6,20 @@
 		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
 	"editor.defaultFormatter": "oxc.oxc-vscode",
-	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"editor.formatOnSave": true,
+	"editor.formatOnSaveMode": "file",
+	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"typescript.experimental.useTsgo": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "explicit"
-	}
+	},
+	"oxc.typeAware": true,
+	"oxc.unusedDisableDirectives": "deny",
+	"oxc.requireConfig": false,
+	"oxc.lint.run": "onType",
+	"oxc.configPath": "oxlint.config.ts",
+	"oxc.enable.oxlint": true,
+	"oxc.enable.oxfmt": true,
+	"oxc.fixKind": "safe_fix",
+	"oxc.disableNestedConfig": false
 }
