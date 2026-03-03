@@ -409,4 +409,24 @@ describe("deployments deploy command", () => {
 			expect(fetchMock).not.toHaveBeenCalled();
 		});
 	});
+
+	it("shows a localhost troubleshooting hint when fetch fails", async () => {
+		const fetchMock = vi.fn().mockRejectedValueOnce(new TypeError("fetch failed"));
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		await expect(
+			DeploymentsDeploy.run([
+				"--base-url",
+				"https://localhost:3000",
+				"--deployment-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+			]),
+		).rejects.toThrow(/If your local server is plain HTTP/);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
 });

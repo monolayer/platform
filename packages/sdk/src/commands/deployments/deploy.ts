@@ -95,6 +95,53 @@ const isRequestDebugEnabled = (): boolean => {
   return process.env.DEBUG === "1";
 };
 
+const resolveFetchCause = (error: unknown): string | undefined => {
+  if (!(error instanceof Error)) {
+    return undefined;
+  }
+
+  const cause = (error as Error & { cause?: unknown }).cause;
+  if (cause instanceof Error) {
+    return cause.message;
+  }
+
+  if (typeof cause === "string") {
+    return cause;
+  }
+
+  if (typeof cause === "object" && cause !== null) {
+    const code =
+      "code" in cause && typeof cause.code === "string" ? cause.code : undefined;
+    const message =
+      "message" in cause && typeof cause.message === "string"
+        ? cause.message
+        : undefined;
+    if (code && message) {
+      return `${code}: ${message}`;
+    }
+    if (message) {
+      return message;
+    }
+    if (code) {
+      return code;
+    }
+  }
+
+  return undefined;
+};
+
+const localhostTroubleshootingHint = (url: URL): string => {
+  if (url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
+    return "";
+  }
+
+  if (url.protocol === "https:") {
+    return " If your local server is plain HTTP, use http://localhost:<port>. If it uses a self-signed HTTPS certificate, trust the cert locally or set NODE_TLS_REJECT_UNAUTHORIZED=0 for local debugging only.";
+  }
+
+  return " Verify the local server is listening on the configured port.";
+};
+
 export default class DeploymentsDeploy extends Command {
   static summary = "Deploy the current git branch";
   static description =
@@ -348,11 +395,22 @@ export default class DeploymentsDeploy extends Command {
       });
     }
 
-    const response = await fetch(url, {
-      method: input.method,
-      headers: requestHeaders,
-      body: input.body === undefined ? undefined : JSON.stringify(input.body),
-    });
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: input.method,
+        headers: requestHeaders,
+        body: input.body === undefined ? undefined : JSON.stringify(input.body),
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const fetchCause = resolveFetchCause(error);
+      const hint = localhostTroubleshootingHint(url);
+      this.error(
+        `Network request failed for ${input.method} ${url.toString()}: ${errorMessage}${fetchCause ? ` (${fetchCause})` : ""}.${hint}`,
+        { exit: 1 },
+      );
+    }
 
     const responseText = await response.text();
     let responseBody: unknown = undefined;
