@@ -14,12 +14,14 @@ import type {
 export const createDeploymentsApi = (
   runtime: ClientRuntime,
 ): DeploymentsApi => {
-  const create = (input: CreateDeploymentInput) =>
-    sendJson<DeploymentDto>(runtime, {
+  const create = (input: CreateDeploymentInput) => {
+    console.dir(input);
+    return sendJson<DeploymentDto>(runtime, {
       method: "POST",
       path: "/sdk/deployments",
       body: input,
     });
+  };
 
   const get = (input: GetDeploymentInput) =>
     sendJson<DeploymentDto>(runtime, {
