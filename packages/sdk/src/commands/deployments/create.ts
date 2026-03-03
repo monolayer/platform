@@ -10,7 +10,7 @@ export default class DeploymentsCreate extends BaseCommand {
 
 	static examples = [
 		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --project-id proj-1",
-		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --project-id proj-1 --environment-id prod --source-ref main --json",
+		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --project-id proj-1 --branch-name main --json",
 	];
 
 	static flags = {
@@ -19,11 +19,8 @@ export default class DeploymentsCreate extends BaseCommand {
 			required: true,
 			summary: "Project identifier",
 		}),
-		"environment-id": Flags.string({
-			summary: "Environment identifier",
-		}),
-		"source-ref": Flags.string({
-			summary: "Source reference (branch, commit, tag)",
+		"branch-name": Flags.string({
+			summary: "Git branch name to deploy",
 		}),
 	};
 
@@ -32,8 +29,7 @@ export default class DeploymentsCreate extends BaseCommand {
 		const client = this.createSdkClient(flags);
 		const result = await client.deployments.createPromise({
 			projectId: flags["project-id"],
-			environmentId: flags["environment-id"],
-			sourceRef: flags["source-ref"],
+			sourceRef: flags["branch-name"],
 		});
 
 		if (flags.json) {

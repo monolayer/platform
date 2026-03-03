@@ -59,8 +59,8 @@ describe("deployments commands", () => {
 				"test-token",
 				"--project-id",
 				"proj-1",
-				"--environment-id",
-				"prod",
+				"--branch-name",
+				"main",
 			]),
 		);
 
@@ -68,8 +68,14 @@ describe("deployments commands", () => {
 		expect(stdout).toContain(result.deploymentId);
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
-		expect(requestUrl.toString()).toBe("https://api.monolayer.com/v1/deployments");
+		expect(requestUrl.toString()).toBe("https://api.monolayer.com/sdk/deployments");
 		expect(requestInit.method).toBe("POST");
+		expect(requestInit.body).toBe(
+			JSON.stringify({
+				projectId: "proj-1",
+				sourceRef: "main",
+			}),
+		);
 	});
 
 	it("gets deployments by id", async () => {
