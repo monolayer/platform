@@ -119,6 +119,7 @@ describe("createClient", () => {
 		});
 
 		const fetched = await client.deployments.getPromise({
+			projectId: created.projectId,
 			deploymentId: created.deploymentId,
 		});
 
@@ -130,7 +131,12 @@ describe("createClient", () => {
 		const client = createMockClient();
 
 		const result = await Effect.runPromise(
-			Effect.either(client.deployments.get({ deploymentId: "dep-missing" })),
+			Effect.either(
+				client.deployments.get({
+					projectId: "proj-1",
+					deploymentId: "dep-missing",
+				}),
+			),
 		);
 
 		expect(Either.isLeft(result)).toBe(true);

@@ -50,6 +50,7 @@ export type CreateDeploymentInput = {
 };
 
 export type GetDeploymentInput = {
+	readonly projectId: string;
 	readonly deploymentId: string;
 };
 

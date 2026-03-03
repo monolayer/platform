@@ -98,12 +98,31 @@ describe("deployments commands", () => {
 				"https://api.monolayer.com",
 				"--auth-token",
 				"test-token",
+				"--project-id",
+				"proj-1",
 			]),
 		);
 
 		expect(result.deploymentId).toBe("dep-1");
 		expect(stdout).toContain("dep-1");
 		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe(
+			"https://api.monolayer.com/sdk/projects/proj-1/deployments/dep-1",
+		);
+		expect(requestInit.method).toBe("GET");
+	});
+
+	it("requires project-id when getting a deployment", async () => {
+		await expect(
+			DeploymentsGet.run([
+				"dep-1",
+				"--base-url",
+				"https://api.monolayer.com",
+				"--auth-token",
+				"test-token",
+			]),
+		).rejects.toThrow(/project-id/);
 	});
 
 	it("lists deployments in json mode", async () => {
