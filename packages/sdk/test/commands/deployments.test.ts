@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 // oxlint-disable-next-line turbo/no-undeclared-env-vars
 process.env.NODE_ENV = "production";
@@ -6,6 +6,14 @@ process.env.NODE_ENV = "production";
 import DeploymentsCreate from "../../src/commands/deployments/create.js";
 import DeploymentsGet from "../../src/commands/deployments/get.js";
 import DeploymentsList from "../../src/commands/deployments/list.js";
+
+const jsonResponse = (status: number, body: unknown): Response =>
+	new Response(JSON.stringify(body), {
+		status,
+		headers: {
+			"content-type": "application/json",
+		},
+	});
 
 const captureStdout = async <T>(task: () => Promise<T>) => {
 	const chunks: Array<string> = [];
@@ -27,7 +35,22 @@ const captureStdout = async <T>(task: () => Promise<T>) => {
 };
 
 describe("deployments commands", () => {
+	afterEach(() => {
+		vi.unstubAllGlobals();
+	});
+
 	it("creates deployments", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(201, {
+				deploymentId: "dep-4",
+				projectId: "proj-1",
+				environmentId: "prod",
+				status: "queued",
+				createdAt: "2026-02-19T00:00:00.000Z",
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const { result, stdout } = await captureStdout(() =>
 			DeploymentsCreate.run([
 				"--base-url",
@@ -43,9 +66,25 @@ describe("deployments commands", () => {
 
 		expect(result.deploymentId).toMatch(/^dep-/);
 		expect(stdout).toContain(result.deploymentId);
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe("https://api.monolayer.com/v1/deployments");
+		expect(requestInit.method).toBe("POST");
 	});
 
 	it("gets deployments by id", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(200, {
+				deploymentId: "dep-1",
+				projectId: "proj-1",
+				environmentId: "prod",
+				sourceRef: "main",
+				status: "succeeded",
+				createdAt: "2026-02-10T10:00:00.000Z",
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const { result, stdout } = await captureStdout(() =>
 			DeploymentsGet.run([
 				"dep-1",
@@ -58,9 +97,26 @@ describe("deployments commands", () => {
 
 		expect(result.deploymentId).toBe("dep-1");
 		expect(stdout).toContain("dep-1");
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
 	it("lists deployments in json mode", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(200, {
+				items: [
+					{
+						deploymentId: "dep-2",
+						projectId: "proj-1",
+						environmentId: "staging",
+						sourceRef: "feature/a",
+						status: "running",
+						createdAt: "2026-02-12T18:30:00.000Z",
+					},
+				],
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const { result, stdout } = await captureStdout(() =>
 			DeploymentsList.run([
 				"--base-url",
@@ -77,5 +133,6 @@ describe("deployments commands", () => {
 			true,
 		);
 		expect(stdout).toContain('"items"');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 });

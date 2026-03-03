@@ -1,9 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 // oxlint-disable-next-line turbo/no-undeclared-env-vars
 process.env.NODE_ENV = "production";
 
 import ProjectsList from "../../src/commands/projects/list.js";
+
+const jsonResponse = (status: number, body: unknown): Response =>
+	new Response(JSON.stringify(body), {
+		status,
+		headers: {
+			"content-type": "application/json",
+		},
+	});
 
 const captureStdout = async <T>(task: () => Promise<T>) => {
 	const chunks: Array<string> = [];
@@ -25,7 +33,21 @@ const captureStdout = async <T>(task: () => Promise<T>) => {
 };
 
 describe("projects:list command", () => {
+	afterEach(() => {
+		vi.unstubAllGlobals();
+	});
+
 	it("prints project rows in human mode", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(200, {
+				items: [
+					{ projectId: "proj-1", name: "Control Plane" },
+					{ projectId: "proj-2", name: "Workflow Engine" },
+				],
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const { result, stdout } = await captureStdout(() =>
 			ProjectsList.run([
 				"--base-url",
@@ -40,9 +62,22 @@ describe("projects:list command", () => {
 		expect(result.items).toHaveLength(2);
 		expect(stdout).toContain("proj-1");
 		expect(stdout).toContain("Control Plane");
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe(
+			"https://api.monolayer.com/v1/projects?limit=2",
+		);
+		expect(requestInit.method).toBe("GET");
 	});
 
 	it("prints JSON in --json mode", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(200, {
+				items: [{ projectId: "proj-1", name: "Control Plane" }],
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const { result, stdout } = await captureStdout(() =>
 			ProjectsList.run([
 				"--base-url",
@@ -55,5 +90,6 @@ describe("projects:list command", () => {
 
 		expect(result.items.length).toBeGreaterThan(0);
 		expect(stdout).toContain('"items"');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 });

@@ -1,14 +1,17 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Effect, Either } from "effect";
 import { createClient } from "../../src/sdk/client.js";
 import { AuthError, NotFoundError } from "../../src/sdk/errors.js";
+import { createMockTransport } from "../../src/sdk/mock-transport.js";
 
 describe("createClient", () => {
 	// oxlint-disable-next-line turbo/no-undeclared-env-vars
 	const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
 
 	afterEach(() => {
+		vi.unstubAllGlobals();
+
 		if (originalToken) {
 			// oxlint-disable-next-line turbo/no-undeclared-env-vars
 			process.env.MONOLAYER_AUTH_TOKEN = originalToken;
@@ -17,6 +20,13 @@ describe("createClient", () => {
 		// oxlint-disable-next-line turbo/no-undeclared-env-vars
 		delete process.env.MONOLAYER_AUTH_TOKEN;
 	});
+
+	const createMockClient = () =>
+		createClient({
+			baseUrl: "https://api.monolayer.com",
+			authToken: "test-token",
+			transport: createMockTransport(),
+		});
 
 	it("builds a client with normalized config", () => {
 		const client = createClient({
@@ -37,11 +47,41 @@ describe("createClient", () => {
 		).toThrow(AuthError);
 	});
 
-	it("lists projects from mock transport", async () => {
+	it("uses http transport by default", async () => {
+		const fetchMock = vi.fn().mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					items: [{ projectId: "proj-9", name: "Platform SDK" }],
+				}),
+				{
+					status: 200,
+					headers: {
+						"content-type": "application/json",
+					},
+				},
+			),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
 		const client = createClient({
 			baseUrl: "https://api.monolayer.com",
 			authToken: "test-token",
 		});
+
+		const projects = await client.projects.listPromise();
+
+		expect(projects.items[0]?.projectId).toBe("proj-9");
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe("https://api.monolayer.com/v1/projects");
+		expect(requestInit.method).toBe("GET");
+		expect(requestInit.headers).toMatchObject({
+			authorization: "Bearer test-token",
+		});
+	});
+
+	it("lists projects from mock transport", async () => {
+		const client = createMockClient();
 
 		const projects = await client.projects.listPromise();
 		expect(projects.items.length).toBeGreaterThan(0);
@@ -49,10 +89,7 @@ describe("createClient", () => {
 	});
 
 	it("supports cursor pagination and filtering for deployment lists", async () => {
-		const client = createClient({
-			baseUrl: "https://api.monolayer.com",
-			authToken: "test-token",
-		});
+		const client = createMockClient();
 
 		const firstPage = await client.deployments.listPromise({ limit: 1 });
 		expect(firstPage.items).toHaveLength(1);
@@ -73,10 +110,7 @@ describe("createClient", () => {
 	});
 
 	it("creates and retrieves deployments from mock transport", async () => {
-		const client = createClient({
-			baseUrl: "https://api.monolayer.com",
-			authToken: "test-token",
-		});
+		const client = createMockClient();
 
 		const created = await client.deployments.createPromise({
 			projectId: "proj-2",
@@ -93,10 +127,7 @@ describe("createClient", () => {
 	});
 
 	it("returns typed not-found error for missing deployment", async () => {
-		const client = createClient({
-			baseUrl: "https://api.monolayer.com",
-			authToken: "test-token",
-		});
+		const client = createMockClient();
 
 		const result = await Effect.runPromise(
 			Effect.either(client.deployments.get({ deploymentId: "dep-missing" })),
@@ -109,10 +140,7 @@ describe("createClient", () => {
 	});
 
 	it("sets and lists secret metadata without exposing values", async () => {
-		const client = createClient({
-			baseUrl: "https://api.monolayer.com",
-			authToken: "test-token",
-		});
+		const client = createMockClient();
 
 		const updatedSecret = await client.secrets.setPromise({
 			projectId: "proj-1",
