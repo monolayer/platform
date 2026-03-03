@@ -244,6 +244,66 @@ describe("deployments deploy command", () => {
 		expect(stdout).toContain("Queued behind active deployment");
 	});
 
+	it("logs each status only once while polling", async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce(
+				jsonResponse(202, {
+					type: "triggered",
+					success: true,
+					deploymentNumber: "dep-106",
+					queued: false,
+				}),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(
+					200,
+					{
+						status: "Ongoing",
+						logs: [],
+					},
+					{ "x-next-since": "1" },
+				),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(
+					200,
+					{
+						status: "Ongoing",
+						logs: [],
+					},
+					{ "x-next-since": "2" },
+				),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(200, {
+					status: "Finished",
+					logs: [],
+				}),
+			);
+
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		const { stdout } = await captureStdout(() =>
+			DeploymentsDeploy.run([
+				"--base-url",
+				"https://api.monolayer.com",
+				"--deployment-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+				"--poll-interval-ms",
+				"0",
+			]),
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(4);
+		expect(stdout.match(/Deployment status: Ongoing/g)?.length ?? 0).toBe(1);
+		expect(stdout.match(/Deployment status: Finished/g)?.length ?? 0).toBe(1);
+	});
+
 	it("fails command when deployment reaches failed terminal status", async () => {
 		const fetchMock = vi
 			.fn()

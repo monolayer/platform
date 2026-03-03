@@ -304,6 +304,7 @@ export default class DeploymentsDeploy extends Command {
   }> {
     const collectedLogs: DeploymentLog[] = [];
     const seenLogKeys = new Set<string>();
+    let lastDisplayedStatus: DeploymentStatus | undefined;
     let since: string | undefined;
 
     for (;;) {
@@ -341,7 +342,10 @@ export default class DeploymentsDeploy extends Command {
         for (const log of freshLogs) {
           this.log(formatLogLine(log));
         }
-        this.log(`Deployment status: ${response.body.status}`);
+        if (lastDisplayedStatus !== response.body.status) {
+          this.log(`Deployment status: ${response.body.status}`);
+          lastDisplayedStatus = response.body.status;
+        }
       }
 
       if (
