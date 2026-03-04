@@ -120,7 +120,9 @@ const resolveFetchCause = (error: unknown): string | undefined => {
 
   if (typeof cause === "object" && cause !== null) {
     const code =
-      "code" in cause && typeof cause.code === "string" ? cause.code : undefined;
+      "code" in cause && typeof cause.code === "string"
+        ? cause.code
+        : undefined;
     const message =
       "message" in cause && typeof cause.message === "string"
         ? cause.message
@@ -155,12 +157,10 @@ export default class DeploymentsDeploy extends Command {
   static summary = "Deploy the current git branch";
   static description =
     "Triggers SDK deployment for the current git branch and polls deployment logs.";
-  static enableJsonFlag = true;
 
   static examples = [
     "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --deployment-token deploy_token_... --project-id proj-1",
     "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --deployment-token deploy_token_... --project-id proj-1 --branch-name feature/x",
-    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --deployment-token deploy_token_... --project-id proj-1 --json",
   ];
 
   static flags = {
@@ -193,7 +193,10 @@ export default class DeploymentsDeploy extends Command {
     const { flags } = await this.parse(DeploymentsDeploy);
     const baseUrl = new URL(flags["base-url"]);
     const deploymentToken = flags["deployment-token"];
-    const jsonOutput = flags.json ?? false;
+    const emitResult = (result: DeployCommandResult): DeployCommandResult => {
+      this.log(JSON.stringify(result, null, 2));
+      return result;
+    };
 
     if (!deploymentToken.startsWith("deploy_token_")) {
       this.error('deployment-token must start with "deploy_token_"', {
@@ -209,9 +212,7 @@ export default class DeploymentsDeploy extends Command {
       );
     }
 
-    if (!jsonOutput) {
-      this.log(`Current branch: ${branchName}`);
-    }
+    this.log(`Current branch: ${branchName}`);
 
     const triggerResponse =
       await this.sendJsonRequest<DeploymentTriggerResponse>(
@@ -224,33 +225,27 @@ export default class DeploymentsDeploy extends Command {
       );
 
     if (triggerResponse.body.type === "skipped") {
-      if (!jsonOutput) {
-        this.log(`Deployment skipped: ${triggerResponse.body.message}`);
-      }
-      return {
+      this.log(`Deployment skipped: ${triggerResponse.body.message}`);
+      return emitResult({
         branchName,
         trigger: triggerResponse.body,
         logs: [],
-      };
+      });
     }
 
     if (triggerResponse.body.type === "queued") {
-      if (!jsonOutput) {
-        this.log("Deployment already queued. Polling skipped.");
-      }
-      return {
+      this.log("Deployment already queued. Polling skipped.");
+      return emitResult({
         branchName,
         trigger: triggerResponse.body,
         status: "Queued",
         logs: [],
-      };
+      });
     }
 
-    if (!jsonOutput) {
-      this.log(
-        `Deployment triggered: ${triggerResponse.body.deploymentNumber}. Polling logs...`,
-      );
-    }
+    this.log(
+      `Deployment triggered: ${triggerResponse.body.deploymentNumber}. Polling logs...`,
+    );
 
     const pollResult = await this.pollDeployment({
       baseUrl,
@@ -258,7 +253,6 @@ export default class DeploymentsDeploy extends Command {
       deploymentNumber: triggerResponse.body.deploymentNumber,
       deploymentToken,
       pollIntervalMs: flags["poll-interval-ms"],
-      jsonOutput,
     });
 
     if (pollResult.status === "Failed") {
@@ -267,13 +261,12 @@ export default class DeploymentsDeploy extends Command {
         { exit: 1 },
       );
     }
-
-    return {
+    return emitResult({
       branchName,
       trigger: triggerResponse.body,
       status: pollResult.status,
       logs: pollResult.logs,
-    };
+    });
   }
 
   private getCurrentBranchName(): string {
@@ -306,7 +299,6 @@ export default class DeploymentsDeploy extends Command {
     readonly deploymentNumber: string;
     readonly deploymentToken: string;
     readonly pollIntervalMs: number;
-    readonly jsonOutput: boolean;
   }): Promise<{
     readonly status: DeploymentStatus;
     readonly logs: DeploymentLog[];
@@ -347,17 +339,15 @@ export default class DeploymentsDeploy extends Command {
 
       collectedLogs.push(...freshLogs);
 
-      if (!input.jsonOutput) {
-        for (const log of freshLogs) {
-          const formattedLogLine = formatLogLine(log);
-          if (formattedLogLine !== undefined) {
-            this.log(formattedLogLine);
-          }
+      for (const log of freshLogs) {
+        const formattedLogLine = formatLogLine(log);
+        if (formattedLogLine !== undefined) {
+          this.log(formattedLogLine);
         }
-        if (lastDisplayedStatus !== response.body.status) {
-          this.log(`Deployment status: ${response.body.status}`);
-          lastDisplayedStatus = response.body.status;
-        }
+      }
+      if (lastDisplayedStatus !== response.body.status) {
+        this.log(`Deployment status: ${response.body.status}`);
+        lastDisplayedStatus = response.body.status;
       }
 
       if (
@@ -419,7 +409,8 @@ export default class DeploymentsDeploy extends Command {
         body: input.body === undefined ? undefined : JSON.stringify(input.body),
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       const fetchCause = resolveFetchCause(error);
       const hint = localhostTroubleshootingHint(url);
       this.error(
