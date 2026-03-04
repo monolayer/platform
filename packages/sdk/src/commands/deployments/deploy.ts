@@ -159,8 +159,8 @@ export default class DeploymentsDeploy extends Command {
     "Triggers SDK deployment for the current git branch and polls deployment logs.";
 
   static examples = [
-    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --auth-token deploy_token_... --project-id proj-1",
-    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --auth-token deploy_token_... --project-id proj-1 --branch-name feature/x",
+    "<%= config.bin %> <%= command.id %> --base-url https://control-plane-domain --auth-token deploy_token_... --project-id proj-1",
+    "<%= config.bin %> <%= command.id %> --base-url https://control-plane-domain --auth-token deploy_token_... --project-id proj-1 --branch-name feature/x",
   ];
 
   static flags = {

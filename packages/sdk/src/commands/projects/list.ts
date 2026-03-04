@@ -8,8 +8,8 @@ export default class ProjectsList extends BaseCommand {
 	static description = "List projects with cursor-based pagination.";
 
 	static examples = [
-		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com",
-		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --limit 1",
+		"<%= config.bin %> <%= command.id %> --base-url https://control-plane-domain",
+		"<%= config.bin %> <%= command.id %> --base-url https://control-plane-domain --limit 1",
 	];
 
 	static flags = {
