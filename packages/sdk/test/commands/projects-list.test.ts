@@ -37,7 +37,7 @@ describe("projects:list command", () => {
 		vi.unstubAllGlobals();
 	});
 
-	it("prints project rows in human mode", async () => {
+	it("prints JSON response by default", async () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			jsonResponse(200, {
 				items: [
@@ -68,9 +68,12 @@ describe("projects:list command", () => {
 		);
 
 		expect(result.items).toHaveLength(2);
-		expect(stdout).toContain("proj-1");
-		expect(stdout).toContain("Control Plane");
-		expect(stdout).toContain("https://github.com/monolayer/control-plane");
+		expect(result.items[0]?.repositoryUrl).toBe(
+			"https://github.com/monolayer/control-plane",
+		);
+		const output = JSON.parse(stdout) as typeof result;
+		expect(output.items).toHaveLength(2);
+		expect(output.items[0]?.projectId).toBe("proj-1");
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
 		expect(requestUrl.toString()).toBe(
@@ -79,7 +82,7 @@ describe("projects:list command", () => {
 		expect(requestInit.method).toBe("GET");
 	});
 
-	it("prints JSON in --json mode", async () => {
+	it("rejects --json because output is always JSON", async () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			jsonResponse(200, {
 				items: [
@@ -93,18 +96,17 @@ describe("projects:list command", () => {
 		);
 		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
 
-		const { result, stdout } = await captureStdout(() =>
-			ProjectsList.run([
-				"--base-url",
-				"https://api.monolayer.com",
-				"--auth-token",
-				"test-token",
-				"--json",
-			]),
-		);
-
-		expect(result.items.length).toBeGreaterThan(0);
-		expect(stdout).toContain('"items"');
-		expect(fetchMock).toHaveBeenCalledTimes(1);
+		await expect(
+			captureStdout(() =>
+				ProjectsList.run([
+					"--base-url",
+					"https://api.monolayer.com",
+					"--auth-token",
+					"test-token",
+					"--json",
+				]),
+			),
+		).rejects.toThrow(/--json/);
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 });

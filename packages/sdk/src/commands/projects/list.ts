@@ -6,11 +6,10 @@ import type { ListResult, ProjectDto } from "../../sdk/types.js";
 export default class ProjectsList extends BaseCommand {
 	static summary = "List projects";
 	static description = "List projects with cursor-based pagination.";
-	static enableJsonFlag = true;
 
 	static examples = [
 		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com",
-		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --limit 1 --json",
+		"<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --limit 1",
 	];
 
 	static flags = {
@@ -32,15 +31,7 @@ export default class ProjectsList extends BaseCommand {
 			limit: flags.limit,
 		});
 
-		if (flags.json) {
-			return result;
-		}
-
-		this.renderList(
-			result.items,
-			(item) => `${item.projectId}\t${item.name}\t${item.repositoryUrl}`,
-			result.nextCursor,
-		);
+		this.log(JSON.stringify(result, null, 2));
 
 		return result;
 	}
