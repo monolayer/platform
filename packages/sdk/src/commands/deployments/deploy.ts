@@ -189,7 +189,7 @@ export default class DeploymentsDeploy extends Command {
     }),
   };
 
-  public async run(): Promise<DeployCommandResult> {
+  public async run(): Promise<void> {
     const { flags } = await this.parse(DeploymentsDeploy);
     const baseUrl = new URL(flags["base-url"]);
     const deploymentToken = flags["auth-token"];
@@ -226,21 +226,12 @@ export default class DeploymentsDeploy extends Command {
 
     if (triggerResponse.body.type === "skipped") {
       this.log(`Deployment skipped: ${triggerResponse.body.message}`);
-      return emitResult({
-        branchName,
-        trigger: triggerResponse.body,
-        logs: [],
-      });
+      return;
     }
 
     if (triggerResponse.body.type === "queued") {
       this.log("Deployment already queued. Polling skipped.");
-      return emitResult({
-        branchName,
-        trigger: triggerResponse.body,
-        status: "Queued",
-        logs: [],
-      });
+      return;
     }
 
     this.log(
@@ -261,12 +252,6 @@ export default class DeploymentsDeploy extends Command {
         { exit: 1 },
       );
     }
-    return emitResult({
-      branchName,
-      trigger: triggerResponse.body,
-      status: pollResult.status,
-      logs: pollResult.logs,
-    });
   }
 
   private getCurrentBranchName(): string {
