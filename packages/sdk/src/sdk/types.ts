@@ -13,6 +13,7 @@ export type ListResult<T> = {
 export type ProjectDto = {
 	readonly projectId: string;
 	readonly name: string;
+	readonly repositoryUrl: string;
 };
 
 export type DeploymentStatus =

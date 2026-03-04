@@ -51,7 +51,13 @@ describe("createClient", () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			new Response(
 				JSON.stringify({
-					items: [{ projectId: "proj-9", name: "Platform SDK" }],
+					items: [
+						{
+							projectId: "proj-9",
+							name: "Platform SDK",
+							repositoryUrl: "https://github.com/monolayer/platform-sdk",
+						},
+					],
 				}),
 				{
 					status: 200,
@@ -71,9 +77,12 @@ describe("createClient", () => {
 		const projects = await client.projects.listPromise();
 
 		expect(projects.items[0]?.projectId).toBe("proj-9");
+		expect(projects.items[0]?.repositoryUrl).toBe(
+			"https://github.com/monolayer/platform-sdk",
+		);
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
-		expect(requestUrl.toString()).toBe("https://api.monolayer.com/v1/projects");
+		expect(requestUrl.toString()).toBe("https://api.monolayer.com/sdk/projects");
 		expect(requestInit.method).toBe("GET");
 		expect(requestInit.headers).toMatchObject({
 			authorization: "Bearer test-token",
@@ -86,6 +95,9 @@ describe("createClient", () => {
 		const projects = await client.projects.listPromise();
 		expect(projects.items.length).toBeGreaterThan(0);
 		expect(projects.items[0]?.projectId).toBe("proj-1");
+		expect(projects.items[0]?.repositoryUrl).toBe(
+			"https://github.com/monolayer/control-plane",
+		);
 	});
 
 	it("supports cursor pagination and filtering for deployment lists", async () => {

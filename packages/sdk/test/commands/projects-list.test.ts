@@ -41,8 +41,16 @@ describe("projects:list command", () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			jsonResponse(200, {
 				items: [
-					{ projectId: "proj-1", name: "Control Plane" },
-					{ projectId: "proj-2", name: "Workflow Engine" },
+					{
+						projectId: "proj-1",
+						name: "Control Plane",
+						repositoryUrl: "https://github.com/monolayer/control-plane",
+					},
+					{
+						projectId: "proj-2",
+						name: "Workflow Engine",
+						repositoryUrl: "https://github.com/monolayer/workflow-engine",
+					},
 				],
 			}),
 		);
@@ -62,10 +70,11 @@ describe("projects:list command", () => {
 		expect(result.items).toHaveLength(2);
 		expect(stdout).toContain("proj-1");
 		expect(stdout).toContain("Control Plane");
+		expect(stdout).toContain("https://github.com/monolayer/control-plane");
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
 		expect(requestUrl.toString()).toBe(
-			"https://api.monolayer.com/v1/projects?limit=2",
+			"https://api.monolayer.com/sdk/projects?limit=2",
 		);
 		expect(requestInit.method).toBe("GET");
 	});
@@ -73,7 +82,13 @@ describe("projects:list command", () => {
 	it("prints JSON in --json mode", async () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			jsonResponse(200, {
-				items: [{ projectId: "proj-1", name: "Control Plane" }],
+				items: [
+					{
+						projectId: "proj-1",
+						name: "Control Plane",
+						repositoryUrl: "https://github.com/monolayer/control-plane",
+					},
+				],
 			}),
 		);
 		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);

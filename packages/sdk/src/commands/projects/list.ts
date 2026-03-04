@@ -38,7 +38,7 @@ export default class ProjectsList extends BaseCommand {
 
 		this.renderList(
 			result.items,
-			(item) => `${item.projectId}\t${item.name}`,
+			(item) => `${item.projectId}\t${item.name}\t${item.repositoryUrl}`,
 			result.nextCursor,
 		);
 

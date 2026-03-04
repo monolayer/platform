@@ -10,9 +10,21 @@ import type {
 import type { HttpRequest, HttpResponse, Transport } from "./transport.js";
 
 const initialProjects: ReadonlyArray<ProjectDto> = [
-	{ projectId: "proj-1", name: "Control Plane" },
-	{ projectId: "proj-2", name: "Workflow Engine" },
-	{ projectId: "proj-3", name: "Infra Agent" },
+	{
+		projectId: "proj-1",
+		name: "Control Plane",
+		repositoryUrl: "https://github.com/monolayer/control-plane",
+	},
+	{
+		projectId: "proj-2",
+		name: "Workflow Engine",
+		repositoryUrl: "https://github.com/monolayer/workflow-engine",
+	},
+	{
+		projectId: "proj-3",
+		name: "Infra Agent",
+		repositoryUrl: "https://github.com/monolayer/infra-agent",
+	},
 ];
 
 const initialDeployments: ReadonlyArray<DeploymentDto> = [
@@ -129,7 +141,7 @@ export const createMockTransport = (): Transport => {
 					return unauthorized();
 				}
 
-				if (request.method === "GET" && request.path === "/v1/projects") {
+				if (request.method === "GET" && request.path === "/sdk/projects") {
 					return {
 						status: 200,
 						body: paginate(
@@ -140,7 +152,7 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (request.method === "GET" && request.path === "/v1/deployments") {
+				if (request.method === "GET" && request.path === "/sdk/deployments") {
 					const projectId = request.query?.projectId;
 					const filtered =
 						typeof projectId === "string"
@@ -159,19 +171,21 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (
-					request.method === "GET" &&
-					request.path.startsWith("/v1/deployments/")
-				) {
-					const deploymentId = decodeURIComponent(
-						request.path.replace("/v1/deployments/", ""),
-					);
+				const getDeploymentMatch = request.path.match(
+					/^\/sdk\/projects\/([^/]+)\/deployments\/([^/]+)$/,
+				);
+				if (request.method === "GET" && getDeploymentMatch) {
+					const projectId = decodeURIComponent(getDeploymentMatch[1] ?? "");
+					const deploymentId = decodeURIComponent(getDeploymentMatch[2] ?? "");
 					const deployment = deployments.find(
-						(item) => item.deploymentId === deploymentId,
+						(item) =>
+							item.deploymentId === deploymentId && item.projectId === projectId,
 					);
 
 					if (!deployment) {
-						return notFound(`Deployment not found: ${deploymentId}`);
+						return notFound(
+							`Deployment not found: ${deploymentId} for project ${projectId}`,
+						);
 					}
 
 					return {
@@ -180,7 +194,7 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (request.method === "POST" && request.path === "/v1/deployments") {
+				if (request.method === "POST" && request.path === "/sdk/deployments") {
 					const body =
 						typeof request.body === "object" && request.body !== null
 							? request.body
