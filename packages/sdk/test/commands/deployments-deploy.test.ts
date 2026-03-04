@@ -163,6 +163,81 @@ describe("deployments deploy command", () => {
 		expect(thirdCallUrl.searchParams.get("since")).toBe("1762200002000");
 	});
 
+	it("prints formatted log lines from polled deployment events", async () => {
+		const firstTimestamp = 1_762_200_041_000;
+		const secondTimestamp = 1_762_200_042_000;
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce(
+				jsonResponse(202, {
+					type: "triggered",
+					success: true,
+					deploymentNumber: "dep-108",
+					queued: false,
+				}),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(
+					200,
+					{
+						status: "Ongoing",
+						logs: [
+							{
+								message: "Running tests",
+								timestamp: firstTimestamp,
+								logGroupName: "group",
+								logStreamName: "stream",
+								eventId: "evt-1",
+							},
+						],
+					},
+					{ "x-next-since": "10" },
+				),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(
+					200,
+					{
+						status: "Finished",
+						logs: [
+							{
+								message: "Deploy complete",
+								timestamp: secondTimestamp,
+								logGroupName: "group",
+								logStreamName: "stream",
+								eventId: "evt-2",
+							},
+						],
+					},
+				),
+			);
+
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		const { stdout } = await captureStdout(() =>
+			DeploymentsDeploy.run([
+				"--base-url",
+				"https://api.monolayer.com",
+				"--deployment-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+				"--poll-interval-ms",
+				"0",
+			]),
+		);
+
+		const polledLogLines = stdout
+			.split(/\r?\n/)
+			.filter((line) => /^\[[^\]]+\]\s.+$/.test(line));
+		expect(polledLogLines).toEqual([
+			`[${new Date(firstTimestamp).toISOString()}] Running tests`,
+			`[${new Date(secondTimestamp).toISOString()}] Deploy complete`,
+		]);
+	});
+
 	it("does not poll when trigger response is queued", async () => {
 		const fetchMock = vi.fn().mockResolvedValueOnce(
 			jsonResponse(202, {
