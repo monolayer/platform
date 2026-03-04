@@ -304,6 +304,81 @@ describe("deployments deploy command", () => {
 		expect(stdout.match(/Deployment status: Finished/g)?.length ?? 0).toBe(1);
 	});
 
+	it("skips blank log lines and trims trailing newlines", async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce(
+				jsonResponse(202, {
+					type: "triggered",
+					success: true,
+					deploymentNumber: "dep-107",
+					queued: false,
+				}),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(
+					200,
+					{
+						status: "Ongoing",
+						logs: [
+							{
+								message: "",
+								timestamp: 1_762_200_031_000,
+								logGroupName: "group",
+								logStreamName: "stream",
+								eventId: "evt-blank-1",
+							},
+							{
+								message: "Loaded image: launch-deploy:latest\n",
+								timestamp: 1_762_200_033_000,
+								logGroupName: "group",
+								logStreamName: "stream",
+								eventId: "evt-text",
+							},
+							{
+								message: "  \n",
+								timestamp: 1_762_200_034_000,
+								logGroupName: "group",
+								logStreamName: "stream",
+								eventId: "evt-blank-2",
+							},
+						],
+					},
+					{ "x-next-since": "3" },
+				),
+			)
+			.mockResolvedValueOnce(
+				jsonResponse(200, {
+					status: "Finished",
+					logs: [],
+				}),
+			);
+
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		const { stdout } = await captureStdout(() =>
+			DeploymentsDeploy.run([
+				"--base-url",
+				"https://api.monolayer.com",
+				"--deployment-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+				"--poll-interval-ms",
+				"0",
+			]),
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(3);
+		expect(stdout).toContain("Loaded image: launch-deploy:latest");
+		const timestampOnlyLines = stdout
+			.split(/\r?\n/)
+			.filter((line) => /^\[[^\]]+\]\s*$/.test(line));
+		expect(timestampOnlyLines).toHaveLength(0);
+	});
+
 	it("fails command when deployment reaches failed terminal status", async () => {
 		const fetchMock = vi
 			.fn()

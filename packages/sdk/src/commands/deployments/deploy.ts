@@ -79,8 +79,17 @@ const resolveErrorMessage = (body: unknown, fallback: string): string => {
   return fallback;
 };
 
-const formatLogLine = (log: DeploymentLog): string =>
-  `[${new Date(log.timestamp).toISOString()}] ${log.message}`;
+const normalizeLogMessage = (message: string): string =>
+  message.replace(/[\r\n]+$/g, "");
+
+const formatLogLine = (log: DeploymentLog): string | undefined => {
+  const normalizedMessage = normalizeLogMessage(log.message);
+  if (normalizedMessage.trim().length === 0) {
+    return undefined;
+  }
+
+  return `[${new Date(log.timestamp).toISOString()}] ${normalizedMessage}`;
+};
 
 const redactToken = (token: string): string => {
   if (token.length <= 8) {
@@ -340,7 +349,10 @@ export default class DeploymentsDeploy extends Command {
 
       if (!input.jsonOutput) {
         for (const log of freshLogs) {
-          this.log(formatLogLine(log));
+          const formattedLogLine = formatLogLine(log);
+          if (formattedLogLine !== undefined) {
+            this.log(formattedLogLine);
+          }
         }
         if (lastDisplayedStatus !== response.body.status) {
           this.log(`Deployment status: ${response.body.status}`);
