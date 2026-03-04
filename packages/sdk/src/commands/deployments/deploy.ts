@@ -159,8 +159,8 @@ export default class DeploymentsDeploy extends Command {
     "Triggers SDK deployment for the current git branch and polls deployment logs.";
 
   static examples = [
-    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --deployment-token deploy_token_... --project-id proj-1",
-    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --deployment-token deploy_token_... --project-id proj-1 --branch-name feature/x",
+    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --auth-token deploy_token_... --project-id proj-1",
+    "<%= config.bin %> <%= command.id %> --base-url https://api.monolayer.com --auth-token deploy_token_... --project-id proj-1 --branch-name feature/x",
   ];
 
   static flags = {
@@ -169,7 +169,7 @@ export default class DeploymentsDeploy extends Command {
       env: "MONOLAYER_BASE_URL",
       summary: "Control plane API base origin",
     }),
-    "deployment-token": Flags.string({
+    "auth-token": Flags.string({
       required: true,
       env: "MONOLAYER_DEPLOYMENT_TOKEN",
       summary: "Deployment token (deploy_token_*)",
@@ -192,14 +192,14 @@ export default class DeploymentsDeploy extends Command {
   public async run(): Promise<DeployCommandResult> {
     const { flags } = await this.parse(DeploymentsDeploy);
     const baseUrl = new URL(flags["base-url"]);
-    const deploymentToken = flags["deployment-token"];
+    const deploymentToken = flags["auth-token"];
     const emitResult = (result: DeployCommandResult): DeployCommandResult => {
       this.log(JSON.stringify(result, null, 2));
       return result;
     };
 
     if (!deploymentToken.startsWith("deploy_token_")) {
-      this.error('deployment-token must start with "deploy_token_"', {
+      this.error('auth-token must start with "deploy_token_"', {
         exit: 1,
       });
     }

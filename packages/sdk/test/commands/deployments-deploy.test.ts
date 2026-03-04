@@ -127,7 +127,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -218,7 +218,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -252,7 +252,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -302,7 +302,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -363,7 +363,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -435,7 +435,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://api.monolayer.com",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
@@ -486,7 +486,7 @@ describe("deployments deploy command", () => {
 				DeploymentsDeploy.run([
 					"--base-url",
 					"https://api.monolayer.com",
-					"--deployment-token",
+					"--auth-token",
 					"deploy_token_test",
 					"--project-id",
 					"proj-1",
@@ -527,7 +527,7 @@ describe("deployments deploy command", () => {
 					DeploymentsDeploy.run([
 						"--base-url",
 						"https://api.monolayer.com",
-						"--deployment-token",
+						"--auth-token",
 						"deploy_token_test",
 						"--project-id",
 						"proj-1",
@@ -576,7 +576,7 @@ describe("deployments deploy command", () => {
 					DeploymentsDeploy.run([
 						"--base-url",
 						"https://api.monolayer.com",
-						"--deployment-token",
+						"--auth-token",
 						"deploy_token_test",
 						"--project-id",
 						"proj-1",
@@ -606,7 +606,7 @@ describe("deployments deploy command", () => {
 					DeploymentsDeploy.run([
 						"--base-url",
 						"https://api.monolayer.com",
-						"--deployment-token",
+						"--auth-token",
 						"deploy_token_test",
 						"--project-id",
 						"proj-1",
@@ -628,7 +628,7 @@ describe("deployments deploy command", () => {
 			DeploymentsDeploy.run([
 				"--base-url",
 				"https://localhost:3000",
-				"--deployment-token",
+				"--auth-token",
 				"deploy_token_test",
 				"--project-id",
 				"proj-1",
