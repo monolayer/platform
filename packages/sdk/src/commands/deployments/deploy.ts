@@ -100,7 +100,6 @@ const redactToken = (token: string): string => {
 };
 
 const isRequestDebugEnabled = (): boolean => {
-  // oxlint-disable-next-line turbo/no-undeclared-env-vars
   return process.env.DEBUG === "1";
 };
 
