@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 // oxlint-disable-next-line turbo/no-undeclared-env-vars
 process.env.NODE_ENV = "production";
+// oxlint-disable-next-line turbo/no-undeclared-env-vars
+const originalBaseUrl = process.env.MONOLAYER_BASE_URL;
 
 import ProjectsList from "../../src/commands/projects/list.js";
 
@@ -35,6 +37,13 @@ const captureStdout = async <T>(task: () => Promise<T>) => {
 describe("projects:list command", () => {
 	afterEach(() => {
 		vi.unstubAllGlobals();
+		if (originalBaseUrl === undefined) {
+			// oxlint-disable-next-line turbo/no-undeclared-env-vars
+			delete process.env.MONOLAYER_BASE_URL;
+			return;
+		}
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		process.env.MONOLAYER_BASE_URL = originalBaseUrl;
 	});
 
 	it("prints JSON response by default", async () => {
@@ -82,6 +91,34 @@ describe("projects:list command", () => {
 		expect(requestInit.method).toBe("GET");
 	});
 
+	it("uses MONOLAYER_BASE_URL when --base-url is omitted", async () => {
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		process.env.MONOLAYER_BASE_URL = "https://api.monolayer.com";
+		const fetchMock = vi.fn().mockResolvedValue(
+			jsonResponse(200, {
+				items: [
+					{
+						projectId: "proj-1",
+						name: "Control Plane",
+						repositoryUrl: "https://github.com/monolayer/control-plane",
+					},
+				],
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		await captureStdout(() =>
+			ProjectsList.run(["--auth-token", "test-token", "--limit", "1"]),
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe(
+			"https://api.monolayer.com/sdk/projects?limit=1",
+		);
+		expect(requestInit.method).toBe("GET");
+	});
+
 	it("rejects --json because output is always JSON", async () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			jsonResponse(200, {
@@ -107,6 +144,22 @@ describe("projects:list command", () => {
 				]),
 			),
 		).rejects.toThrow(/--json/);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it("fails with helpful message when base-url is missing", async () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		delete process.env.MONOLAYER_BASE_URL;
+
+		await expect(
+			captureStdout(() =>
+				ProjectsList.run(["--auth-token", "test-token", "--limit", "1"]),
+			),
+		).rejects.toThrow(
+			/Missing base URL\. Pass --base-url explicitly or set MONOLAYER_BASE_URL\./,
+		);
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 });

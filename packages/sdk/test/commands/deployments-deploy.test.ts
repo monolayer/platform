@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import DeploymentsDeploy from "../../src/commands/deployments/deploy.js";
 
+// oxlint-disable-next-line turbo/no-undeclared-env-vars
+const originalBaseUrl = process.env.MONOLAYER_BASE_URL;
+
 const captureStdout = async <T>(task: () => Promise<T>) => {
 	const chunks: Array<string> = [];
 	const writeSpy = vi.spyOn(process.stdout, "write").mockImplementation(((
@@ -75,6 +78,13 @@ describe("deployments deploy command", () => {
 	afterEach(() => {
 		vi.unstubAllGlobals();
 		vi.clearAllMocks();
+		if (originalBaseUrl === undefined) {
+			// oxlint-disable-next-line turbo/no-undeclared-env-vars
+			delete process.env.MONOLAYER_BASE_URL;
+			return;
+		}
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		process.env.MONOLAYER_BASE_URL = originalBaseUrl;
 	});
 
 	it("triggers deployment, polls logs, and stops when finished", async () => {
@@ -236,6 +246,38 @@ describe("deployments deploy command", () => {
 			`[${new Date(firstTimestamp).toISOString()}] Running tests`,
 			`[${new Date(secondTimestamp).toISOString()}] Deploy complete`,
 		]);
+	});
+
+	it("uses MONOLAYER_BASE_URL when --base-url is omitted", async () => {
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		process.env.MONOLAYER_BASE_URL = "https://api.monolayer.com";
+		const fetchMock = vi.fn().mockResolvedValueOnce(
+			jsonResponse(202, {
+				type: "queued",
+				success: true,
+				queued: true,
+			}),
+		);
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+		const { stdout } = await captureStdout(() =>
+			DeploymentsDeploy.run([
+				"--auth-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+				"--poll-interval-ms",
+				"0",
+			]),
+		);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
+		expect(requestUrl.toString()).toBe("https://api.monolayer.com/sdk/deployments");
+		expect(requestInit.method).toBe("POST");
+		expect(stdout).toContain("Deployment already queued. Polling skipped.");
 	});
 
 	it("does not poll when trigger response is queued", async () => {
@@ -618,6 +660,30 @@ describe("deployments deploy command", () => {
 
 			expect(fetchMock).not.toHaveBeenCalled();
 		});
+	});
+
+	it("fails with helpful message when base-url is missing", async () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		delete process.env.MONOLAYER_BASE_URL;
+
+		await expect(
+			DeploymentsDeploy.run([
+				"--auth-token",
+				"deploy_token_test",
+				"--project-id",
+				"proj-1",
+				"--branch-name",
+				"feature/test-branch",
+				"--poll-interval-ms",
+				"0",
+			]),
+		).rejects.toThrow(
+			/Missing base URL\. Pass --base-url explicitly or set MONOLAYER_BASE_URL\./,
+		);
+
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
 	it("shows a localhost troubleshooting hint when fetch fails", async () => {

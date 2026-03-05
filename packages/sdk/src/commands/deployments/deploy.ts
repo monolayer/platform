@@ -165,9 +165,9 @@ export default class DeploymentsDeploy extends Command {
 
   static flags = {
     "base-url": Flags.string({
-      required: true,
       env: "MONOLAYER_BASE_URL",
-      summary: "Control plane API base origin",
+      summary:
+        "Control plane API base origin (falls back to MONOLAYER_BASE_URL when omitted)",
     }),
     "auth-token": Flags.string({
       required: true,
@@ -191,7 +191,14 @@ export default class DeploymentsDeploy extends Command {
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(DeploymentsDeploy);
-    const baseUrl = new URL(flags["base-url"]);
+    const baseUrlInput = flags["base-url"]?.trim();
+    if (!baseUrlInput) {
+      this.error(
+        "Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.",
+        { exit: 1 },
+      );
+    }
+    const baseUrl = new URL(baseUrlInput);
     const deploymentToken = flags["auth-token"];
     const emitResult = (result: DeployCommandResult): DeployCommandResult => {
       this.log(JSON.stringify(result, null, 2));
