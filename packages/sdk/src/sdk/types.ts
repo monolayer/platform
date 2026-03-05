@@ -30,13 +30,6 @@ export type DeploymentDto = {
   readonly createdAt: string;
 };
 
-export type SecretDto = {
-  readonly projectId: string;
-  readonly key: string;
-  readonly updatedAt: string;
-  readonly version: number;
-};
-
 export type ListProjectsInput = {
   readonly cursor?: string;
   readonly limit?: number;

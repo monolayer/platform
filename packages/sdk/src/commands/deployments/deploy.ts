@@ -47,13 +47,6 @@ type DeploymentProgressResponse = {
   readonly logs: ReadonlyArray<DeploymentLog>;
 };
 
-type DeployCommandResult = {
-  readonly branchName: string;
-  readonly trigger: DeploymentTriggerResponse;
-  readonly status?: DeploymentStatus;
-  readonly logs: ReadonlyArray<DeploymentLog>;
-};
-
 type JsonRequestResult<T> = {
   readonly status: number;
   readonly headers: Headers;
@@ -199,10 +192,6 @@ export default class DeploymentsDeploy extends Command {
     }
     const baseUrl = new URL(baseUrlInput);
     const deploymentToken = flags["auth-token"];
-    const emitResult = (result: DeployCommandResult): DeployCommandResult => {
-      this.log(JSON.stringify(result, null, 2));
-      return result;
-    };
 
     if (!deploymentToken.startsWith("deploy_token_")) {
       this.error('auth-token must start with "deploy_token_"', {
@@ -292,9 +281,7 @@ export default class DeploymentsDeploy extends Command {
     readonly pollIntervalMs: number;
   }): Promise<{
     readonly status: DeploymentStatus;
-    readonly logs: DeploymentLog[];
   }> {
-    const collectedLogs: DeploymentLog[] = [];
     const seenLogKeys = new Set<string>();
     let lastDisplayedStatus: DeploymentStatus | undefined;
     let since: string | undefined;
@@ -328,8 +315,6 @@ export default class DeploymentsDeploy extends Command {
         freshLogs.push(log);
       }
 
-      collectedLogs.push(...freshLogs);
-
       for (const log of freshLogs) {
         const formattedLogLine = formatLogLine(log);
         if (formattedLogLine !== undefined) {
@@ -348,7 +333,6 @@ export default class DeploymentsDeploy extends Command {
       ) {
         return {
           status: response.body.status,
-          logs: collectedLogs,
         };
       }
 
