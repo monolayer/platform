@@ -3,50 +3,41 @@ title: Overview
 Order: 1
 ---
 
-This SDK package provides two user-facing interfaces:
+The `@monolayer/sdk` includes the `monolayer` command-line interface (CLI), which helps you manage your projects and deployments seamlessly.
 
-1. A CLI binary named `monolayer` for control plane operations.
-2. Stable command references for projects and deployments.
+## Available commands
 
-Current CLI scope:
+The Monolayer CLI currently supports the following commands:
 
-- `projects:list`
-- `deployments:deploy`
+| Command | Description | Output |
+| --- | --- | --- |
+| `projects:list` | Lists your projects using cursor-based pagination. | JSON |
+| `deployments:deploy` | Triggers a branch deployment and monitors its progress. | Logs and status |
 
-## What You Can Do
+## Quick reference
 
-- Print projects as JSON.
-- Trigger a deployment for a branch and stream deployment logs.
+To get started quickly, you can run these commands directly from your terminal.
 
-## Package Contents
-
-The package is published as `@monolayer/sdk`.
-
-It includes:
-
-- `monolayer` CLI command
-- Command implementations for `projects:list` and `deployments:deploy`
-- Built-in request handling, polling, and error messaging for these workflows
-
-## Quick Examples
-
-CLI:
+**List your projects**
 
 ```bash
-npx monolayer projects:list \
-  --base-url https://control-plane-domain \
-  --auth-token token_xxx
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="token_xxx" \
+npx monolayer projects:list --limit 5
 ```
+
+**Trigger a deployment**
 
 ```bash
-npx monolayer deployments:deploy \
-  --base-url https://control-plane-domain \
-  --auth-token deploy_token_xxx \
-  --project-id proj-1 \
-  --branch-name main
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx monolayer deployments:deploy --project-id proj-1 --branch-name main
 ```
 
-See command-specific pages for full option and output details:
+## Learn more
 
-- `projects:list`
-- `deployments:deploy`
+Explore the following topics to get the most out of the Monolayer CLI:
+
+- **[Installation](./installation):** Set up the SDK in your environment.
+- **[Authentication and Configuration](./authentication):** Securely connect to your control plane.
+- **[CLI Reference](./cli):** Detailed guides for each command.

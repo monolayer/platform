@@ -3,47 +3,50 @@ title: Authentication and Configuration
 Order: 3
 ---
 
+To interact with your Monolayer control plane, you need to provide a base URL and the appropriate authentication tokens. You can supply these using command-line flags or environment variables.
+
 ## Base URL
 
-Both CLI commands use the same base URL configuration:
+Every command requires a base URL to connect to the control plane. 
 
-- Flag: `--base-url`
-- Env fallback: `MONOLAYER_BASE_URL`
+The CLI resolves the base URL in the following order:
 
-If both are missing, the command fails with:
+1. The `--base-url` flag.
+2. The `MONOLAYER_BASE_URL` environment variable.
+
+If neither is provided, the command fails and displays:
 
 `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
 
-## Auth Tokens by Command
+## Authentication tokens
 
-The auth env variable differs by command.
+Different commands require specific tokens to keep your environment secure.
 
-### `projects:list`
+| Command | Required flag | Environment variable |
+| --- | --- | --- |
+| `projects:list` | `--auth-token` | `MONOLAYER_AUTH_TOKEN` |
+| `deployments:deploy` | `--auth-token` | `MONOLAYER_DEPLOYMENT_TOKEN` |
 
-- Flag: `--auth-token`
-- Env fallback: `MONOLAYER_AUTH_TOKEN`
+### Listing projects
 
-Precedence:
+When running `projects:list`, the CLI looks for your authentication token in this order:
 
-1. `--auth-token`
-2. `MONOLAYER_AUTH_TOKEN`
-3. Error
+1. The `--auth-token` flag.
+2. The `MONOLAYER_AUTH_TOKEN` environment variable.
 
-Error message:
+If the token is missing, the command fails and displays:
 
 `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 
-### `deployments:deploy`
+### Deploying projects
 
-- Flag: `--auth-token`
-- Env fallback: `MONOLAYER_DEPLOYMENT_TOKEN`
+When running `deployments:deploy`, the CLI looks for your deployment token in this order:
 
-Precedence:
+1. The `--auth-token` flag.
+2. The `MONOLAYER_DEPLOYMENT_TOKEN` environment variable.
 
-1. `--auth-token`
-2. `MONOLAYER_DEPLOYMENT_TOKEN`
-3. Required flag error
+If the token is missing, the command fails.
 
-For deployments, tokens must start with:
+**Important:** Your deployment token must begin with `deploy_token_`. If you provide an invalid token, the command fails and displays:
 
-`deploy_token_`
+`auth-token must start with "deploy_token_"`

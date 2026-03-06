@@ -2,19 +2,27 @@
 title: projects:list
 ---
 
-## Description
+Use the `projects:list` command to retrieve a list of your projects from the control plane. The results are paginated so you can easily manage large numbers of projects.
 
-Lists projects with cursor-based pagination and prints JSON output.
-
-## Usage
+## Syntax
 
 ```bash
 npx monolayer projects:list [options]
 ```
 
+## Options
+
+| Option | Description |
+| --- | --- |
+| `--base-url <url>` | The base URL of your control plane API. You can also set this using the `MONOLAYER_BASE_URL` environment variable. |
+| `--auth-token <token>` | Your authentication token. You can also set this using the `MONOLAYER_AUTH_TOKEN` environment variable. |
+| `--cursor <cursor>` | The cursor value from a previous response, used to fetch the next set of results. |
+| `--limit <n>` | The maximum number of items to return. The default is `50`. |
+| `-h`, `--help` | Displays help information for the command. |
+
 ## Examples
 
-Explicit flags:
+**List projects using inline flags**
 
 ```bash
 npx monolayer projects:list \
@@ -23,7 +31,7 @@ npx monolayer projects:list \
   --limit 20
 ```
 
-Using env vars:
+**List projects using environment variables**
 
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
@@ -31,19 +39,19 @@ MONOLAYER_AUTH_TOKEN="token_xxx" \
 npx monolayer projects:list --limit 20
 ```
 
-## Options
+**Fetch the next page of results**
 
-| Option | Description |
-| --- | --- |
-| `--base-url <url>` | Control plane API base origin (or `MONOLAYER_BASE_URL`) |
-| `--auth-token <token>` | Auth token (or `MONOLAYER_AUTH_TOKEN`) |
-| `--cursor <cursor>` | Pagination cursor from previous response |
-| `--limit <n>` | Max items to return (default `50`) |
-| `-h, --help` | Display command help |
+```bash
+npx monolayer projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx \
+  --cursor 1 \
+  --limit 20
+```
 
 ## Output
 
-Output is always JSON. Example:
+The command outputs the results in JSON format directly to your terminal. Note that the `--json` flag is not required or supported, as JSON is the default format.
 
 ```json
 {
@@ -58,9 +66,11 @@ Output is always JSON. Example:
 }
 ```
 
-## Failure Modes
+## Troubleshooting
 
-- Missing base URL:
-  - `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
-- Missing auth token:
-  - `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+If the command fails, you might see one of the following messages:
+
+- **Missing base URL:**
+  `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- **Missing authentication token:**
+  `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`

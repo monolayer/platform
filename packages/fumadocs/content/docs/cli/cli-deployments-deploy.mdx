@@ -2,19 +2,28 @@
 title: deployments:deploy
 ---
 
-## Description
+Use the `deployments:deploy` command to trigger a deployment for a specific branch. The CLI automatically monitors the process and streams live status updates until the deployment completes.
 
-Triggers deployment for a branch and polls logs until terminal status.
-
-## Usage
+## Syntax
 
 ```bash
 npx monolayer deployments:deploy [options]
 ```
 
+## Options
+
+| Option | Description |
+| --- | --- |
+| `--base-url <url>` | The base URL of your control plane API. You can also set this using the `MONOLAYER_BASE_URL` environment variable. |
+| `--auth-token <token>` | Your deployment token. You can also set this using the `MONOLAYER_DEPLOYMENT_TOKEN` environment variable. |
+| `--project-id <id>` | The unique identifier for your project. This is required to monitor the deployment's progress. |
+| `--branch-name <name>` | The branch you want to deploy. If omitted, the CLI defaults to your current Git branch. |
+| `--poll-interval-ms <n>` | How often the CLI checks for updates, in milliseconds. The default is `2000`. |
+| `-h`, `--help` | Displays help information for the command. |
+
 ## Examples
 
-Explicit flags:
+**Deploy a specific branch**
 
 ```bash
 npx monolayer deployments:deploy \
@@ -24,7 +33,7 @@ npx monolayer deployments:deploy \
   --branch-name main
 ```
 
-Using env vars:
+**Deploy using environment variables**
 
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
@@ -32,7 +41,7 @@ MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
 npx monolayer deployments:deploy --project-id proj-1 --branch-name main
 ```
 
-Auto-detect current git branch:
+**Deploy your current Git branch**
 
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
@@ -40,44 +49,49 @@ MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
 npx monolayer deployments:deploy --project-id proj-1
 ```
 
-## Options
+## How it works
 
-| Option | Description |
-| --- | --- |
-| `--base-url <url>` | Control plane API base origin (or `MONOLAYER_BASE_URL`) |
-| `--auth-token <token>` | Deployment token (or `MONOLAYER_DEPLOYMENT_TOKEN`) |
-| `--project-id <id>` | Project identifier used for deployment polling |
-| `--branch-name <name>` | Branch to deploy (defaults to current git branch) |
-| `--poll-interval-ms <n>` | Poll interval in milliseconds (default `2000`) |
-| `-h, --help` | Display command help |
+When you initiate a deployment, the CLI follows these steps:
 
-## Behavior
+1. **Identifies the branch:** Uses the `--branch-name` flag, or auto-detects your current Git branch.
+2. **Triggers the deployment:** Sends a request to start the process.
+3. **Monitors progress:** If the deployment is successfully triggered, the CLI begins polling for updates. (If the deployment is skipped or queued, the CLI notifies you and exits.)
+4. **Streams logs:** Outputs new log lines and status changes directly to your terminal. It intelligently skips empty lines and prevents duplicate log entries.
+5. **Completes:** Stops polling when the deployment reaches a final state (`Finished`, `Failed`, or `Queued`). If the deployment fails, the CLI exits with an error.
 
-1. Resolves branch name (`--branch-name` or current git branch).
-2. Triggers deployment.
-3. Handles immediate responses:
-   - `skipped`: prints reason and exits.
-   - `queued`: prints queued message and exits.
-4. If triggered, polls deployment endpoint and streams logs.
-5. Stops polling on terminal status: `Finished`, `Failed`, or `Queued`.
-6. Exits with failure when final status is `Failed`.
+The CLI outputs logs and status updates in a clear, human-readable format.
 
-Polling details:
+## Guidelines
 
-- Uses `x-next-since` response header for incremental log polling.
-- Deduplicates repeated log events.
-- Skips empty log lines.
-- Prints status only when status changes.
+To ensure a successful deployment, keep the following rules in mind:
 
-## Token Validation
+- Your deployment token must begin with `deploy_token_`.
+- Your branch name must be a raw name. It cannot start with `refs/heads/` or `branch/`.
 
-`--auth-token` must start with:
+## Troubleshooting
 
-`deploy_token_`
+If you encounter issues, review the common errors below or enable debugging to see detailed request information.
 
-## Debugging Requests
+**Missing base URL**
+`Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
 
-Set `DEBUG=1` to print request metadata from `sendJsonRequest`:
+**Invalid deployment token**
+`auth-token must start with "deploy_token_"`
+
+**Invalid branch name**
+`Current branch must be a raw branch name (no "refs/heads/" or "branch/" prefix).`
+
+**Branch detection failure**
+`Unable to determine current git branch. Run this command inside a git repository or pass --branch-name.`
+
+**Localhost connection issues**
+If you are testing on `https://localhost:<port>` and see a `TypeError: fetch failed` error:
+- If your local server uses HTTP, ensure your base URL is `http://localhost:<port>`.
+- If your local server uses HTTPS with a self-signed certificate, make sure the certificate is trusted on your machine.
+
+### Debugging
+
+To view detailed request metadata, set the `DEBUG` environment variable to `1`. Rest assured, your token values are automatically redacted from debug logs to keep your credentials safe.
 
 ```bash
 DEBUG=1 npx monolayer deployments:deploy \
@@ -86,23 +100,3 @@ DEBUG=1 npx monolayer deployments:deploy \
   --project-id proj-1 \
   --branch-name main
 ```
-
-The token is redacted in debug logs.
-
-## Troubleshooting
-
-If you use `https://localhost:<port>` and get `TypeError: fetch failed`:
-
-- If your server is plain HTTP, use `http://localhost:<port>`.
-- If your server uses a self-signed certificate, trust the cert locally.
-
-## Failure Modes
-
-- Missing base URL:
-  - `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
-- Invalid deployment token:
-  - `auth-token must start with "deploy_token_"`
-- Invalid branch name format:
-  - `Current branch must be a raw branch name (no "refs/heads/" or "branch/" prefix).`
-- Unable to resolve branch automatically:
-  - `Unable to determine current git branch. Run this command inside a git repository or pass --branch-name.`
