@@ -1,14 +1,8 @@
 {
   "pages": [
-    "---Introduction---",
-    "guide/installation",
-    "guide/quick-start",
-    "---Workloads---",
-    "...workloads",
-    "---",
-    "guide/configuration",
-    "guide/testing",
-    "---Reference---",
-    "...reference"
+    "overview",
+    "installation",
+    "authentication",
+    "cli"
   ]
 }

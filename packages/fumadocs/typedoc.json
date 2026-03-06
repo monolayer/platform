@@ -1,12 +1,11 @@
 {
-  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-frontmatter", "./lib/custom-frontmatter.mjs"
-],
-  "out": "content/docs/reference/api",
-  "entryPoints": [
-    "./../sdk/src/workloads.ts",
-    "./../sdk/src/test-helpers.ts",
-    "./../sdk/src/introspection.ts"
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-frontmatter",
+    "./lib/custom-frontmatter.mjs"
   ],
+  "out": "content/docs/reference/api",
+  "entryPoints": [],
   "entryPointStrategy": "expand",
   "tsconfig": "./../sdk/tsconfig.json",
   "exclude": ["**/dist/**/*.ts", "**/vitest.config.ts", "**/test/**/*.ts"],
