@@ -1,0 +1,44 @@
+---
+title: Authentication and Configuration
+---
+
+## Base URL
+
+Both CLI commands use the same base URL configuration:
+
+- Flag: `--base-url`
+- Env fallback: `MONOLAYER_BASE_URL`
+
+If both are missing, the command fails with:
+
+`Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+
+## Auth Tokens by Command
+
+The auth env variable differs by command.
+
+### `projects:list`
+
+- Flag: `--auth-token`
+- Env fallback: `MONOLAYER_AUTH_TOKEN`
+
+Precedence:
+
+1. `--auth-token`
+2. `MONOLAYER_AUTH_TOKEN`
+3. Error
+
+### `deployments:deploy`
+
+- Flag: `--auth-token`
+- Env fallback: `MONOLAYER_DEPLOYMENT_TOKEN`
+
+Precedence:
+
+1. `--auth-token`
+2. `MONOLAYER_DEPLOYMENT_TOKEN`
+3. Required flag error
+
+For deployments, tokens must start with:
+
+`deploy_token_`

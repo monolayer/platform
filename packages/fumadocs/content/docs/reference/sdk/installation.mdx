@@ -1,0 +1,48 @@
+---
+title: Installation
+---
+
+Install the package in your project:
+
+```bash
+npm install @monolayer/sdk
+```
+
+or
+
+```bash
+pnpm add @monolayer/sdk
+```
+
+## CLI Availability
+
+The package exposes a CLI binary named `monolayer`.
+
+Run with `npx`:
+
+```bash
+npx monolayer --help
+```
+
+If you use `pnpm` in a workspace:
+
+```bash
+pnpm monolayer --help
+```
+
+## Runtime Requirements
+
+- Node.js 18+ recommended.
+- Network access to your control plane domain.
+
+## Suggested Environment Variables
+
+Set these once in your shell/profile or CI environment:
+
+```bash
+export MONOLAYER_BASE_URL="https://control-plane-domain"
+export MONOLAYER_AUTH_TOKEN="token_xxx"
+export MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx"
+```
+
+Then you can omit some CLI flags depending on command (see authentication and command pages).

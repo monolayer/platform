@@ -1,0 +1,97 @@
+---
+title: deployments:deploy
+---
+
+## Description
+
+Triggers deployment for a branch and polls logs until terminal status.
+
+## Usage
+
+```bash
+npx monolayer deployments:deploy [options]
+```
+
+## Examples
+
+Explicit flags:
+
+```bash
+npx monolayer deployments:deploy \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch-name main
+```
+
+Using env vars:
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx monolayer deployments:deploy --project-id proj-1 --branch-name main
+```
+
+Auto-detect current git branch:
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx monolayer deployments:deploy --project-id proj-1
+```
+
+## Options
+
+| Option | Description |
+| --- | --- |
+| `--base-url <url>` | Control plane API base origin (or `MONOLAYER_BASE_URL`) |
+| `--auth-token <token>` | Deployment token (or `MONOLAYER_DEPLOYMENT_TOKEN`) |
+| `--project-id <id>` | Project identifier used for deployment polling |
+| `--branch-name <name>` | Branch to deploy (defaults to current git branch) |
+| `--poll-interval-ms <n>` | Poll interval in milliseconds (default `2000`) |
+| `-h, --help` | Display command help |
+
+## Behavior
+
+1. Resolves branch name (`--branch-name` or current git branch).
+2. Triggers deployment.
+3. Handles immediate responses:
+   - `skipped`: prints reason and exits.
+   - `queued`: prints queued message and exits.
+4. If triggered, polls deployment endpoint and streams logs.
+5. Stops polling on terminal status: `Finished`, `Failed`, or `Queued`.
+6. Exits with failure when final status is `Failed`.
+
+Polling details:
+
+- Uses `x-next-since` response header for incremental log polling.
+- Deduplicates repeated log events.
+- Skips empty log lines.
+- Prints status only when status changes.
+
+## Token Validation
+
+`--auth-token` must start with:
+
+`deploy_token_`
+
+## Debugging Requests
+
+Set `DEBUG=1` to print request metadata from `sendJsonRequest`:
+
+```bash
+DEBUG=1 npx monolayer deployments:deploy \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch-name main
+```
+
+The token is redacted in debug logs.
+
+## Troubleshooting
+
+If you use `https://localhost:<port>` and get `TypeError: fetch failed`:
+
+- If your server is plain HTTP, use `http://localhost:<port>`.
+- If your server uses a self-signed certificate, trust the cert locally.

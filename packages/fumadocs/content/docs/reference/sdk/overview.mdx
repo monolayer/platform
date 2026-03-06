@@ -1,0 +1,51 @@
+---
+title: SDK Overview
+---
+
+This SDK package provides two user-facing interfaces:
+
+1. A CLI binary named `monolayer` for control plane operations.
+2. Stable command references for projects and deployments.
+
+Current CLI scope:
+
+- `projects:list`
+- `deployments:deploy`
+
+## What You Can Do
+
+- Print projects as JSON.
+- Trigger a deployment for a branch and stream deployment logs.
+
+## Package Contents
+
+The package is published as `@monolayer/sdk`.
+
+It includes:
+
+- `monolayer` CLI command
+- Command implementations for `projects:list` and `deployments:deploy`
+- Built-in request handling, polling, and error messaging for these workflows
+
+## Quick Examples
+
+CLI:
+
+```bash
+npx monolayer projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx
+```
+
+```bash
+npx monolayer deployments:deploy \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch-name main
+```
+
+See command-specific pages for full option and output details:
+
+- `projects:list`
+- `deployments:deploy`

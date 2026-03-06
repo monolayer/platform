@@ -1,0 +1,7 @@
+{
+  "pages": [
+    "sdk/overview",
+    "...sdk",
+    "...cli"
+  ]
+}

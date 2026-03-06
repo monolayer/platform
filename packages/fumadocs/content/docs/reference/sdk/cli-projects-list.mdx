@@ -1,0 +1,66 @@
+---
+title: projects:list
+---
+
+## Description
+
+Lists projects with cursor-based pagination and prints JSON output.
+
+## Usage
+
+```bash
+npx monolayer projects:list [options]
+```
+
+## Examples
+
+Explicit flags:
+
+```bash
+npx monolayer projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx \
+  --limit 20
+```
+
+Using env vars:
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="token_xxx" \
+npx monolayer projects:list --limit 20
+```
+
+## Options
+
+| Option | Description |
+| --- | --- |
+| `--base-url <url>` | Control plane API base origin (or `MONOLAYER_BASE_URL`) |
+| `--auth-token <token>` | Auth token (or `MONOLAYER_AUTH_TOKEN`) |
+| `--cursor <cursor>` | Pagination cursor from previous response |
+| `--limit <n>` | Max items to return (default `50`) |
+| `-h, --help` | Display command help |
+
+## Output
+
+Output is always JSON. Example:
+
+```json
+{
+  "items": [
+    {
+      "projectId": "proj-1",
+      "name": "Control Plane",
+      "repositoryUrl": "https://github.com/monolayer/control-plane"
+    }
+  ],
+  "nextCursor": "1"
+}
+```
+
+## Failure Modes
+
+- Missing base URL:
+  - `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Missing auth token:
+  - `Missing auth token. Pass authToken explicitly or set MONOLAYER_AUTH_TOKEN`

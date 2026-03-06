@@ -1,0 +1,47 @@
+---
+title: Testing
+---
+
+Use this page to validate your setup and command access in local or CI environments.
+
+## Smoke Checks
+
+Check help output:
+
+```bash
+npx monolayer --help
+```
+
+Check projects access:
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="token_xxx" \
+npx monolayer projects:list --limit 1
+```
+
+Check deployment trigger path:
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx monolayer deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
+```
+
+## CI Recommendation
+
+Pin and export required env vars before command execution:
+
+```bash
+export MONOLAYER_BASE_URL="https://control-plane-domain"
+export MONOLAYER_AUTH_TOKEN="token_xxx"
+export MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx"
+```
+
+Then invoke the relevant command:
+
+```bash
+npx monolayer projects:list --limit 1
+# or
+npx monolayer deployments:deploy --project-id proj-1 --branch-name main
+```
