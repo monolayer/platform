@@ -1,33 +1,21 @@
 # Platform SDK + CLI Docs
 
-This folder is a continuation guide for developing `@monolayer/sdk`.
+This folder contains maintainer documentation for the `@monolayer/sdk` monorepo.
 
-## What exists today
+## Current CLI scope
 
-- Oclif-powered CLI entrypoint (`src/cli.ts`, `src/main.ts`)
-- CLI commands organized by topic:
-  - `workloads:add:*` (Scaffold new workloads like postgres, cron, bucket, etc.)
-  - `workloads:build` (Build workloads and generate manifest)
-  - `workloads:pull` (Pull container images for defined workloads)
-  - `local:start:dev` & `local:start:test` (Launch workloads in local containers)
-  - `local:stop:dev` & `local:stop:test` (Stop local workload containers)
-  - `local:status:dev` & `local:status:test` (Check status of local workload containers)
-  - `local:trigger:cron` (Trigger a local cron workload)
-  - `deployments:create|get|list`
-  - `projects:list`
-  - `secrets:set|list`
-- Effect-first SDK methods with Promise wrappers
-- Vitest coverage:
-  - Unit tests for commands (`test/commands/*`)
-  - Integration tests for full workload lifecycle (`test/integration/*`)
-- Dual-build support (CJS + ESM) via `tsdown`
+The CLI surface in `packages/sdk` is intentionally small:
 
-## Project Structure
+- `projects:list`
+- `deployments:deploy`
 
-- `packages/sdk`: The core SDK and CLI logic.
-- `packages/fumadocs`: The documentation website built with Fumadocs (Next.js).
+## Repository map
 
-## Read this first
+- `packages/sdk`: CLI commands + typed SDK runtime.
+- `packages/fumadocs`: Documentation site (Next.js + Fumadocs).
+- `docs`: Maintainer playbooks for architecture, testing, and command work.
+
+## Suggested read order
 
 1. `docs/architecture.md`
 2. `docs/adding-commands.md`
@@ -39,24 +27,22 @@ This folder is a continuation guide for developing `@monolayer/sdk`.
 
 ## Fast local workflow
 
-### SDK Development
+SDK package checks:
 
 ```bash
-pnpm --filter @monolayer/sdk check-types
-pnpm --filter @monolayer/sdk test
-pnpm --filter @monolayer/sdk build
+pnpm -C packages/sdk run test
+pnpm -C packages/sdk run lint
+pnpm -C packages/sdk run build
+```
+
+Run CLI help from build output:
+
+```bash
 node packages/sdk/dist/cli.mjs --help
 ```
 
-### Documentation Development
+Run docs site:
 
 ```bash
-pnpm --filter fumadocs dev
+pnpm -C packages/fumadocs run dev
 ```
-
-## Short roadmap
-
-- Keep command classes thin; move real work to reusable SDK modules.
-- Add `src/sdk/*` modules for API client logic.
-- Keep all side effects at boundaries (CLI command `run()` and dedicated IO/adapters).
-- Maintain integration tests as features grow.

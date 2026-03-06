@@ -78,35 +78,30 @@ export default function Page() {
       </section>
 
       <section className="mt-8 rounded-xl border border-fd-border p-6">
-        <h2 className="text-xl font-semibold">API Reference</h2>
+        <h2 className="text-xl font-semibold">SDK API Surface</h2>
         <p className="mt-2 text-fd-muted-foreground">
-          Browse generated API docs for package types, classes, and helpers.
+          Programmatic APIs are exposed through <code>createClient</code> with
+          typed project and deployment methods.
         </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <a
-            className="rounded-lg border border-fd-border px-3 py-2 text-sm hover:border-fd-primary"
-            href="/docs/reference/api/main/interfaces/Configuration"
-          >
-            Configuration
-          </a>
-          <a
-            className="rounded-lg border border-fd-border px-3 py-2 text-sm hover:border-fd-primary"
-            href="/docs/reference/api/main/classes/Task"
-          >
-            Task
-          </a>
-          <a
-            className="rounded-lg border border-fd-border px-3 py-2 text-sm hover:border-fd-primary"
-            href="/docs/reference/api/main/classes/PostgresDatabase"
-          >
-            PostgresDatabase
-          </a>
-          <a
-            className="rounded-lg border border-fd-border px-3 py-2 text-sm hover:border-fd-primary"
-            href="/docs/reference/api/introspection/variables/manifestJsonSchema"
-          >
-            Manifest Schema
-          </a>
+        <div className="mt-4 text-sm text-fd-muted-foreground">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              <code>client.projects.list</code> /{" "}
+              <code>client.projects.listPromise</code>
+            </li>
+            <li>
+              <code>client.deployments.create</code> /{" "}
+              <code>client.deployments.createPromise</code>
+            </li>
+            <li>
+              <code>client.deployments.get</code> /{" "}
+              <code>client.deployments.getPromise</code>
+            </li>
+            <li>
+              <code>client.deployments.list</code> /{" "}
+              <code>client.deployments.listPromise</code>
+            </li>
+          </ul>
         </div>
       </section>
     </main>

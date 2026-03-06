@@ -1,54 +1,65 @@
 # Adding Commands
 
-## Command checklist
+## Checklist
 
-1. Create a file in `src/commands/<topic>/<action>.ts` (e.g., `src/commands/workloads/add/bucket.ts`).
-2. Export a default class that extends `Command` from `@oclif/core`.
-3. Define:
-   - `summary`
-   - `description`
-   - `examples`
-   - `flags` / `args`
+1. Create a file in `packages/sdk/src/commands/<topic>/<action>.ts`.
+   - Example: `packages/sdk/src/commands/projects/list.ts` -> `projects:list`
+2. Export a default class extending `Command` (or `BaseCommand` when SDK-backed).
+3. Define `summary`, `description`, `examples`, and `flags`.
 4. Keep `run()` orchestration-focused.
-5. Return structured result when JSON output should be supported.
-6. Add Vitest coverage in `test/commands/<topic>/<action>.test.ts`.
+5. Make output mode explicit and stable.
+   - JSON-only commands should always emit JSON.
+   - Human commands should keep concise, deterministic log lines.
+6. Add tests in `packages/sdk/test/commands/*`.
+7. Update docs in all of:
+   - `packages/fumadocs/content/docs/cli/*`
+   - `packages/sdk/README.md`
+   - `packages/sdk/DEVELOPMENT_GUIDE.md`
 
-## Template
+## Choose command style deliberately
+
+1. SDK-backed style (preferred default)
+- Extend `BaseCommand`.
+- Use `this.createSdkClient(...)` and call SDK methods.
+
+2. Command-local flow (only when needed)
+- Extend `Command` directly.
+- Use local helpers for specialized flows (for example trigger + poll log streaming).
+
+## Output contract guidance
+
+Define output contract before implementation:
+
+- What prints to stdout on success?
+- What exact failures should be actionable for users?
+- Is output machine-readable (JSON) or operator-readable (logs)?
+
+Treat output contract as API. If it changes, update tests and docs in the same change.
+
+## Minimal command template
 
 ```ts
-import { Command, Flags } from "@oclif/core";
-import { Effect } from "effect";
+import { Flags } from "@oclif/core";
+import { BaseCommand } from "../../base-command.js";
 
-const doWork = (input: string) => Effect.succeed({ value: input });
+export default class ExampleList extends BaseCommand {
+  static summary = "Example list";
 
-export default class Example extends Command {
-	static summary = "Example command";
-	static enableJsonFlag = true;
+  static flags = {
+    ...BaseCommand.baseFlags,
+    limit: Flags.integer({ default: 50 }),
+  };
 
-	static flags = {
-		input: Flags.string({ required: true }),
-	};
+  public async run() {
+    const { flags } = await this.parse(ExampleList);
+    const client = this.createSdkClient({
+      "base-url": flags["base-url"],
+      "auth-token": flags["auth-token"],
+    });
 
-	public async run() {
-		const { flags } = await this.parse(Example);
-		const result = await Effect.runPromise(doWork(flags.input));
-		if (flags.json) return result;
-		this.log(result.value);
-		return result;
-	}
+    const result = await client.projects.listPromise({ limit: flags.limit });
+    this.log(JSON.stringify(result, null, 2));
+    return result;
+  }
 }
 ```
-
-## Naming conventions
-
-- Use directory structure for topics and actions:
-  - `src/commands/workloads/add/bucket.ts` -> `workloads add bucket`
-  - `src/commands/local/start/dev.ts` -> `local start dev`
-- Keep alias list short and explicit (`aliases = ["alias"]`).
-- Prefer `summary` for command listings and `description` for detailed help.
-
-## Output conventions
-
-- Human mode: concise, one-line success where possible.
-- JSON mode (`--json`): return typed object with stable keys.
-- Errors: let Oclif handle parsing/usage errors, throw structured errors for domain failures.

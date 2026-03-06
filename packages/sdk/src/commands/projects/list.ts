@@ -37,9 +37,18 @@ export default class ProjectsList extends BaseCommand {
         { exit: 1 },
       );
     }
+    const authToken = flags["auth-token"]?.trim();
+    if (!authToken) {
+      this.error(
+        "Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.",
+        { exit: 1 },
+      );
+    }
+
     const client = this.createSdkClient({
       ...flags,
       "base-url": baseUrl,
+      "auth-token": authToken,
     });
     const result = await client.projects.listPromise({
       cursor: flags.cursor,

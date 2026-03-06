@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## Oclif dependency not found
+## Missing oclif dependency
 
 Symptom:
 
@@ -8,48 +8,58 @@ Symptom:
 
 Checks:
 
-1. `package.json` has `@oclif/core` and `@oclif/plugin-help` in `dependencies`.
-2. `pnpm install` completed successfully for the workspace.
-3. `pnpm-lock.yaml` includes the same versions required by this package.
+1. `packages/sdk/package.json` includes `@oclif/core` and `@oclif/plugin-help`.
+2. Dependencies are installed (`pnpm install`).
+3. Workspace lockfile and `node_modules` are in sync.
 
-## Oclif tests noisy about plugin resolution
-
-Symptom:
-
-- warnings about missing `@oclif/plugin-plugins` in test output
-
-Workaround currently used:
-
-- set `process.env.NODE_ENV = "production"` in tests before invoking command classes.
-
-## Local registry issues
+## Plugin warnings during tests
 
 Symptom:
 
-- package installs fail due `registry=http://localhost:4873`
+- warnings mentioning `@oclif/plugin-plugins`
 
-What to do:
+Status:
 
-1. Ensure the local registry is running if that workflow is intended.
-2. If using public registry for this package, override registry for install commands.
-3. Re-run `pnpm install` to refresh links when dependency graph changes.
+- Known warning noise in test runs; command tests still pass.
 
-## pnpm store mismatch
+## `base-url` errors in CLI commands
 
 Symptom:
 
-- `ERR_PNPM_UNEXPECTED_STORE`
+- `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
 
-What to do:
+Fix:
 
-1. Reuse the store that existing `node_modules` was linked from, or
-2. perform a clean reinstall with the desired store directory.
+1. Pass `--base-url https://your-control-plane-origin`
+2. or set `MONOLAYER_BASE_URL` in your shell/CI.
 
-## Build is green but CLI command missing
+## Auth token errors in `projects:list`
+
+Symptom:
+
+- `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+
+Fix:
+
+1. Pass `--auth-token <token>`
+2. or set `MONOLAYER_AUTH_TOKEN`.
+
+## `deployments:deploy` fetch failure on localhost HTTPS
+
+Symptom:
+
+- `TypeError: fetch failed` while using `https://localhost:<port>`
+
+Fix:
+
+1. If server is HTTP-only, use `http://localhost:<port>`.
+2. If using self-signed HTTPS, trust the cert locally.
+
+## Build succeeds but command is not found
 
 Checks:
 
-1. command file is under `src/commands`.
-2. build output has matching file in `dist/commands`.
-3. `package.json` `oclif.commands` points to `./dist/commands`.
-4. run `node dist/cli.js --help` and verify command list.
+1. Command file exists in `packages/sdk/src/commands`.
+2. Build output exists in `packages/sdk/dist/commands`.
+3. `packages/sdk/package.json` has `oclif.commands = "./dist/commands"`.
+4. Verify with `node packages/sdk/dist/cli.mjs --help`.

@@ -1,35 +1,32 @@
 # Effect Patterns
 
-## Why Effect here
+## Why Effect is used in SDK modules
 
-- Keeps business logic composable and testable.
-- Gives strong typing across async workflows.
-- Makes it easier to move from simple commands to layered SDK capabilities.
+- Encodes success/error channels with explicit types.
+- Keeps API logic composable and testable.
+- Supports both Effect-first and Promise-first call sites.
 
-## Pattern used now
+## Pattern used in this repository
 
-- Command parses input with Oclif.
-- Business logic is implemented as `Effect`.
-- Command executes with `Effect.runPromise(...)`.
+- Commands parse flags and format output.
+- SDK modules (`packages/sdk/src/sdk/*`) implement request logic with `Effect`.
+- SDK APIs expose:
+  - Effect methods (primary)
+  - Promise wrappers (convenience)
 
-Current example:
+Example:
 
-- `buildHelloMessage(name)` in `src/commands/say-hello.ts`
-
-## Recommended pattern for real SDK logic
-
-1. Put domain operations in `src/sdk/*` or `src/core/*`.
-2. Return `Effect.Effect<Success, DomainError, Dependencies>`.
-3. Keep parsing and rendering in command class only.
+- `projects.list(...)` returns `Effect<...>`
+- `projects.listPromise(...)` calls `Effect.runPromise(...)`
 
 ## Error strategy
 
-- Validation/parsing errors: Oclif flags/args mechanisms.
-- Domain errors: custom tagged error types in SDK/core modules.
-- Command `run()` should map domain errors into user-friendly CLI output.
+- CLI validation errors: command-level (`this.error(...)` with actionable guidance).
+- SDK request errors: typed tagged errors (`AuthError`, `ValidationError`, `NotFoundError`, etc.).
+- Transport failures: `TransportError` with request context.
 
-## Testing strategy with Effect
+## Testing guidance
 
-- Unit test effect functions directly via `Effect.runPromise`.
-- Keep effect functions deterministic by injecting dependencies as arguments/layers.
-- Avoid putting side effects directly in command classes unless output/logging.
+1. Test command behavior directly with `CommandClass.run([...args])`.
+2. Test SDK behavior with mock transport and `Effect.runPromise(...)`.
+3. Keep SDK modules free of CLI concerns so tests stay deterministic.

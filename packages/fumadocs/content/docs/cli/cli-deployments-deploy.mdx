@@ -95,3 +95,14 @@ If you use `https://localhost:<port>` and get `TypeError: fetch failed`:
 
 - If your server is plain HTTP, use `http://localhost:<port>`.
 - If your server uses a self-signed certificate, trust the cert locally.
+
+## Failure Modes
+
+- Missing base URL:
+  - `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Invalid deployment token:
+  - `auth-token must start with "deploy_token_"`
+- Invalid branch name format:
+  - `Current branch must be a raw branch name (no "refs/heads/" or "branch/" prefix).`
+- Unable to resolve branch automatically:
+  - `Unable to determine current git branch. Run this command inside a git repository or pass --branch-name.`

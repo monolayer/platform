@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 process.env.NODE_ENV = "production";
 // oxlint-disable-next-line turbo/no-undeclared-env-vars
 const originalBaseUrl = process.env.MONOLAYER_BASE_URL;
+// oxlint-disable-next-line turbo/no-undeclared-env-vars
+const originalAuthToken = process.env.MONOLAYER_AUTH_TOKEN;
 
 import ProjectsList from "../../src/commands/projects/list.js";
 
@@ -40,10 +42,19 @@ describe("projects:list command", () => {
 		if (originalBaseUrl === undefined) {
 			// oxlint-disable-next-line turbo/no-undeclared-env-vars
 			delete process.env.MONOLAYER_BASE_URL;
+		} else {
+			// oxlint-disable-next-line turbo/no-undeclared-env-vars
+			process.env.MONOLAYER_BASE_URL = originalBaseUrl;
+		}
+
+		if (originalAuthToken === undefined) {
+			// oxlint-disable-next-line turbo/no-undeclared-env-vars
+			delete process.env.MONOLAYER_AUTH_TOKEN;
 			return;
 		}
+
 		// oxlint-disable-next-line turbo/no-undeclared-env-vars
-		process.env.MONOLAYER_BASE_URL = originalBaseUrl;
+		process.env.MONOLAYER_AUTH_TOKEN = originalAuthToken;
 	});
 
 	it("prints JSON response by default", async () => {
@@ -159,6 +170,27 @@ describe("projects:list command", () => {
 			),
 		).rejects.toThrow(
 			/Missing base URL\. Pass --base-url explicitly or set MONOLAYER_BASE_URL\./,
+		);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it("fails with helpful message when auth-token is missing", async () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+		// oxlint-disable-next-line turbo/no-undeclared-env-vars
+		delete process.env.MONOLAYER_AUTH_TOKEN;
+
+		await expect(
+			captureStdout(() =>
+				ProjectsList.run([
+					"--base-url",
+					"https://api.monolayer.com",
+					"--limit",
+					"1",
+				]),
+			),
+		).rejects.toThrow(
+			/Missing auth token\. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN\./,
 		);
 		expect(fetchMock).not.toHaveBeenCalled();
 	});

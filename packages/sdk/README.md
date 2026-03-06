@@ -99,7 +99,7 @@ Auth token:
 - `projects:list` token precedence:
   1. `--auth-token`
   2. `MONOLAYER_AUTH_TOKEN`
-  3. error (`Missing auth token...`)
+  3. `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 - `deployments:deploy` token precedence:
   1. `--auth-token`
   2. `MONOLAYER_DEPLOYMENT_TOKEN`
@@ -189,6 +189,7 @@ Coverage includes:
 - JSON output behavior (`projects:list`).
 - `MONOLAYER_BASE_URL` fallback for both commands.
 - Helpful missing-base-url error message.
+- Helpful missing-auth-token error message for `projects:list`.
 - `--json` rejection in JSON-only command paths.
 - Deploy trigger and poll lifecycle.
 - Incremental polling (`x-next-since` handling).

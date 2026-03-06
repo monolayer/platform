@@ -101,6 +101,8 @@ Flags:
 Failure contract:
 - If base URL missing from both flag and env:
   - `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- If auth token missing from both flag and env:
+  - `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 
 API contract:
 - GET `/sdk/projects`
@@ -172,7 +174,8 @@ Both commands:
 `projects:list`:
 1. `--auth-token`
 2. `MONOLAYER_AUTH_TOKEN`
-3. `AuthError`
+3. Command error:
+   - `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 
 `deployments:deploy`:
 1. `--auth-token`
@@ -226,6 +229,7 @@ Techniques:
 What must stay covered:
 - Env fallback for base URL.
 - Helpful missing-base-url message.
+- Helpful missing-auth-token message for `projects:list`.
 - Deploy poll mechanics (`since`, status dedupe, blank log suppression).
 - Branch fallback behavior (inside/outside git repo).
 - Localhost fetch failure hint.
@@ -388,4 +392,3 @@ Before opening a PR:
 - `projects:list` is JSON-only by default.
 - `deployments:deploy` remains human-log-streaming command.
 - Base URL guidance intentionally explicit in error messaging to reduce setup friction.
-
