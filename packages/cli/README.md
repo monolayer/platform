@@ -1,8 +1,8 @@
-# Monolayer CLI and SDK (packages/sdk)
+# Monolayer CLI and Client (packages/cli)
 
 This package ships:
 - A CLI binary: `monolayer`
-- A typed SDK client used by CLI commands
+- A typed client used by CLI commands
 
 Maintainer-focused development playbook:
 - `DEVELOPMENT_GUIDE.md`
@@ -16,16 +16,16 @@ Current CLI scope is intentionally small:
 Install dependencies and run commands from this package:
 
 ```bash
-pnpm -C packages/sdk install
-pnpm -C packages/sdk exec monolayer projects:list --base-url https://control-plane-domain --auth-token <token>
-pnpm -C packages/sdk exec monolayer deployments:deploy --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
+pnpm -C packages/cli install
+pnpm -C packages/cli exec monolayer projects:list --base-url https://control-plane-domain --auth-token <token>
+pnpm -C packages/cli exec monolayer deployments:deploy --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
 ```
 
 Build and test:
 
 ```bash
-pnpm -C packages/sdk run build
-pnpm -C packages/sdk run test
+pnpm -C packages/cli run build
+pnpm -C packages/cli run test
 ```
 
 ## Command Reference
@@ -68,8 +68,8 @@ Flags:
 Behavior:
 - Validates token prefix: `deploy_token_`.
 - Rejects branch names starting with `refs/heads/` or `branch/`.
-- Trigger endpoint: `POST /sdk/deployments` with `{ branchName }`.
-- Poll endpoint: `GET /sdk/projects/{projectId}/deployments/{deploymentNumber}`.
+- Trigger endpoint: `POST /cli/deployments` with `{ branchName }`.
+- Poll endpoint: `GET /cli/projects/{projectId}/deployments/{deploymentNumber}`.
 - Uses `x-next-since` response header for incremental polling.
 - Prints log lines with timestamps.
 - Skips blank/whitespace log events.
@@ -114,7 +114,7 @@ CLI output is command-specific:
 - `projects:list`: JSON payload output.
 - `deployments:deploy`: streaming human-readable logs and status lines.
 
-SDK output (programmatic client):
+Client output (programmatic API):
 - Exposes typed `Effect` and Promise APIs for `projects` and `deployments`.
 
 ## Architecture
@@ -125,7 +125,7 @@ High-level flow:
 2. `src/main.ts` calls `@oclif/core.execute(...)`.
 3. oclif loads command classes from `dist/commands`.
 4. Commands either:
-   - Call SDK client abstractions (`projects:list`), or
+   - Call client abstractions (`projects:list`), or
    - Call HTTP directly for specialized flow (`deployments:deploy`).
 
 ### Code Layout
@@ -133,22 +133,22 @@ High-level flow:
 CLI:
 - `src/cli.ts`: executable entrypoint.
 - `src/main.ts`: oclif bootstrap.
-- `src/base-command.ts`: shared flags and SDK client wiring.
+- `src/base-command.ts`: shared flags and client wiring.
 - `src/commands/projects/list.ts`: projects list command.
 - `src/commands/deployments/deploy.ts`: deployment trigger + polling command.
 
-SDK core:
-- `src/sdk/client.ts`: constructs runtime + API groups.
-- `src/sdk/config.ts`: base URL normalization + auth token resolution.
-- `src/sdk/request.ts`: maps HTTP statuses to typed SDK errors.
-- `src/sdk/http-transport.ts`: fetch-based transport implementation.
-- `src/sdk/mock-transport.ts`: deterministic transport for tests.
-- `src/sdk/projects.ts`: projects API methods.
-- `src/sdk/deployments.ts`: deployments API methods.
-- `src/sdk/types.ts`: DTOs + API interfaces.
-- `src/sdk/errors.ts`: typed error model.
+Client core:
+- `src/client/client.ts`: constructs runtime + API groups.
+- `src/client/config.ts`: base URL normalization + auth token resolution.
+- `src/client/request.ts`: maps HTTP statuses to typed client errors.
+- `src/client/http-transport.ts`: fetch-based transport implementation.
+- `src/client/mock-transport.ts`: deterministic transport for tests.
+- `src/client/projects.ts`: projects API methods.
+- `src/client/deployments.ts`: deployments API methods.
+- `src/client/types.ts`: DTOs + API interfaces.
+- `src/client/errors.ts`: typed error model.
 
-### SDK Layering
+### Client Layering
 
 `createClient(options)`:
 - Normalizes base URL (`origin` only).
@@ -175,8 +175,8 @@ Test framework:
 Test files:
 - `test/commands/projects-list.test.ts`
 - `test/commands/deployments-deploy.test.ts`
-- `test/sdk/config.test.ts`
-- `test/sdk/client.test.ts`
+- `test/client/config.test.ts`
+- `test/client/client.test.ts`
 
 ### Command Tests
 
@@ -198,7 +198,7 @@ Coverage includes:
 - Branch detection fallback to git.
 - Failure modes (queued, failed, no git repo, localhost fetch hint).
 
-### SDK Tests
+### Client Tests
 
 `config.test.ts`:
 - Base URL normalization.
@@ -218,22 +218,22 @@ Coverage includes:
 Recommended local checks:
 
 ```bash
-pnpm -C packages/sdk run test
-pnpm -C packages/sdk run lint
-pnpm -C packages/sdk run build
+pnpm -C packages/cli run test
+pnpm -C packages/cli run lint
+pnpm -C packages/cli run build
 ```
 
 Useful focused runs:
 
 ```bash
-pnpm -C packages/sdk exec vitest run test/commands/deployments-deploy.test.ts
-pnpm -C packages/sdk exec vitest run test/commands/projects-list.test.ts
-pnpm -C packages/sdk exec vitest run test/sdk/client.test.ts
+pnpm -C packages/cli exec vitest run test/commands/deployments-deploy.test.ts
+pnpm -C packages/cli exec vitest run test/commands/projects-list.test.ts
+pnpm -C packages/cli exec vitest run test/client/client.test.ts
 ```
 
 ## Known Caveats
 
-- `pnpm -C packages/sdk run check-types` currently fails due `import.meta` in `src/main.ts` under current CommonJS type-check output settings.
+- `pnpm -C packages/cli run check-types` currently fails due `import.meta` in `src/main.ts` under current CommonJS type-check output settings.
 - Running tests may print oclif plugin warnings about `@oclif/plugin-plugins`; tests still pass.
 
 ## Extending the CLI

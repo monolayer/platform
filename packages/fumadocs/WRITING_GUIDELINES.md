@@ -35,7 +35,7 @@ Organize information so it is easy to scan. Users rarely read documentation top-
 
 * **Action-oriented headings:** Start task-based headings with an imperative verb.
   * *Avoid:* Installation Steps.
-  * *Prefer:* Install the SDK.
+  * *Prefer:* Install the CLI package.
 * **Conversational grouping:** Group related concepts under approachable, conversational headings.
   * *Avoid:* Prerequisites / Requirements.
   * *Prefer:* What you need.

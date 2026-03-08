@@ -1,6 +1,6 @@
 {
-  "name": "sdk",
+  "name": "cli",
   "private": true,
-  "description": "monolayer SDK monorepo",
+  "description": "monolayer CLI monorepo",
   "type": "module"
 }

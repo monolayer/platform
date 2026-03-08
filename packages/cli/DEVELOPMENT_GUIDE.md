@@ -1,6 +1,6 @@
-# SDK/CLI Development Guide (Maintainer Playbook)
+# CLI and Client Development Guide (Maintainer Playbook)
 
-This document is for future maintainers working in `packages/sdk`.
+This document is for future maintainers working in `packages/cli`.
 
 It is intentionally implementation-heavy and assumes you are making code changes, not just using the CLI.
 
@@ -14,7 +14,7 @@ Goals:
 - Keep CLI behavior predictable and testable.
 - Keep command behavior explicit (especially stdout/error contracts).
 - Keep API request paths and payload contracts easy to audit.
-- Keep SDK typed errors stable.
+- Keep client typed errors stable.
 
 Non-goals (current scope):
 - Large command surface with many command groups.
@@ -26,29 +26,29 @@ Non-goals (current scope):
 Core package files:
 - `src/cli.ts`: node executable entrypoint
 - `src/main.ts`: oclif bootstrap (`execute`)
-- `src/base-command.ts`: shared flags and SDK client helper
+- `src/base-command.ts`: shared flags and client helper
 
 Commands:
 - `src/commands/projects/list.ts`
 - `src/commands/deployments/deploy.ts`
 
-SDK internals:
-- `src/sdk/client.ts`: runtime wiring
-- `src/sdk/config.ts`: config normalization and auth token resolution
-- `src/sdk/request.ts`: status-to-error mapping
-- `src/sdk/http-transport.ts`: fetch transport
-- `src/sdk/mock-transport.ts`: in-memory fake transport for tests
-- `src/sdk/projects.ts`: projects API
-- `src/sdk/deployments.ts`: deployments API
-- `src/sdk/types.ts`: DTO and API types
-- `src/sdk/errors.ts`: typed error classes
-- `src/sdk/runtime.ts`, `src/sdk/transport.ts`: wiring types
+Client internals:
+- `src/client/client.ts`: runtime wiring
+- `src/client/config.ts`: config normalization and auth token resolution
+- `src/client/request.ts`: status-to-error mapping
+- `src/client/http-transport.ts`: fetch transport
+- `src/client/mock-transport.ts`: in-memory fake transport for tests
+- `src/client/projects.ts`: projects API
+- `src/client/deployments.ts`: deployments API
+- `src/client/types.ts`: DTO and API types
+- `src/client/errors.ts`: typed error classes
+- `src/client/runtime.ts`, `src/client/transport.ts`: wiring types
 
 Tests:
 - `test/commands/projects-list.test.ts`
 - `test/commands/deployments-deploy.test.ts`
-- `test/sdk/config.test.ts`
-- `test/sdk/client.test.ts`
+- `test/client/config.test.ts`
+- `test/client/client.test.ts`
 
 ## 3. Runtime Architecture
 
@@ -66,10 +66,10 @@ Important:
 
 There are two patterns in this package:
 
-1. SDK-backed command pattern:
+1. Client-backed command pattern:
 - Example: `projects:list`
-- Command uses `BaseCommand.createSdkClient(...)`
-- Requests go through SDK layers (`sendJson`, typed error mapping, transport abstraction)
+- Command uses `BaseCommand.createClient(...)`
+- Requests go through client layers (`sendJson`, typed error mapping, transport abstraction)
 
 2. Custom command-local HTTP pattern:
 - Example: `deployments:deploy`
@@ -105,7 +105,7 @@ Failure contract:
   - `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 
 API contract:
-- GET `/sdk/projects`
+- GET `/cli/projects`
 - Query params: `cursor`, `limit` when provided
 
 ### 4.2 `deployments:deploy`
@@ -131,7 +131,7 @@ Validation invariants:
 - Missing base URL error message must explicitly mention `--base-url` and `MONOLAYER_BASE_URL`.
 
 Trigger request contract:
-- POST `/sdk/deployments`
+- POST `/cli/deployments`
 - Body: `{ branchName }`
 
 Trigger response handling:
@@ -140,7 +140,7 @@ Trigger response handling:
 - `type: "triggered"`: start polling.
 
 Poll request contract:
-- GET `/sdk/projects/{projectId}/deployments/{deploymentNumber}`
+- GET `/cli/projects/{projectId}/deployments/{deploymentNumber}`
 - If `x-next-since` is returned and non-empty, send `?since=...` on next poll.
 
 Polling invariants:
@@ -187,9 +187,9 @@ This asymmetry is intentional in current code. If you standardize env names late
 - docs
 - tests
 
-## 6. SDK Layer (Programmatic Client)
+## 6. Client Layer (Programmatic API)
 
-`createClient(options)` in `src/sdk/client.ts`:
+`createClient(options)` in `src/client/client.ts`:
 - `normalizeBaseUrl(options.baseUrl)` -> origin-only URL
 - `resolveAuthToken(options.authToken)` -> explicit token or env token
 - transport:
@@ -201,9 +201,9 @@ This asymmetry is intentional in current code. If you standardize env names late
 `Transport` type:
 - `(request: HttpRequest) => Effect<HttpResponse, TransportError>`
 
-This keeps SDK methods deterministic and testable without network.
+This keeps client methods deterministic and testable without network.
 
-### 6.2 Error mapping in SDK requests
+### 6.2 Error mapping in client requests
 
 `sendJson` maps HTTP status:
 - 401/403 -> `AuthError`
@@ -235,12 +235,12 @@ What must stay covered:
 - Localhost fetch failure hint.
 - `--json` rejection behavior where expected.
 
-### 7.2 SDK tests
+### 7.2 Client tests
 
-`test/sdk/config.test.ts`:
+`test/client/config.test.ts`:
 - URL normalization and auth token precedence.
 
-`test/sdk/client.test.ts`:
+`test/client/client.test.ts`:
 - Default HTTP transport behavior with stubbed `fetch`.
 - Mock transport scenarios for projects/deployments.
 - Typed error behavior (`NotFoundError`).
@@ -248,13 +248,13 @@ What must stay covered:
 ### 7.3 What to run depending on change
 
 If you changed command parsing/output:
-- `pnpm -C packages/sdk exec vitest run test/commands`
+- `pnpm -C packages/cli exec vitest run test/commands`
 
-If you changed SDK runtime/config/transport:
-- `pnpm -C packages/sdk exec vitest run test/sdk`
+If you changed client runtime/config/transport:
+- `pnpm -C packages/cli exec vitest run test/client`
 
 If unsure:
-- `pnpm -C packages/sdk run test`
+- `pnpm -C packages/cli run test`
 
 ## 8. Change Playbooks
 
@@ -262,7 +262,7 @@ If unsure:
 
 1. Create file under `src/commands/<group>/<name>.ts`.
 2. Decide style:
-   - SDK-backed via `BaseCommand`, or
+   - client-backed via `BaseCommand`, or
    - command-local fetch flow
 3. Define flags and env fallback explicitly.
 4. Define output contract clearly (JSON-only vs human logs).
@@ -277,9 +277,9 @@ If unsure:
 
 ### 8.2 Change endpoint path/payload
 
-1. Update command or SDK API method.
+1. Update command or client API method.
 2. Update tests that assert URL/path/body.
-3. Run targeted command + sdk tests.
+3. Run targeted command + client tests.
 4. Verify no stale old-path references remain (`rg`).
 
 ### 8.3 Change stdout behavior
@@ -301,7 +301,7 @@ Checklist:
 ## 9. Coding Conventions Used Here
 
 - TypeScript strict mode is enabled.
-- Prefer explicit domain types in `src/sdk/types.ts`.
+- Prefer explicit domain types in `src/client/types.ts`.
 - Prefer small pure helpers for data normalization.
 - Avoid hidden output branching; keep command output mode explicit.
 - Keep command errors user-actionable (what to pass/set next).
@@ -315,7 +315,7 @@ For tests:
 
 ### 10.1 `check-types` current failure
 
-`pnpm -C packages/sdk run check-types` currently fails with:
+`pnpm -C packages/cli run check-types` currently fails with:
 - `TS1470` in `src/main.ts` (`import.meta` with current CommonJS type-check output mode)
 
 This is pre-existing. Do not block unrelated changes on this unless you are fixing tooling configuration.
@@ -354,7 +354,7 @@ Projects:
 ```bash
 MONOLAYER_BASE_URL=https://control-plane-domain \
 MONOLAYER_AUTH_TOKEN=test-token \
-pnpm -C packages/sdk exec monolayer projects:list --limit 1
+pnpm -C packages/cli exec monolayer projects:list --limit 1
 ```
 
 Deploy:
@@ -362,7 +362,7 @@ Deploy:
 ```bash
 MONOLAYER_BASE_URL=https://control-plane-domain \
 MONOLAYER_DEPLOYMENT_TOKEN=deploy_token_test \
-pnpm -C packages/sdk exec monolayer deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
+pnpm -C packages/cli exec monolayer deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
 ```
 
 ## 12. CI/Pre-Commit Checklist (Manual)
@@ -371,9 +371,9 @@ Before opening a PR:
 
 1. Run targeted tests for touched area.
 2. Run full package tests:
-   - `pnpm -C packages/sdk run test`
+   - `pnpm -C packages/cli run test`
 3. Run lint:
-   - `pnpm -C packages/sdk run lint`
+   - `pnpm -C packages/cli run lint`
 4. Ensure docs are updated if behavior changed.
 5. Confirm no accidental command-surface expansion.
 6. Confirm no stale dead code (use `rg` after refactors).

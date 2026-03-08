@@ -6,16 +6,16 @@ import {
 	NotFoundError,
 	RateLimitError,
 	ValidationError,
-	type SdkError,
+	type ClientError,
 } from "./errors.js";
 import type { ClientRuntime } from "./runtime.js";
 import type { HttpRequest } from "./transport.js";
 
-const toSdkError = (
+const toClientError = (
 	status: number,
 	body: unknown,
 	requestId?: string,
-): SdkError => {
+): ClientError => {
 	const message =
 		typeof body === "object" &&
 		body !== null &&
@@ -50,7 +50,7 @@ const toSdkError = (
 export const sendJson = <T>(
 	runtime: ClientRuntime,
 	request: Omit<HttpRequest, "headers">,
-): Effect.Effect<T, SdkError> =>
+): Effect.Effect<T, ClientError> =>
 	Effect.gen(function* () {
 		const response = yield* runtime.transport({
 			...request,
@@ -64,7 +64,7 @@ export const sendJson = <T>(
 		}
 
 		return yield* Effect.fail(
-			toSdkError(
+			toClientError(
 				response.status,
 				response.body,
 				response.headers?.["x-request-id"],

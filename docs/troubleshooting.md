@@ -8,7 +8,7 @@ Symptom:
 
 Checks:
 
-1. `packages/sdk/package.json` includes `@oclif/core` and `@oclif/plugin-help`.
+1. `packages/cli/package.json` includes `@oclif/core` and `@oclif/plugin-help`.
 2. Dependencies are installed (`pnpm install`).
 3. Workspace lockfile and `node_modules` are in sync.
 
@@ -59,7 +59,7 @@ Fix:
 
 Checks:
 
-1. Command file exists in `packages/sdk/src/commands`.
-2. Build output exists in `packages/sdk/dist/commands`.
-3. `packages/sdk/package.json` has `oclif.commands = "./dist/commands"`.
-4. Verify with `node packages/sdk/dist/cli.mjs --help`.
+1. Command file exists in `packages/cli/src/commands`.
+2. Build output exists in `packages/cli/dist/commands`.
+3. `packages/cli/package.json` has `oclif.commands = "./dist/commands"`.
+4. Verify with `node packages/cli/dist/cli.mjs --help`.

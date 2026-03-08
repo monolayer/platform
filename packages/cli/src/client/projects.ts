@@ -13,7 +13,7 @@ export const createProjectsApi = (runtime: ClientRuntime): ProjectsApi => {
   const list = (input?: ListProjectsInput) =>
     sendJson<ListResult<ProjectDto>>(runtime, {
       method: "GET",
-      path: "/sdk/projects",
+      path: "/cli/projects",
       query: {
         cursor: input?.cursor,
         limit: input?.limit,

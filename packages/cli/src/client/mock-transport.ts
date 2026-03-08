@@ -110,7 +110,7 @@ export const createMockTransport = (): Transport => {
 					return unauthorized();
 				}
 
-				if (request.method === "GET" && request.path === "/sdk/projects") {
+				if (request.method === "GET" && request.path === "/cli/projects") {
 					return {
 						status: 200,
 						body: paginate(
@@ -121,7 +121,7 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (request.method === "GET" && request.path === "/sdk/deployments") {
+				if (request.method === "GET" && request.path === "/cli/deployments") {
 					const projectId = request.query?.projectId;
 					const filtered =
 						typeof projectId === "string"
@@ -141,7 +141,7 @@ export const createMockTransport = (): Transport => {
 				}
 
 				const getDeploymentMatch = request.path.match(
-					/^\/sdk\/projects\/([^/]+)\/deployments\/([^/]+)$/,
+					/^\/cli\/projects\/([^/]+)\/deployments\/([^/]+)$/,
 				);
 				if (request.method === "GET" && getDeploymentMatch) {
 					const projectId = decodeURIComponent(getDeploymentMatch[1] ?? "");
@@ -163,7 +163,7 @@ export const createMockTransport = (): Transport => {
 					};
 				}
 
-				if (request.method === "POST" && request.path === "/sdk/deployments") {
+				if (request.method === "POST" && request.path === "/cli/deployments") {
 					const body =
 						typeof request.body === "object" && request.body !== null
 							? request.body

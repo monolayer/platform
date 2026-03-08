@@ -148,7 +148,7 @@ const localhostTroubleshootingHint = (url: URL): string => {
 export default class DeploymentsDeploy extends Command {
   static summary = "Deploy the current git branch";
   static description =
-    "Triggers SDK deployment for the current git branch and polls deployment logs.";
+    "Triggers CLI deployment for the current git branch and polls deployment logs.";
 
   static examples = [
     "<%= config.bin %> <%= command.id %> --base-url https://control-plane-domain --auth-token deploy_token_... --project-id proj-1",
@@ -211,7 +211,7 @@ export default class DeploymentsDeploy extends Command {
 
     const triggerResponse =
       await this.sendJsonRequest<DeploymentTriggerResponse>(
-        new URL("/sdk/deployments", baseUrl),
+        new URL("/cli/deployments", baseUrl),
         {
           method: "POST",
           deploymentToken,
@@ -288,7 +288,7 @@ export default class DeploymentsDeploy extends Command {
 
     for (;;) {
       const pollUrl = new URL(
-        `/sdk/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentNumber)}`,
+        `/cli/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentNumber)}`,
         input.baseUrl,
       );
       if (since !== undefined) {

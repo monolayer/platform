@@ -4,31 +4,31 @@
 
 CLI bootstrap:
 
-- `packages/sdk/src/cli.ts`: executable entrypoint.
-- `packages/sdk/src/main.ts`: calls `@oclif/core.execute(...)`.
-- `packages/sdk/src/commands/**/*.ts`: command classes discovered by oclif at runtime.
+- `packages/cli/src/cli.ts`: executable entrypoint.
+- `packages/cli/src/main.ts`: calls `@oclif/core.execute(...)`.
+- `packages/cli/src/commands/**/*.ts`: command classes discovered by oclif at runtime.
 
 Shared CLI wiring:
 
-- `packages/sdk/src/base-command.ts`: common flags and SDK client construction for SDK-backed commands.
+- `packages/cli/src/base-command.ts`: common flags and client construction for client-backed commands.
 
-SDK core:
+Client core:
 
-- `packages/sdk/src/sdk/client.ts`: runtime construction + API groups.
-- `packages/sdk/src/sdk/config.ts`: base URL normalization + auth token resolution.
-- `packages/sdk/src/sdk/http-transport.ts`: fetch transport.
-- `packages/sdk/src/sdk/mock-transport.ts`: deterministic in-memory transport for tests.
-- `packages/sdk/src/sdk/request.ts`: maps HTTP statuses to typed SDK errors.
-- `packages/sdk/src/sdk/projects.ts`: projects API methods.
-- `packages/sdk/src/sdk/deployments.ts`: deployments API methods.
+- `packages/cli/src/client/client.ts`: runtime construction + API groups.
+- `packages/cli/src/client/config.ts`: base URL normalization + auth token resolution.
+- `packages/cli/src/client/http-transport.ts`: fetch transport.
+- `packages/cli/src/client/mock-transport.ts`: deterministic in-memory transport for tests.
+- `packages/cli/src/client/request.ts`: maps HTTP statuses to typed client errors.
+- `packages/cli/src/client/projects.ts`: projects API methods.
+- `packages/cli/src/client/deployments.ts`: deployments API methods.
 
 ## Command execution styles
 
 The package currently uses two command patterns:
 
-1. SDK-backed command
+1. Client-backed command
 - Example: `projects:list`
-- Uses `BaseCommand.createSdkClient(...)` and SDK methods.
+- Uses `BaseCommand.createClient(...)` and client methods.
 
 2. Command-local fetch flow
 - Example: `deployments:deploy`
@@ -38,13 +38,13 @@ This split is intentional for now because deployment polling has command-specifi
 
 ## Build and package wiring
 
-`packages/sdk/package.json`:
+`packages/cli/package.json`:
 
 - `bin.monolayer = "./dist/cli.mjs"`
 - `oclif.bin = "monolayer"`
 - `oclif.commands = "./dist/commands"`
 
-`packages/sdk/tsdown.config.esm.ts`:
+`packages/cli/tsdown.config.esm.ts`:
 
 - entry points: `src/cli.ts`, `src/commands/**/*.ts`
 - output format: ESM (`dist/*.mjs`)
@@ -52,6 +52,6 @@ This split is intentional for now because deployment polling has command-specifi
 ## Design principles
 
 1. Keep command classes focused on parsing, orchestration, and output.
-2. Keep reusable API logic in `src/sdk/*`.
+2. Keep reusable API logic in `src/client/*`.
 3. Preserve explicit output contracts (JSON-only vs human log streams).
 4. Treat tests and docs as part of the command contract.

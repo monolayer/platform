@@ -1,6 +1,6 @@
-# SDK Design (Current)
+# Client Design (Current)
 
-This document captures the current contract and architecture for `@monolayer/sdk`.
+This document captures the current contract and architecture for `@monolayer/cli`.
 
 ## Product intent
 
@@ -12,12 +12,12 @@ Primary users:
 Current posture:
 
 - Node.js runtime
-- Typed SDK with Effect-first internals
+- Typed client with Effect-first internals
 - Small, stable CLI command surface
 
 ## Current scope
 
-SDK modules available:
+Client modules available:
 
 - `projects`
 - `deployments`
@@ -50,7 +50,7 @@ Auth token resolution (`resolveAuthToken`):
 2. `process.env.MONOLAYER_AUTH_TOKEN`
 3. throw `AuthError`
 
-## Public SDK API shape
+## Public client API shape
 
 ```ts
 type MonolayerClient = {
@@ -111,7 +111,7 @@ Request behavior:
 
 `projects:list`:
 
-- SDK-backed command through `BaseCommand`
+- Client-backed command through `BaseCommand`
 - outputs JSON payload to stdout
 
 `deployments:deploy`:
@@ -121,6 +121,6 @@ Request behavior:
 
 ## Testing expectations
 
-- Command contracts are validated in `packages/sdk/test/commands/*`.
-- SDK behavior is validated in `packages/sdk/test/sdk/*`.
+- Command contracts are validated in `packages/cli/test/commands/*`.
+- Client behavior is validated in `packages/cli/test/client/*`.
 - Docs should change alongside command/runtime contract changes.

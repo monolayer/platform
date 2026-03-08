@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Effect, Either } from "effect";
-import { createClient } from "../../src/sdk/client.js";
-import { AuthError, NotFoundError } from "../../src/sdk/errors.js";
-import { createMockTransport } from "../../src/sdk/mock-transport.js";
+import { createClient } from "../../src/client/client.js";
+import { AuthError, NotFoundError } from "../../src/client/errors.js";
+import { createMockTransport } from "../../src/client/mock-transport.js";
 
 describe("createClient", () => {
   const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
@@ -50,8 +50,8 @@ describe("createClient", () => {
           items: [
             {
               projectId: "proj-9",
-              name: "Platform SDK",
-              repositoryUrl: "https://github.com/monolayer/platform-sdk",
+              name: "Platform CLI",
+              repositoryUrl: "https://github.com/monolayer/platform-cli",
             },
           ],
         }),
@@ -74,7 +74,7 @@ describe("createClient", () => {
 
     expect(projects.items[0]?.projectId).toBe("proj-9");
     expect(projects.items[0]?.repositoryUrl).toBe(
-      "https://github.com/monolayer/platform-sdk",
+      "https://github.com/monolayer/platform-cli",
     );
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [
@@ -82,7 +82,7 @@ describe("createClient", () => {
       RequestInit,
     ];
     expect(requestUrl.toString()).toBe(
-      "https://api.monolayer.com/sdk/projects",
+      "https://api.monolayer.com/cli/projects",
     );
     expect(requestInit.method).toBe("GET");
     expect(requestInit.headers).toMatchObject({

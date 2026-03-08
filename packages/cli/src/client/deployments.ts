@@ -17,20 +17,20 @@ export const createDeploymentsApi = (
 	const create = (input: CreateDeploymentInput) =>
 		sendJson<DeploymentDto>(runtime, {
 			method: "POST",
-			path: "/sdk/deployments",
+			path: "/cli/deployments",
 			body: input,
 		});
 
 	const get = (input: GetDeploymentInput) =>
 		sendJson<DeploymentDto>(runtime, {
 			method: "GET",
-			path: `/sdk/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentId)}`,
+			path: `/cli/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentId)}`,
 		});
 
 	const list = (input?: ListDeploymentsInput) =>
 		sendJson<ListResult<DeploymentDto>>(runtime, {
 			method: "GET",
-			path: "/sdk/deployments",
+			path: "/cli/deployments",
 			query: {
 				projectId: input?.projectId,
 				cursor: input?.cursor,

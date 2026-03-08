@@ -1,7 +1,7 @@
 import { Flags } from "@oclif/core";
 
 import { BaseCommand } from "../../base-command.js";
-import type { ListResult, ProjectDto } from "../../sdk/types.js";
+import type { ListResult, ProjectDto } from "../../client/types.js";
 
 export default class ProjectsList extends BaseCommand {
   static summary = "List projects";
@@ -45,7 +45,7 @@ export default class ProjectsList extends BaseCommand {
       );
     }
 
-    const client = this.createSdkClient({
+    const client = this.createClient({
       ...flags,
       "base-url": baseUrl,
       "auth-token": authToken,

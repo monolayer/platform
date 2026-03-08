@@ -4,13 +4,13 @@
 
 Command tests:
 
-- `packages/sdk/test/commands/projects-list.test.ts`
-- `packages/sdk/test/commands/deployments-deploy.test.ts`
+- `packages/cli/test/commands/projects-list.test.ts`
+- `packages/cli/test/commands/deployments-deploy.test.ts`
 
-SDK tests:
+Client tests:
 
-- `packages/sdk/test/sdk/config.test.ts`
-- `packages/sdk/test/sdk/client.test.ts`
+- `packages/cli/test/client/config.test.ts`
+- `packages/cli/test/client/client.test.ts`
 
 ## Test patterns
 
@@ -20,7 +20,7 @@ SDK tests:
 - Capture stdout with `process.stdout.write` spies.
 - Verify exact URL/method/body contracts where possible.
 
-2. SDK tests
+2. Client tests
 - Test pure config helpers directly (`normalizeBaseUrl`, `resolveAuthToken`).
 - Use `createMockTransport()` for deterministic API scenarios.
 - Assert typed errors for failure paths.
@@ -32,14 +32,14 @@ SDK tests:
 ## Commands
 
 ```bash
-pnpm -C packages/sdk run test
-pnpm -C packages/sdk run test:watch
+pnpm -C packages/cli run test
+pnpm -C packages/cli run test:watch
 ```
 
 Focused runs:
 
 ```bash
-pnpm -C packages/sdk exec vitest run test/commands/projects-list.test.ts
-pnpm -C packages/sdk exec vitest run test/commands/deployments-deploy.test.ts
-pnpm -C packages/sdk exec vitest run test/sdk/client.test.ts
+pnpm -C packages/cli exec vitest run test/commands/projects-list.test.ts
+pnpm -C packages/cli exec vitest run test/commands/deployments-deploy.test.ts
+pnpm -C packages/cli exec vitest run test/client/client.test.ts
 ```

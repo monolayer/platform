@@ -4,7 +4,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
-    name: "sdk",
+    name: "cli",
     disableConsoleIntercept: true,
     include: ["test/**/*.test.ts", "src/**/*.test.ts"],
     pool: "forks",

@@ -13,7 +13,7 @@ This file is the maintainer/agent operational guide for this monorepo.
 
 ## 3. Repository Map
 
-- `packages/sdk`: CLI commands and typed SDK runtime.
+- `packages/cli`: CLI commands and typed client runtime.
 - `packages/fumadocs`: documentation site.
 - `docs`: maintainer source-of-truth playbooks.
 
@@ -26,8 +26,8 @@ Read in this order before making behavior changes:
 3. `docs/effect-patterns.md`
 4. `docs/testing.md`
 5. `docs/troubleshooting.md`
-6. `docs/sdk-design.md`
-7. `packages/sdk/DEVELOPMENT_GUIDE.md`
+6. `docs/client-design.md`
+7. `packages/cli/DEVELOPMENT_GUIDE.md`
 
 ## 5. Non-Negotiable Command Contracts
 
@@ -60,9 +60,9 @@ Read in this order before making behavior changes:
 Required checks:
 
 ```bash
-pnpm -C packages/sdk run test
-pnpm -C packages/sdk run lint
-pnpm -C packages/sdk run build
+pnpm -C packages/cli run test
+pnpm -C packages/cli run lint
+pnpm -C packages/cli run build
 ```
 
 Focused runs:
@@ -70,13 +70,13 @@ Focused runs:
 - Command-only edits:
 
 ```bash
-pnpm -C packages/sdk exec vitest run test/commands
+pnpm -C packages/cli exec vitest run test/commands
 ```
 
-- SDK runtime/config/transport edits:
+- Client runtime/config/transport edits:
 
 ```bash
-pnpm -C packages/sdk exec vitest run test/sdk
+pnpm -C packages/cli exec vitest run test/client
 ```
 
 ## 7. Documentation Sync Rules
@@ -85,12 +85,12 @@ When CLI behavior changes, update all relevant docs in the same PR:
 
 - `packages/fumadocs/content/docs/cli/*`
 - `packages/fumadocs/content/docs/authentication.mdx` (if config/auth behavior changes)
-- `packages/sdk/README.md`
-- `packages/sdk/DEVELOPMENT_GUIDE.md`
+- `packages/cli/README.md`
+- `packages/cli/DEVELOPMENT_GUIDE.md`
 
 ## 8. Known Caveats
 
-- `pnpm -C packages/sdk run check-types` currently fails with TS1470 (`import.meta` vs CommonJS type-check mode).
+- `pnpm -C packages/cli run check-types` currently fails with TS1470 (`import.meta` vs CommonJS type-check mode).
 - Test runs may show oclif plugin warning noise for `@oclif/plugin-plugins`; tests can still pass.
 
 ## 9. Pre-Commit Checklist

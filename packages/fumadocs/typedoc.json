@@ -7,7 +7,7 @@
   "out": "content/docs/reference/api",
   "entryPoints": [],
   "entryPointStrategy": "expand",
-  "tsconfig": "./../sdk/tsconfig.json",
+  "tsconfig": "./../cli/tsconfig.json",
   "exclude": ["**/dist/**/*.ts", "**/vitest.config.ts", "**/test/**/*.ts"],
   "excludeExternals": false,
   "skipErrorChecking": true,

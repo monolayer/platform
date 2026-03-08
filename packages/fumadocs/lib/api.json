@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Monolayer SDK API",
-    "description": "Programmatic SDK API for projects and deployments.",
+    "title": "Monolayer CLI API",
+    "description": "Programmatic CLI and client API for projects and deployments.",
     "version": "1.0.0",
     "termsOfService": "https://monolayer.com/terms",
     "contact": {
@@ -28,13 +28,13 @@
     "schemas": {}
   },
   "paths": {
-    "/sdk/projects": {
+    "/cli/projects": {
       "get": {
-        "operationId": "sdkListProjects",
+        "operationId": "cliListProjects",
         "summary": "List projects",
-        "description": "Returns a paginated list of projects for authorized SDK clients.",
+        "description": "Returns a paginated list of projects for authorized CLI clients.",
         "tags": [
-          "sdk"
+          "cli"
         ],
         "security": [
           {
@@ -163,13 +163,13 @@
         }
       }
     },
-    "/sdk/deployments": {
+    "/cli/deployments": {
       "post": {
-        "operationId": "sdkTriggerDeployment",
+        "operationId": "cliTriggerDeployment",
         "summary": "Trigger deployment",
         "description": "Triggers or queues a deployment for the authenticated token project.",
         "tags": [
-          "sdk"
+          "cli"
         ],
         "security": [
           {
@@ -410,13 +410,13 @@
         }
       }
     },
-    "/sdk/projects/{projectId}/deployments/{deploymentNumber}": {
+    "/cli/projects/{projectId}/deployments/{deploymentNumber}": {
       "get": {
-        "operationId": "sdkGetDeploymentProgress",
+        "operationId": "cliGetDeploymentProgress",
         "summary": "Get deployment progress",
-        "description": "Returns deployment status and logs for SDK polling clients.",
+        "description": "Returns deployment status and logs for CLI polling clients.",
         "tags": [
-          "sdk"
+          "cli"
         ],
         "security": [
           {

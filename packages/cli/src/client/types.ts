@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 
-import type { SdkError } from "./errors.js";
+import type { ClientError } from "./errors.js";
 import type { Transport } from "./transport.js";
 
 export type ListResult<T> = {
@@ -55,20 +55,20 @@ export type ListDeploymentsInput = {
 export type ProjectsApi = {
   list: (
     input?: ListProjectsInput,
-  ) => Effect.Effect<ListResult<ProjectDto>, SdkError>;
+  ) => Effect.Effect<ListResult<ProjectDto>, ClientError>;
   listPromise: (input?: ListProjectsInput) => Promise<ListResult<ProjectDto>>;
 };
 
 export type DeploymentsApi = {
   create: (
     input: CreateDeploymentInput,
-  ) => Effect.Effect<DeploymentDto, SdkError>;
+  ) => Effect.Effect<DeploymentDto, ClientError>;
   createPromise: (input: CreateDeploymentInput) => Promise<DeploymentDto>;
-  get: (input: GetDeploymentInput) => Effect.Effect<DeploymentDto, SdkError>;
+  get: (input: GetDeploymentInput) => Effect.Effect<DeploymentDto, ClientError>;
   getPromise: (input: GetDeploymentInput) => Promise<DeploymentDto>;
   list: (
     input?: ListDeploymentsInput,
-  ) => Effect.Effect<ListResult<DeploymentDto>, SdkError>;
+  ) => Effect.Effect<ListResult<DeploymentDto>, ClientError>;
   listPromise: (
     input?: ListDeploymentsInput,
   ) => Promise<ListResult<DeploymentDto>>;

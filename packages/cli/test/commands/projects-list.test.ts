@@ -97,7 +97,7 @@ describe("projects:list command", () => {
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
 		expect(requestUrl.toString()).toBe(
-			"https://api.monolayer.com/sdk/projects?limit=2",
+			"https://api.monolayer.com/cli/projects?limit=2",
 		);
 		expect(requestInit.method).toBe("GET");
 	});
@@ -125,7 +125,7 @@ describe("projects:list command", () => {
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		const [requestUrl, requestInit] = fetchMock.mock.calls[0] as [URL, RequestInit];
 		expect(requestUrl.toString()).toBe(
-			"https://api.monolayer.com/sdk/projects?limit=1",
+			"https://api.monolayer.com/cli/projects?limit=1",
 		);
 		expect(requestInit.method).toBe("GET");
 	});

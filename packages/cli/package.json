@@ -1,15 +1,15 @@
 {
-  "name": "@monolayer/sdk",
+  "name": "@monolayer/cli",
   "version": "2.0.0-canary.1",
-  "description": "monolayer SDK",
+  "description": "monolayer CLI and client",
   "author": "Marcos Essindi <marcessindi@me.com>",
   "license": "MIT",
-  "homepage": "https://monolayer.dev/docs/sdk",
-  "bugs": "https://github.com/monolayer/sdk/issues",
+  "homepage": "https://monolayer.dev/docs/cli",
+  "bugs": "https://github.com/monolayer/cli/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monolayer/sdk/",
-    "directory": "packages/sdk"
+    "url": "https://github.com/monolayer/cli/",
+    "directory": "packages/cli"
   },
   "keywords": [],
   "bin": {
@@ -29,7 +29,7 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "publish:local": "npm publish --registry http://localhost:4873",
-    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/sdk -f"
+    "unpublish:local": "npm unpublish --registry http://localhost:4873 @monolayer/cli -f"
   },
   "dependencies": {
     "@oclif/core": "^4.0.0",

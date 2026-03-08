@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 
-import { createClient } from "./sdk/client.js";
+import { createClient } from "./client/client.js";
 
 export abstract class BaseCommand extends Command {
 	static baseFlags = {
@@ -15,7 +15,7 @@ export abstract class BaseCommand extends Command {
 		}),
 	};
 
-	protected createSdkClient(flags: {
+	protected createClient(flags: {
 		readonly "base-url": string;
 		readonly "auth-token"?: string;
 	}) {

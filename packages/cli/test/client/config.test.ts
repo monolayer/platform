@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { AuthError, ConfigError } from "../../src/sdk/errors.js";
-import { normalizeBaseUrl, resolveAuthToken } from "../../src/sdk/config.js";
+import { AuthError, ConfigError } from "../../src/client/errors.js";
+import { normalizeBaseUrl, resolveAuthToken } from "../../src/client/config.js";
 
-describe("sdk config", () => {
+describe("client config", () => {
 	// oxlint-disable-next-line turbo/no-undeclared-env-vars
 	const originalToken = process.env.MONOLAYER_AUTH_TOKEN;
 

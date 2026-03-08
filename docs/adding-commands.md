@@ -2,25 +2,25 @@
 
 ## Checklist
 
-1. Create a file in `packages/sdk/src/commands/<topic>/<action>.ts`.
-   - Example: `packages/sdk/src/commands/projects/list.ts` -> `projects:list`
-2. Export a default class extending `Command` (or `BaseCommand` when SDK-backed).
+1. Create a file in `packages/cli/src/commands/<topic>/<action>.ts`.
+   - Example: `packages/cli/src/commands/projects/list.ts` -> `projects:list`
+2. Export a default class extending `Command` (or `BaseCommand` when client-backed).
 3. Define `summary`, `description`, `examples`, and `flags`.
 4. Keep `run()` orchestration-focused.
 5. Make output mode explicit and stable.
    - JSON-only commands should always emit JSON.
    - Human commands should keep concise, deterministic log lines.
-6. Add tests in `packages/sdk/test/commands/*`.
+6. Add tests in `packages/cli/test/commands/*`.
 7. Update docs in all of:
    - `packages/fumadocs/content/docs/cli/*`
-   - `packages/sdk/README.md`
-   - `packages/sdk/DEVELOPMENT_GUIDE.md`
+   - `packages/cli/README.md`
+   - `packages/cli/DEVELOPMENT_GUIDE.md`
 
 ## Choose command style deliberately
 
-1. SDK-backed style (preferred default)
+1. Client-backed style (preferred default)
 - Extend `BaseCommand`.
-- Use `this.createSdkClient(...)` and call SDK methods.
+- Use `this.createClient(...)` and call client methods.
 
 2. Command-local flow (only when needed)
 - Extend `Command` directly.
@@ -52,7 +52,7 @@ export default class ExampleList extends BaseCommand {
 
   public async run() {
     const { flags } = await this.parse(ExampleList);
-    const client = this.createSdkClient({
+    const client = this.createClient({
       "base-url": flags["base-url"],
       "auth-token": flags["auth-token"],
     });

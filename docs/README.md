@@ -1,17 +1,17 @@
-# Platform SDK + CLI Docs
+# Platform CLI Docs
 
-This folder contains maintainer documentation for the `@monolayer/sdk` monorepo.
+This folder contains maintainer documentation for the `@monolayer/cli` monorepo.
 
 ## Current CLI scope
 
-The CLI surface in `packages/sdk` is intentionally small:
+The CLI surface in `packages/cli` is intentionally small:
 
 - `projects:list`
 - `deployments:deploy`
 
 ## Repository map
 
-- `packages/sdk`: CLI commands + typed SDK runtime.
+- `packages/cli`: CLI commands + typed client runtime.
 - `packages/fumadocs`: Documentation site (Next.js + Fumadocs).
 - `docs`: Maintainer playbooks for architecture, testing, and command work.
 
@@ -22,23 +22,23 @@ The CLI surface in `packages/sdk` is intentionally small:
 3. `docs/effect-patterns.md`
 4. `docs/testing.md`
 5. `docs/troubleshooting.md`
-6. `docs/sdk-design.md`
+6. `docs/client-design.md`
 7. `docs/references.md`
 
 ## Fast local workflow
 
-SDK package checks:
+CLI package checks:
 
 ```bash
-pnpm -C packages/sdk run test
-pnpm -C packages/sdk run lint
-pnpm -C packages/sdk run build
+pnpm -C packages/cli run test
+pnpm -C packages/cli run lint
+pnpm -C packages/cli run build
 ```
 
 Run CLI help from build output:
 
 ```bash
-node packages/sdk/dist/cli.mjs --help
+node packages/cli/dist/cli.mjs --help
 ```
 
 Run docs site:

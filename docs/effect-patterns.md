@@ -1,6 +1,6 @@
 # Effect Patterns
 
-## Why Effect is used in SDK modules
+## Why Effect is used in client modules
 
 - Encodes success/error channels with explicit types.
 - Keeps API logic composable and testable.
@@ -9,8 +9,8 @@
 ## Pattern used in this repository
 
 - Commands parse flags and format output.
-- SDK modules (`packages/sdk/src/sdk/*`) implement request logic with `Effect`.
-- SDK APIs expose:
+- Client modules (`packages/cli/src/client/*`) implement request logic with `Effect`.
+- Client APIs expose:
   - Effect methods (primary)
   - Promise wrappers (convenience)
 
@@ -22,11 +22,11 @@ Example:
 ## Error strategy
 
 - CLI validation errors: command-level (`this.error(...)` with actionable guidance).
-- SDK request errors: typed tagged errors (`AuthError`, `ValidationError`, `NotFoundError`, etc.).
+- Client request errors: typed tagged errors (`AuthError`, `ValidationError`, `NotFoundError`, etc.).
 - Transport failures: `TransportError` with request context.
 
 ## Testing guidance
 
 1. Test command behavior directly with `CommandClass.run([...args])`.
-2. Test SDK behavior with mock transport and `Effect.runPromise(...)`.
-3. Keep SDK modules free of CLI concerns so tests stay deterministic.
+2. Test client behavior with mock transport and `Effect.runPromise(...)`.
+3. Keep client modules free of CLI concerns so tests stay deterministic.

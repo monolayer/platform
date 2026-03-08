@@ -32,7 +32,7 @@ export class TransportError extends Data.TaggedError("TransportError")<{
 	readonly message: string;
 }> {}
 
-export type SdkError =
+export type ClientError =
 	| AuthError
 	| ConfigError
 	| ValidationError
