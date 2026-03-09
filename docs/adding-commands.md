@@ -12,7 +12,7 @@
    - Human commands should keep concise, deterministic log lines.
 6. Add tests in `packages/cli/test/commands/*`.
 7. Update docs in all of:
-   - `packages/fumadocs/content/docs/cli/*`
+   - `packages/cli-docs/content/docs/cli/*`
    - `packages/cli/README.md`
    - `packages/cli/DEVELOPMENT_GUIDE.md`
 

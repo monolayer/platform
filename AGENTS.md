@@ -14,7 +14,7 @@ This file is the maintainer/agent operational guide for this monorepo.
 ## 3. Repository Map
 
 - `packages/cli`: CLI commands and typed client runtime.
-- `packages/fumadocs`: documentation site.
+- `packages/cli-docs`: documentation site.
 - `docs`: maintainer source-of-truth playbooks.
 
 ## 4. Source-of-Truth Docs
@@ -83,8 +83,8 @@ pnpm -C packages/cli exec vitest run test/client
 
 When CLI behavior changes, update all relevant docs in the same PR:
 
-- `packages/fumadocs/content/docs/cli/*`
-- `packages/fumadocs/content/docs/authentication.mdx` (if config/auth behavior changes)
+- `packages/cli-docs/content/docs/cli/*`
+- `packages/cli-docs/content/docs/authentication.mdx` (if config/auth behavior changes)
 - `packages/cli/README.md`
 - `packages/cli/DEVELOPMENT_GUIDE.md`
 

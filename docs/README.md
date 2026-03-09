@@ -12,7 +12,7 @@ The CLI surface in `packages/cli` is intentionally small:
 ## Repository map
 
 - `packages/cli`: CLI commands + typed client runtime.
-- `packages/fumadocs`: Documentation site (Next.js + Fumadocs).
+- `packages/cli-docs`: Documentation site (Next.js + Fumadocs).
 - `docs`: Maintainer playbooks for architecture, testing, and command work.
 
 ## Suggested read order
@@ -44,5 +44,5 @@ node packages/cli/dist/cli.mjs --help
 Run docs site:
 
 ```bash
-pnpm -C packages/fumadocs run dev
+pnpm -C packages/cli-docs run dev
 ```
