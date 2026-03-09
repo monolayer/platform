@@ -54,3 +54,10 @@ jobs:
 
       - name: Run CLI build
         run: pnpm -C packages/cli run build
+
+      - name: Upload CLI build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-dist
+          path: packages/cli/dist
+          if-no-files-found: error
