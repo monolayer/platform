@@ -4,11 +4,11 @@
   "description": "monolayer CLI and client",
   "author": "Marcos Essindi <marcessindi@me.com>",
   "license": "MIT",
-  "homepage": "https://monolayer.dev/docs/cli",
-  "bugs": "https://github.com/monolayer/cli/issues",
+  "homepage": "https://monolayer.dev/docs/cli/overview",
+  "bugs": "https://github.com/monolayer/platform/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monolayer/cli/",
+    "url": "https://github.com/monolayer/platform/",
     "directory": "packages/cli"
   },
   "keywords": [],
