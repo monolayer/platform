@@ -1,7 +1,7 @@
 # Monolayer CLI and Client (packages/cli)
 
 This package ships:
-- A CLI binary: `monolayer`
+- A CLI binary: `mnlyr`
 - A typed client used by CLI commands
 
 Maintainer-focused development playbook:
@@ -17,8 +17,8 @@ Install dependencies and run commands from this package:
 
 ```bash
 pnpm -C packages/cli install
-pnpm -C packages/cli exec monolayer projects:list --base-url https://control-plane-domain --auth-token <token>
-pnpm -C packages/cli exec monolayer deployments:deploy --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
+pnpm -C packages/cli exec mnlyr projects:list --base-url https://control-plane-domain --auth-token <token>
+pnpm -C packages/cli exec mnlyr deployments:deploy --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
 ```
 
 Build and test:
@@ -51,7 +51,7 @@ Example:
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_AUTH_TOKEN="token_xxx" \
-monolayer projects:list --limit 10
+mnlyr projects:list --limit 10
 ```
 
 ## `deployments:deploy`
@@ -84,7 +84,7 @@ Example:
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
-monolayer deployments:deploy --project-id proj-1 --branch-name main
+mnlyr deployments:deploy --project-id proj-1 --branch-name main
 ```
 
 ## Configuration and Precedence

@@ -7,7 +7,7 @@ Use the `projects:list` command to retrieve a list of your projects from the con
 ## Syntax
 
 ```bash
-npx monolayer projects:list [options]
+npx mnlyr projects:list [options]
 ```
 
 ## Options
@@ -25,7 +25,7 @@ npx monolayer projects:list [options]
 **List projects using inline flags**
 
 ```bash
-npx monolayer projects:list \
+npx mnlyr projects:list \
   --base-url https://control-plane-domain \
   --auth-token token_xxx \
   --limit 20
@@ -36,13 +36,13 @@ npx monolayer projects:list \
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_AUTH_TOKEN="token_xxx" \
-npx monolayer projects:list --limit 20
+npx mnlyr projects:list --limit 20
 ```
 
 **Fetch the next page of results**
 
 ```bash
-npx monolayer projects:list \
+npx mnlyr projects:list \
   --base-url https://control-plane-domain \
   --auth-token token_xxx \
   --cursor 1 \

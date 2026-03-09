@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "bin": {
-    "monolayer": "./dist/cli.mjs"
+    "mnlyr": "./dist/cli.mjs"
   },
   "files": [
     "dist/**"
@@ -56,7 +56,7 @@
     "vitest": "^4.0.17"
   },
   "oclif": {
-    "bin": "monolayer",
+    "bin": "mnlyr",
     "commands": "./dist/commands",
     "plugins": [
       "@oclif/plugin-help"

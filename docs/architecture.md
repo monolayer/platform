@@ -40,8 +40,8 @@ This split is intentional for now because deployment polling has command-specifi
 
 `packages/cli/package.json`:
 
-- `bin.monolayer = "./dist/cli.mjs"`
-- `oclif.bin = "monolayer"`
+- `bin.mnlyr = "./dist/cli.mjs"`
+- `oclif.bin = "mnlyr"`
 - `oclif.commands = "./dist/commands"`
 
 `packages/cli/tsdown.config.esm.ts`:

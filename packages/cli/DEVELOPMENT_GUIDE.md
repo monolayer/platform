@@ -335,7 +335,7 @@ Projects and deployments commands use different env fallback vars for auth token
 Set debug mode:
 
 ```bash
-DEBUG=1 monolayer deployments:deploy ...
+DEBUG=1 mnlyr deployments:deploy ...
 ```
 
 This prints `sendJsonRequest` method/url/headers/body with token redaction.
@@ -354,7 +354,7 @@ Projects:
 ```bash
 MONOLAYER_BASE_URL=https://control-plane-domain \
 MONOLAYER_AUTH_TOKEN=test-token \
-pnpm -C packages/cli exec monolayer projects:list --limit 1
+pnpm -C packages/cli exec mnlyr projects:list --limit 1
 ```
 
 Deploy:
@@ -362,7 +362,7 @@ Deploy:
 ```bash
 MONOLAYER_BASE_URL=https://control-plane-domain \
 MONOLAYER_DEPLOYMENT_TOKEN=deploy_token_test \
-pnpm -C packages/cli exec monolayer deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
+pnpm -C packages/cli exec mnlyr deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
 ```
 
 ## 12. CI/Pre-Commit Checklist (Manual)

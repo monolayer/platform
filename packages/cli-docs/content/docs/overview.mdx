@@ -3,7 +3,7 @@ title: Overview
 Order: 1
 ---
 
-The `@monolayer/cli` includes the `monolayer` command-line interface (CLI), which helps you manage your projects and deployments seamlessly.
+The `@monolayer/cli` includes the `mnlyr` command-line interface (CLI), which helps you manage your projects and deployments seamlessly.
 
 ## Available commands
 
@@ -23,7 +23,7 @@ To get started quickly, you can run these commands directly from your terminal.
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_AUTH_TOKEN="token_xxx" \
-npx monolayer projects:list --limit 5
+npx mnlyr projects:list --limit 5
 ```
 
 **Trigger a deployment**
@@ -31,7 +31,7 @@ npx monolayer projects:list --limit 5
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
-npx monolayer deployments:deploy --project-id proj-1 --branch-name main
+npx mnlyr deployments:deploy --project-id proj-1 --branch-name main
 ```
 
 ## Learn more

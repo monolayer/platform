@@ -7,7 +7,7 @@ Use the `deployments:deploy` command to trigger a deployment for a specific bran
 ## Syntax
 
 ```bash
-npx monolayer deployments:deploy [options]
+npx mnlyr deployments:deploy [options]
 ```
 
 ## Options
@@ -26,7 +26,7 @@ npx monolayer deployments:deploy [options]
 **Deploy a specific branch**
 
 ```bash
-npx monolayer deployments:deploy \
+npx mnlyr deployments:deploy \
   --base-url https://control-plane-domain \
   --auth-token deploy_token_xxx \
   --project-id proj-1 \
@@ -38,7 +38,7 @@ npx monolayer deployments:deploy \
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
-npx monolayer deployments:deploy --project-id proj-1 --branch-name main
+npx mnlyr deployments:deploy --project-id proj-1 --branch-name main
 ```
 
 **Deploy your current Git branch**
@@ -46,7 +46,7 @@ npx monolayer deployments:deploy --project-id proj-1 --branch-name main
 ```bash
 MONOLAYER_BASE_URL="https://control-plane-domain" \
 MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
-npx monolayer deployments:deploy --project-id proj-1
+npx mnlyr deployments:deploy --project-id proj-1
 ```
 
 ## How it works
@@ -94,7 +94,7 @@ If you are testing on `https://localhost:<port>` and see a `TypeError: fetch fai
 To view detailed request metadata, set the `DEBUG` environment variable to `1`. Rest assured, your token values are automatically redacted from debug logs to keep your credentials safe.
 
 ```bash
-DEBUG=1 npx monolayer deployments:deploy \
+DEBUG=1 npx mnlyr deployments:deploy \
   --base-url https://control-plane-domain \
   --auth-token deploy_token_xxx \
   --project-id proj-1 \
