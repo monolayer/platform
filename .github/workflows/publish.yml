@@ -1,39 +1,50 @@
 name: Publish Package
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
 
 permissions:
+  actions: read
   id-token: write
   contents: read
 
 jobs:
   publish:
+    if: >-
+      ${{
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        startsWith(github.event.workflow_run.head_branch, 'v')
+      }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
         with:
-          version: 10
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Download CLI build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cli-dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: packages/cli/dist
 
-      - name: Run tests
-        run: pnpm -C packages/cli run test
+      - name: Restore executable permission
+        run: chmod +x packages/cli/dist/cli.mjs
 
       - name: Publish
+        working-directory: packages/cli
         run: npm publish
