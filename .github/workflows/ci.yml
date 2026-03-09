@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  cli-tests:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -30,7 +30,7 @@ jobs:
         run: pnpm -C packages/cli run test
 
   build:
-    needs: cli-tests
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
