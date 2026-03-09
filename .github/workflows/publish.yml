@@ -48,4 +48,12 @@ jobs:
 
       - name: Publish
         working-directory: packages/cli
-        run: npm publish --provenance
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          tag="latest"
+          if [[ "$version" == *-* ]]; then
+            tag="next"
+          fi
+          echo "Publishing $version with npm dist-tag '$tag'"
+          npm publish --provenance --tag "$tag"
