@@ -28,11 +28,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Download CLI build artifact
         uses: actions/download-artifact@v4
@@ -47,4 +48,4 @@ jobs:
 
       - name: Publish
         working-directory: packages/cli
-        run: npm publish
+        run: npm publish --provenance
