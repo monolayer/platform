@@ -1,0 +1,125 @@
+---
+title: deployments:deploy
+---
+
+Use `deployments:deploy` to start a deployment for a branch and stream progress in your terminal.
+
+## About `deployments:deploy`
+
+This section explains the command lifecycle and required inputs.
+
+The command starts a deployment, polls deployment status, and prints new log lines until the deployment reaches a terminal state.
+
+## Using `deployments:deploy`
+
+This section gives you a standard procedure for starting deployments with explicit or inferred branch names.
+
+### Concept and Goal
+
+Use this procedure to deploy a branch and monitor status without leaving your terminal session.
+
+### Prerequisites
+
+- You set `MONOLAYER_BASE_URL` or plan to pass `--base-url`.
+- You set `MONOLAYER_DEPLOYMENT_TOKEN` or plan to pass `--auth-token`.
+- You know your target project ID.
+
+**IMPORTANT:** Deployment tokens must start with `deploy_token_`.
+
+### Numbered Steps
+
+1. **Run** the command with an explicit branch name.
+
+```bash
+npx mnlyr deployments:deploy \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch-name main
+```
+
+2. **Run** the command with environment variables when you prefer shell-level defaults.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx mnlyr deployments:deploy --project-id proj-1 --branch-name main
+```
+
+3. **Run** the command without `--branch-name` when you want to deploy your current Git branch.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
+npx mnlyr deployments:deploy --project-id proj-1
+```
+
+### Expected Result
+
+The command-line interface (CLI) prints deployment status and new logs until the deployment reaches `Finished`, `Failed`, or `Queued`.
+
+## `deployments:deploy` Reference
+
+This section lists syntax, options, command behavior, and branch-name constraints.
+
+### Syntax
+
+```bash
+npx mnlyr deployments:deploy [options]
+```
+
+### Options
+
+| Option                   | Description                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| `--base-url <url>`       | Sets the control plane base URL. You can also set `MONOLAYER_BASE_URL`.                  |
+| `--auth-token <token>`   | Sets the deployment token. You can also set `MONOLAYER_DEPLOYMENT_TOKEN`.                |
+| `--project-id <id>`      | Sets the project identifier for the deployment request.                                  |
+| `--branch-name <name>`   | Sets the branch name to deploy. When omitted, the command reads your current Git branch. |
+| `--poll-interval-ms <n>` | How often the command checks for updates, in milliseconds. The default is `2000`.        |
+| `-h`, `--help`           | Shows command help.                                                                      |
+
+### Deployment Lifecycle
+
+When you run the command, it follows this sequence:
+
+- It resolves the branch from `--branch-name` or from your current Git branch.
+- It sends a deployment request for the selected project and branch.
+- It starts polling when the deployment starts running.
+- It writes new log lines and status changes to your terminal.
+- It exits when deployment status reaches `Finished`, `Failed`, or `Queued`.
+
+### Branch Name Rules
+
+Use raw branch names only.
+
+- Correct: `main`
+- Correct: `feature/new-navbar`
+- Incorrect: `refs/heads/main`
+- Incorrect: `branch/main`
+
+## Troubleshooting
+
+This section lists common command errors and local debug guidance.
+
+- Missing base URL: `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Invalid deployment token: `auth-token must start with "deploy_token_"`
+- Invalid branch name: `Current branch must be a raw branch name (no "refs/heads/" or "branch/" prefix).`
+- Branch detection failure: `Unable to determine current git branch. Run this command inside a git repository or pass --branch-name.`
+
+When you test against `localhost`, match the protocol to your server configuration.
+
+- If your local server uses Hypertext Transfer Protocol (HTTP), ensure your base URL is `http://localhost:<port>`.
+- If your local server uses Hypertext Transfer Protocol Secure (HTTPS) with a self-signed certificate, make sure the certificate is trusted on your machine.
+
+### Debugging
+
+Set `DEBUG=1` to print request metadata while keeping token values redacted.
+
+```bash
+DEBUG=1 npx mnlyr deployments:deploy \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch-name main
+```

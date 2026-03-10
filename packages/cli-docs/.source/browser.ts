@@ -7,6 +7,6 @@ const create = browser<typeof Config, import("fumadocs-mdx/runtime/types").Inter
   }
 }>();
 const browserCollections = {
-  docs: create.doc("docs", {"authentication.mdx": () => import("../content/docs/authentication.mdx?collection=docs"), "installation.mdx": () => import("../content/docs/installation.mdx?collection=docs"), "overview.mdx": () => import("../content/docs/overview.mdx?collection=docs"), "cli/cli-deployments-deploy.mdx": () => import("../content/docs/cli/cli-deployments-deploy.mdx?collection=docs"), "cli/cli-projects-list.mdx": () => import("../content/docs/cli/cli-projects-list.mdx?collection=docs"), }),
+  docs: create.doc("docs", {"authentication.mdx": () => import("../content/docs/authentication.mdx?collection=docs"), "installation.mdx": () => import("../content/docs/installation.mdx?collection=docs"), "overview.mdx": () => import("../content/docs/overview.mdx?collection=docs"), "commands/cli-deployments-deploy.mdx": () => import("../content/docs/commands/cli-deployments-deploy.mdx?collection=docs"), "commands/cli-projects-list.mdx": () => import("../content/docs/commands/cli-projects-list.mdx?collection=docs"), }),
 };
 export default browserCollections;

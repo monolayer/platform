@@ -1,8 +1,9 @@
 {
+  "title": "CLI",
   "pages": [
     "overview",
     "installation",
     "authentication",
-    "cli"
+    "commands"
   ]
 }
