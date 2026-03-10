@@ -1,0 +1,99 @@
+---
+title: projects:list
+---
+
+Use `projects:list` to retrieve a paginated list of projects from your control plane.
+
+## About `projects:list`
+
+This section describes what the command returns and how pagination works.
+
+A cursor is a marker from one response that you pass to the next request to continue listing results. The command writes JavaScript Object Notation (JSON) output directly to your terminal.
+
+## Using `projects:list`
+
+This section provides a repeatable workflow for running the command with flags or environment variables.
+
+### Concept and Goal
+
+Use this procedure to list projects and request additional pages when results span multiple responses.
+
+### Prerequisites
+
+- You set `MONOLAYER_BASE_URL` or plan to pass `--base-url`.
+- You set `MONOLAYER_AUTH_TOKEN` or plan to pass `--auth-token`.
+
+### Numbered Steps
+
+1. **Run** the command with explicit flags.
+
+```bash
+npx mnlyr projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx \
+  --limit 20
+```
+
+2. **Run** the command with environment variables when you prefer shell-level defaults.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="token_xxx" \
+npx mnlyr projects:list --limit 20
+```
+
+3. **Run** the command with a cursor value from a previous response to fetch the next page.
+
+```bash
+npx mnlyr projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx \
+  --cursor 1 \
+  --limit 20
+```
+
+### Expected Result
+
+The command returns JSON with an `items` array and, when more data exists, a `nextCursor` value.
+
+## `projects:list` Reference
+
+This section lists command syntax, options, and sample output.
+
+### Syntax
+
+```bash
+npx mnlyr projects:list [options]
+```
+
+### Options
+
+| Option                 | Description                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------- |
+| `--base-url <url>`     | Sets the control plane base URL. You can also set `MONOLAYER_BASE_URL`.           |
+| `--auth-token <token>` | Sets the project auth token. You can also set `MONOLAYER_AUTH_TOKEN`.             |
+| `--cursor <cursor>`    | The cursor value from a previous response, used to fetch the next set of results. |
+| `--limit <n>`          | The maximum number of items to return. The default is `50`.                       |
+| `-h`, `--help`         | Shows command help.                                                               |
+
+### Output
+
+```json
+{
+	"items": [
+		{
+			"projectId": "proj-1",
+			"name": "Control Plane",
+			"repositoryUrl": "https://github.com/monolayer/control-plane"
+		}
+	],
+	"nextCursor": "1"
+}
+```
+
+## Troubleshooting
+
+This section lists common command errors.
+
+- Missing base URL: `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Missing authentication token: `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`

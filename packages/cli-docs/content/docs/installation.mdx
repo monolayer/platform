@@ -3,49 +3,49 @@ title: Installation
 Order: 2
 ---
 
-Get started with the Monolayer CLI package by adding it to your project.
+Install the Monolayer command-line interface (CLI) package and verify that your terminal can run the `mnlyr` command.
 
-## What you need
+## Concept and Goal
 
-Before you install the CLI package, ensure your environment meets the following requirements:
+This section explains how to install the package and validate your connection settings.
+
+## Prerequisites
+
+Before you start, ensure your environment meets these requirements:
 
 - **Node.js 18 or later:** Required to run the CLI.
 - **Network access:** You need a connection to the Monolayer control plane.
-- **Authentication tokens:** Valid tokens are required to authorize your commands.
+- **Authentication tokens:** You need valid values for `MONOLAYER_AUTH_TOKEN` and `MONOLAYER_DEPLOYMENT_TOKEN`.
 
-## Install the CLI package
+**IMPORTANT:** `MONOLAYER_DEPLOYMENT_TOKEN` must start with `deploy_token_`.
 
-You can install the CLI package using your preferred package manager.
+## Numbered Steps
 
-**Using npm:**
+1. **Install** the CLI package with your preferred package manager.
 
 ```bash
 npm install @monolayer/cli
 ```
 
-**Using pnpm:**
-
 ```bash
 pnpm add @monolayer/cli
 ```
 
-## Verify your installation
-
-To confirm that the CLI is installed correctly, check the help menu.
+2. **Verify** that the command is available by opening the help output.
 
 ```bash
 npx mnlyr --help
 ```
 
-If you are using a `pnpm` workspace, run:
+If you use a `pnpm` workspace, run this command instead:
 
 ```bash
 pnpm exec mnlyr --help
 ```
 
-## Configure your environment
+3. **Set** your environment variables for the current shell session.
 
-The CLI uses environment variables to communicate securely with your control plane. Set these in your terminal session or add them to your shell profile.
+The CLI uses these values to communicate with your control plane.
 
 ```bash
 export MONOLAYER_BASE_URL="https://control-plane-domain"
@@ -53,18 +53,18 @@ export MONOLAYER_AUTH_TOKEN="token_xxx"
 export MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx"
 ```
 
-## Test your connection
-
-Run these validation commands to ensure everything is configured properly.
-
-**Test the projects command:**
+4. **Run** a read command to validate project authentication.
 
 ```bash
 npx mnlyr projects:list --limit 1
 ```
 
-**Test the deploy command:**
+5. **Run** a deployment command to validate deployment authentication.
 
 ```bash
 npx mnlyr deployments:deploy --project-id proj-1 --branch-name main --poll-interval-ms 0
 ```
+
+## Expected Result
+
+You can open the help output and run both commands without configuration errors.

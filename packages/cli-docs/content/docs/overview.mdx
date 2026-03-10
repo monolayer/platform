@@ -3,41 +3,65 @@ title: Overview
 Order: 1
 ---
 
-The `@monolayer/cli` includes the `mnlyr` command-line interface (CLI), which helps you manage your projects and deployments seamlessly.
+Use the Monolayer command-line interface (CLI) to list projects and start deployments from your terminal.
 
-## Available commands
+## About the Monolayer CLI
 
-The Monolayer CLI currently supports the following commands:
+This section summarizes the commands that the `@monolayer/cli` package provides.
 
-| Command | Description | Output |
-| --- | --- | --- |
-| `projects:list` | Lists your projects using cursor-based pagination. | JSON |
+The CLI currently supports the following commands:
+
+JavaScript Object Notation (JSON) is the default output format for `projects:list`.
+
+| Command              | Description                                             | Output          |
+| -------------------- | ------------------------------------------------------- | --------------- |
+| `projects:list`      | Lists your projects using cursor-based pagination.      | JSON            |
 | `deployments:deploy` | Triggers a branch deployment and monitors its progress. | Logs and status |
 
-## Quick reference
+## Using the Monolayer CLI
 
-To get started quickly, you can run these commands directly from your terminal.
+This section gives you a quick workflow for validating access to your control plane.
 
-**List your projects**
+### Concept and Goal
+
+Use this procedure to confirm that your CLI installation can authenticate and run both available commands.
+
+### Prerequisites
+
+- You installed the CLI package.
+- You have a control plane base URL.
+- You have a project auth token and a deployment token.
+
+### Numbered Steps
+
+1. **Set** your environment variables in the current terminal session.
 
 ```bash
-MONOLAYER_BASE_URL="https://control-plane-domain" \
-MONOLAYER_AUTH_TOKEN="token_xxx" \
+export MONOLAYER_BASE_URL="https://control-plane-domain"
+export MONOLAYER_AUTH_TOKEN="token_xxx"
+export MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx"
+```
+
+2. **Run** the project listing command.
+
+```bash
 npx mnlyr projects:list --limit 5
 ```
 
-**Trigger a deployment**
+3. **Run** the deployment command.
 
 ```bash
-MONOLAYER_BASE_URL="https://control-plane-domain" \
-MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx" \
 npx mnlyr deployments:deploy --project-id proj-1 --branch-name main
 ```
 
-## Learn more
+### Expected Result
 
-Explore the following topics to get the most out of the Monolayer CLI:
+You see JSON output from `projects:list` and live deployment status output from `deployments:deploy`.
 
-- **[Installation](./installation):** Set up the CLI package in your environment.
-- **[Authentication and Configuration](./authentication):** Securely connect to your control plane.
-- **[CLI Reference](./cli):** Detailed guides for each command.
+## CLI Reference
+
+This section points you to task-focused and command-focused pages.
+
+- **[Installation](./installation):** Install the package and validate your environment.
+- **[Authentication and Configuration](./authentication):** Configure base URL and token resolution.
+- **[Commands](./commands):** View detailed reference pages for each command.

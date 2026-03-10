@@ -3,50 +3,109 @@ title: Authentication and Configuration
 Order: 3
 ---
 
-To interact with your Monolayer control plane, you need to provide a base URL and the appropriate authentication tokens. You can supply these using command-line flags or environment variables.
+Configure your command-line interface (CLI) base URL and tokens so commands can reach your control plane securely.
 
-## Base URL
+## About Authentication and Configuration
 
-Every command requires a base URL to connect to the control plane. 
+This section defines required connection values and how the CLI resolves them.
 
-The CLI resolves the base URL in the following order:
+A base URL is the root endpoint for your Monolayer control plane application programming interface (API). An authentication token is a credential that authorizes a command.
+
+### Base URL Resolution
+
+The CLI resolves the base URL in this order:
 
 1. The `--base-url` flag.
 2. The `MONOLAYER_BASE_URL` environment variable.
 
-If neither is provided, the command fails and displays:
+When neither value is available, the command exits with this message:
 
 `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
 
-## Authentication tokens
+### Token Requirements
 
-Different commands require specific tokens to keep your environment secure.
+Different commands use different token sources.
 
-| Command | Required flag | Environment variable |
-| --- | --- | --- |
-| `projects:list` | `--auth-token` | `MONOLAYER_AUTH_TOKEN` |
+| Command              | Required flag  | Environment variable         |
+| -------------------- | -------------- | ---------------------------- |
+| `projects:list`      | `--auth-token` | `MONOLAYER_AUTH_TOKEN`       |
 | `deployments:deploy` | `--auth-token` | `MONOLAYER_DEPLOYMENT_TOKEN` |
 
-### Listing projects
+### Token Resolution Order
 
-When running `projects:list`, the CLI looks for your authentication token in this order:
+When you run `projects:list`, the CLI resolves the token in this order:
 
 1. The `--auth-token` flag.
 2. The `MONOLAYER_AUTH_TOKEN` environment variable.
 
-If the token is missing, the command fails and displays:
+When the token is missing, the command exits with this message:
 
 `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
 
-### Deploying projects
-
-When running `deployments:deploy`, the CLI looks for your deployment token in this order:
+When you run `deployments:deploy`, the CLI resolves the token in this order:
 
 1. The `--auth-token` flag.
 2. The `MONOLAYER_DEPLOYMENT_TOKEN` environment variable.
 
-If the token is missing, the command fails.
-
-**Important:** Your deployment token must begin with `deploy_token_`. If you provide an invalid token, the command fails and displays:
+When the deployment token does not match the required format, the command exits with this message:
 
 `auth-token must start with "deploy_token_"`
+
+**IMPORTANT:** Deployment tokens must start with `deploy_token_`.
+
+## Using Authentication and Configuration
+
+This section provides a repeatable setup procedure for local terminal sessions.
+
+### Concept and Goal
+
+Use this procedure to configure environment variables and override values with flags when needed.
+
+### Prerequisites
+
+- You have your control plane base URL.
+- You have a project auth token.
+- You have a deployment token that begins with `deploy_token_`.
+
+### Numbered Steps
+
+1. **Export** the required environment variables.
+
+```bash
+export MONOLAYER_BASE_URL="https://control-plane-domain"
+export MONOLAYER_AUTH_TOKEN="token_xxx"
+export MONOLAYER_DEPLOYMENT_TOKEN="deploy_token_xxx"
+```
+
+2. **Run** the project command with environment-based authentication.
+
+```bash
+npx mnlyr projects:list --limit 5
+```
+
+3. **Run** the deployment command with environment-based authentication.
+
+```bash
+npx mnlyr deployments:deploy --project-id proj-1 --branch-name main
+```
+
+4. **Override** values with flags when you need command-specific credentials.
+
+```bash
+npx mnlyr projects:list \
+  --base-url https://control-plane-domain \
+  --auth-token token_xxx \
+  --limit 5
+```
+
+### Expected Result
+
+Each command uses the configured base URL and token source, then returns normal command output.
+
+## Troubleshooting
+
+This section lists common configuration errors and their command output.
+
+- Missing base URL: `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Missing project token: `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+- Invalid deployment token: `auth-token must start with "deploy_token_"`
