@@ -82,7 +82,7 @@ describe("createClient", () => {
       RequestInit,
     ];
     expect(requestUrl.toString()).toBe(
-      "https://api.monolayer.com/cli/projects",
+      "https://api.monolayer.com/sdk/projects",
     );
     expect(requestInit.method).toBe("GET");
     expect(requestInit.headers).toMatchObject({
