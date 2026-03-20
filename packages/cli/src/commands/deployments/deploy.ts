@@ -211,7 +211,7 @@ export default class DeploymentsDeploy extends Command {
 
     const triggerResponse =
       await this.sendJsonRequest<DeploymentTriggerResponse>(
-        new URL("/cli/deployments", baseUrl),
+        new URL("/sdk/deployments", baseUrl),
         {
           method: "POST",
           deploymentToken,
@@ -288,7 +288,7 @@ export default class DeploymentsDeploy extends Command {
 
     for (;;) {
       const pollUrl = new URL(
-        `/cli/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentNumber)}`,
+        `/sdk/projects/${encodeURIComponent(input.projectId)}/deployments/${encodeURIComponent(input.deploymentNumber)}`,
         input.baseUrl,
       );
       if (since !== undefined) {

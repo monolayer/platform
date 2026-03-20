@@ -151,7 +151,7 @@ describe("deployments deploy command", () => {
     const firstUrl = firstCall?.[0] as URL;
     const firstInit = firstCall?.[1] as RequestInit;
     expect(firstUrl.toString()).toBe(
-      "https://api.monolayer.com/cli/deployments",
+      "https://api.monolayer.com/sdk/deployments",
     );
     expect(firstInit.method).toBe("POST");
     expect(firstInit.headers).toMatchObject({
@@ -269,7 +269,7 @@ describe("deployments deploy command", () => {
       RequestInit,
     ];
     expect(requestUrl.toString()).toBe(
-      "https://api.monolayer.com/cli/deployments",
+      "https://api.monolayer.com/sdk/deployments",
     );
     expect(requestInit.method).toBe("POST");
     expect(stdout).toContain("Deployment already queued. Polling skipped.");
