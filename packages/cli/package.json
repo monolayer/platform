@@ -1,6 +1,6 @@
 {
   "name": "@monolayer/cli",
-  "version": "1.0.0-canary.10",
+  "version": "1.0.4",
   "description": "monolayer CLI",
   "author": "Marcos Essindi <marcessindi@me.com>",
   "license": "MIT",
