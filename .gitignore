@@ -50,3 +50,5 @@ vitepress/.vitepress/cache
 vitepress/.vitepress/dist
 vitepress/reference
 
+.pnpm-store
+
