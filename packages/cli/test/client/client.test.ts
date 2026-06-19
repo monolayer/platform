@@ -157,4 +157,34 @@ describe("createClient", () => {
       expect(result.left).toBeInstanceOf(NotFoundError);
     }
   });
+
+  it("performs environment variables CRUD from mock transport", async () => {
+    const client = createMockClient();
+
+    // 1. List variables
+    const initialList = await client.environmentVariables.listPromise({
+      projectId: "proj-1",
+    });
+    expect(initialList.items.length).toBeGreaterThan(0);
+    expect(initialList.items[0]?.name).toBe("API_KEY");
+
+    // 2. Create variable
+    const created = await client.environmentVariables.createPromise({
+      projectId: "proj-1",
+      key: "NEW_VAR",
+      value: "new-value",
+      environment: "production",
+    });
+    expect(created.name).toBe("NEW_VAR");
+    expect(created.value).toBe("new-value");
+    expect(created.environment).toBe("production");
+
+    // 3. Delete variable
+    const deleted = await client.environmentVariables.deletePromise({
+      projectId: "proj-1",
+      name: "NEW_VAR",
+      environmentName: "production",
+    });
+    expect(deleted.success).toBe(true);
+  });
 });

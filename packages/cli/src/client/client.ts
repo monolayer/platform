@@ -1,5 +1,6 @@
 import { normalizeBaseUrl, resolveAuthToken } from "./config.js";
 import { createDeploymentsApi } from "./deployments.js";
+import { createEnvironmentVariablesApi } from "./environment-variables.js";
 import { createHttpTransport } from "./http-transport.js";
 import { createProjectsApi } from "./projects.js";
 import type { ClientRuntime } from "./runtime.js";
@@ -20,5 +21,6 @@ export const createClient = (options: CreateClientOptions): MonolayerClient => {
     config: { baseUrl },
     projects: createProjectsApi(runtime),
     deployments: createDeploymentsApi(runtime),
+    environmentVariables: createEnvironmentVariablesApi(runtime),
   };
 };

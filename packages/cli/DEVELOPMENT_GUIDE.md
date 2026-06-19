@@ -4,9 +4,12 @@ This document is for future maintainers working in `packages/cli`.
 
 It is intentionally implementation-heavy and assumes you are making code changes, not just using the CLI.
 
-As of **2026-03-05**, CLI surface is intentionally minimal:
+As of **2026-03-05**, CLI surface is:
 - `projects:list`
 - `deployments:deploy`
+- `env:list`
+- `env:set`
+- `env:delete`
 
 ## 1. Goals and Non-Goals
 
@@ -31,6 +34,9 @@ Core package files:
 Commands:
 - `src/commands/projects/list.ts`
 - `src/commands/deployments/deploy.ts`
+- `src/commands/env/list.ts`
+- `src/commands/env/set.ts`
+- `src/commands/env/delete.ts`
 
 Client internals:
 - `src/client/client.ts`: runtime wiring
@@ -40,6 +46,7 @@ Client internals:
 - `src/client/mock-transport.ts`: in-memory fake transport for tests
 - `src/client/projects.ts`: projects API
 - `src/client/deployments.ts`: deployments API
+- `src/client/environment-variables.ts`: environment variables API
 - `src/client/types.ts`: DTO and API types
 - `src/client/errors.ts`: typed error classes
 - `src/client/runtime.ts`, `src/client/transport.ts`: wiring types
@@ -47,6 +54,9 @@ Client internals:
 Tests:
 - `test/commands/projects-list.test.ts`
 - `test/commands/deployments-deploy.test.ts`
+- `test/commands/env-list.test.ts`
+- `test/commands/env-set.test.ts`
+- `test/commands/env-delete.test.ts`
 - `test/client/config.test.ts`
 - `test/client/client.test.ts`
 
@@ -158,6 +168,35 @@ Debug invariants:
 
 Network error invariants:
 - Localhost HTTPS failures include actionable hint (HTTP vs TLS trust guidance).
+
+### 4.3 `env` Commands (`env:list`, `env:set`, `env:delete`)
+
+Files:
+- `src/commands/env/list.ts`
+- `src/commands/env/set.ts`
+- `src/commands/env/delete.ts`
+
+Contracts:
+- Always output JSON to stdout.
+- `--json` is rejected by oclif.
+- Token prefix validation check is enforced client-side (token must start with `deploy_token_`).
+
+Flags:
+- `--base-url` (or `MONOLAYER_BASE_URL`)
+- `--auth-token` (or `MONOLAYER_AUTH_TOKEN`)
+- `--project-id` (required, all three commands)
+- `env:set` additional flags: `--key` (required), `--value` (required), `--environment` (required)
+- `env:delete` additional flags: `--name` (required), `--environment` (required)
+
+Failure contracts:
+- Base URL missing: `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- Auth token missing: `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+- Auth token missing the `deploy_token_` prefix: `auth-token must start with "deploy_token_"`
+
+API request contracts:
+- `env:list`: GET `/sdk/projects/{projectId}/environment-variables`
+- `env:set`: POST `/sdk/projects/{projectId}/environment-variables` with `{ key, value, environment }` body.
+- `env:delete`: DELETE `/sdk/projects/{projectId}/environment-variables/{name}?environmentName={environmentName}`
 
 ## 5. Config and Precedence Matrix
 

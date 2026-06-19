@@ -1,0 +1,88 @@
+---
+title: env:delete
+---
+
+Use `env:delete` to delete an environment variable from your project.
+
+## About `env:delete`
+
+This section describes variable deletions and scope filters.
+
+When you run this command, it locates the targeted variable using both its name and environment scope (e.g. `production` or `preview`). It deletes the variable record from the database and returns a success confirmation payload.
+
+## Using `env:delete`
+
+This section provides a repeatable workflow for deleting a variable.
+
+### Concept and Goal
+
+To remove obsolete or deprecated variables from your runtime context, use this procedure to delete an environment variable.
+
+### What you need
+
+- You installed the CLI package.
+- You set `MONOLAYER_BASE_URL` or plan to pass `--base-url`.
+- You set `MONOLAYER_AUTH_TOKEN` (must be a deployment token starting with `deploy_token_`) or plan to pass `--auth-token`.
+
+### Numbered Steps
+
+1. **Run** the command with explicit flags to delete a variable.
+
+```bash
+npx mnlyr env:delete \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --name API_KEY \
+  --environment production
+```
+
+2. **Run** the command using environment variables when you prefer session defaults.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="deploy_token_xxx" \
+npx mnlyr env:delete --project-id proj-1 --name API_KEY --environment production
+```
+
+### Expected Result
+
+The command returns `{ "success": true }` as a JSON payload upon successful deletion of the target variable.
+
+## `env:delete` Reference
+
+This section lists command syntax, options, and sample output.
+
+### Command syntax
+
+```bash
+npx mnlyr env:delete [options]
+```
+
+### Options
+
+| Option                 | Description                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| `--base-url <url>`     | Sets the control plane base URL. You can also set `MONOLAYER_BASE_URL`.         |
+| `--auth-token <token>` | Sets the project deployment auth token. You can also set `MONOLAYER_AUTH_TOKEN`. |
+| `--project-id <id>`    | The identifier of your project. This option is required.                        |
+| `--name <name>`        | The environment variable name/key to delete. This option is required.           |
+| `--environment <env>`  | The environment scope of the target variable. This option is required.          |
+| `-h`, `--help`         | Shows command help.                                                             |
+
+### Output
+
+```json
+{
+  "success": true
+}
+```
+
+## Troubleshooting
+
+This section lists common command errors.
+
+- **Missing base URL:** `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- **Missing authentication token:** `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+- **Invalid token format:** `auth-token must start with "deploy_token_"`
+- **Variable not found:** `Environment variable not found` (returned when the target key or environment scope does not exist on the project).

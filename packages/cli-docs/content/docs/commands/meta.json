@@ -3,6 +3,9 @@
   "defaultOpen": true,
   "pages": [
     "cli-projects-list",
-    "cli-deployments-deploy"
+    "cli-deployments-deploy",
+    "cli-env-list",
+    "cli-env-set",
+    "cli-env-delete"
   ]
 }

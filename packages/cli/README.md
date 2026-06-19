@@ -8,6 +8,9 @@ Current command surface:
 
 - `projects:list`
 - `deployments:deploy`
+- `env:list`
+- `env:set`
+- `env:delete`
 
 ## Install
 
@@ -113,12 +116,80 @@ mnlyr deployments:deploy \
   --branch-name main
 ```
 
+### `env:list`
+
+Lists project environment variables.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr env:list --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
+```
+
+### `env:set`
+
+Creates or updates an environment variable for the project.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+- `--key <name>` (required)
+- `--value <val>` (required)
+- `--environment <env>` (required; e.g. production, preview, all)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr env:set --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1 --key API_KEY --value secret --environment production
+```
+
+### `env:delete`
+
+Deletes an environment variable from the project.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+- `--name <name>` (required; key of the environment variable)
+- `--environment <env>` (required)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr env:delete --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1 --name API_KEY --environment production
+```
+
 ## Help
 
 ```bash
 mnlyr --help
 mnlyr projects:list --help
 mnlyr deployments:deploy --help
+mnlyr env:list --help
+mnlyr env:set --help
+mnlyr env:delete --help
 ```
 
 ## Contributing

@@ -2,7 +2,7 @@ import { Effect } from "effect";
 
 import { TransportError } from "./errors.js";
 import type { HttpRequest, HttpResponse, Transport } from "./transport.js";
-import type { DeploymentDto, ListResult, ProjectDto } from "./types.js";
+import type { DeploymentDto, EnvironmentVariableDto, ListResult, ProjectDto } from "./types.js";
 
 const initialProjects: ReadonlyArray<ProjectDto> = [
   {
@@ -46,6 +46,21 @@ const initialDeployments: ReadonlyArray<DeploymentDto> = [
     sourceRef: "main",
     status: "queued",
     createdAt: "2026-02-16T11:10:00.000Z",
+  },
+];
+
+const initialEnvironmentVariables: ReadonlyArray<EnvironmentVariableDto> = [
+  {
+    name: "API_KEY",
+    value: "mock-secret-value",
+    environment: "production",
+    updatedAt: "2026-02-10T10:00:00.000Z",
+  },
+  {
+    name: "DEBUG",
+    value: "1",
+    environment: "preview",
+    updatedAt: "2026-02-12T18:30:00.000Z",
   },
 ];
 
@@ -101,6 +116,7 @@ const notFound = (message: string): HttpResponse => ({
 export const createMockTransport = (): Transport => {
   const projects = [...initialProjects];
   const deployments = [...initialDeployments];
+  const environmentVariables = [...initialEnvironmentVariables];
   let deploymentSequence = deployments.length;
 
   return (request) =>
@@ -205,6 +221,96 @@ export const createMockTransport = (): Transport => {
           return {
             status: 201,
             body: newDeployment,
+          };
+        }
+
+        const listEnvMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/environment-variables$/,
+        );
+        if (request.method === "GET" && listEnvMatch) {
+          const projectId = decodeURIComponent(listEnvMatch[1] ?? "");
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+          return {
+            status: 200,
+            body: {
+              items: environmentVariables,
+            },
+          };
+        }
+
+        const createEnvMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/environment-variables$/,
+        );
+        if (request.method === "POST" && createEnvMatch) {
+          const projectId = decodeURIComponent(createEnvMatch[1] ?? "");
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+          const body =
+            typeof request.body === "object" && request.body !== null
+              ? request.body
+              : undefined;
+          const key = body && "key" in body && typeof body.key === "string" ? body.key : undefined;
+          const value = body && "value" in body && typeof body.value === "string" ? body.value : undefined;
+          const environment = body && "environment" in body && typeof body.environment === "string" ? body.environment : undefined;
+
+          if (!key || !value || !environment) {
+            return {
+              status: 400,
+              body: { message: "key, value, and environment are required" },
+            };
+          }
+
+          const newVar: EnvironmentVariableDto = {
+            name: key,
+            value,
+            environment,
+            updatedAt: new Date().toISOString(),
+          };
+
+          environmentVariables.push(newVar);
+          return {
+            status: 201,
+            body: newVar,
+          };
+        }
+
+        const deleteEnvMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/environment-variables\/([^/]+)$/,
+        );
+        if (request.method === "DELETE" && deleteEnvMatch) {
+          const projectId = decodeURIComponent(deleteEnvMatch[1] ?? "");
+          const name = decodeURIComponent(deleteEnvMatch[2] ?? "");
+          const environmentName = request.query?.environmentName;
+
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+
+          if (typeof environmentName !== "string") {
+            return {
+              status: 400,
+              body: { message: "environmentName is required" },
+            };
+          }
+
+          const index = environmentVariables.findIndex(
+            (v) => v.name === name && v.environment === environmentName,
+          );
+
+          if (index === -1) {
+            return notFound(`Environment variable not found: ${name} for environment ${environmentName}`);
+          }
+
+          environmentVariables.splice(index, 1);
+          return {
+            status: 200,
+            body: { success: true },
           };
         }
 

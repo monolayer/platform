@@ -11,12 +11,15 @@ This section summarizes the commands that the `@monolayer/cli` package provides.
 
 The CLI currently supports the following commands:
 
-JavaScript Object Notation (JSON) is the default output format for `projects:list`.
+JavaScript Object Notation (JSON) is the default output format for `projects:list` and the `env` commands.
 
 | Command              | Description                                             | Output          |
 | -------------------- | ------------------------------------------------------- | --------------- |
 | `projects:list`      | Lists your projects using cursor-based pagination.      | JSON            |
 | `deployments:deploy` | Triggers a branch deployment and monitors its progress. | Logs and status |
+| `env:list`           | Lists project environment variables.                    | JSON            |
+| `env:set`            | Creates or updates an environment variable.             | JSON            |
+| `env:delete`         | Deletes an environment variable.                        | JSON            |
 
 ## Using the Monolayer CLI
 
