@@ -3,6 +3,9 @@
   "defaultOpen": true,
   "pages": [
     "cli-projects-list",
+    "cli-projects-branch-tracking-get",
+    "cli-projects-branch-tracking-set",
+    "cli-projects-branch-tracking-delete",
     "cli-deployments-deploy",
     "cli-env-list",
     "cli-env-set",

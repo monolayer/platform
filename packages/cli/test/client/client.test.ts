@@ -187,4 +187,42 @@ describe("createClient", () => {
     });
     expect(deleted.success).toBe(true);
   });
+
+  it("performs branch tracking CRUD from mock transport", async () => {
+    const client = createMockClient();
+
+    // 1. Get branch tracking settings
+    const initialSettings = await client.branchTracking.getPromise({
+      projectId: "proj-1",
+    });
+    expect(initialSettings.production).toBe(true);
+    expect(initialSettings.preview).toBe(true);
+    expect(initialSettings.branches).toHaveLength(1);
+    expect(initialSettings.branches[0]).toEqual({ "feature-a": false });
+
+    // 2. Upsert rule successfully
+    const upsertRes = await client.branchTracking.upsertPromise({
+      projectId: "proj-1",
+      branch: "feature-a",
+      enabled: true,
+    });
+    expect(upsertRes.success).toBe(true);
+
+    const updatedSettings = await client.branchTracking.getPromise({
+      projectId: "proj-1",
+    });
+    expect(updatedSettings.branches[0]).toEqual({ "feature-a": true });
+
+    // 3. Delete custom rule successfully
+    const deleteRes = await client.branchTracking.deletePromise({
+      projectId: "proj-1",
+      branch: "feature-a",
+    });
+    expect(deleteRes.success).toBe(true);
+
+    const postDeleteSettings = await client.branchTracking.getPromise({
+      projectId: "proj-1",
+    });
+    expect(postDeleteSettings.branches).toHaveLength(0);
+  });
 });

@@ -1,0 +1,89 @@
+---
+title: projects:branch-tracking:get
+---
+
+Use `projects:branch-tracking:get` to retrieve the branch tracking configuration for your project.
+
+## About `projects:branch-tracking:get`
+
+This section describes what the command returns.
+
+When you run this command, it retrieves the tracking configuration which controls whether incoming commit/push events automatically trigger a deployment. The results are written directly to your terminal as a formatted JSON object.
+
+## Using `projects:branch-tracking:get`
+
+This section provides a repeatable workflow for running the command.
+
+### Concept and Goal
+
+To audit your current branch tracking rules (production, preview defaults, and custom branch overrides), use this procedure to retrieve the active settings.
+
+### What you need
+
+- You installed the CLI package.
+- You set `MONOLAYER_BASE_URL` or plan to pass `--base-url`.
+- You set `MONOLAYER_AUTH_TOKEN` (must be a deployment token starting with `deploy_token_`) or plan to pass `--auth-token`.
+
+### Numbered Steps
+
+1. **Run** the command with explicit flags to get the tracking rules.
+
+```bash
+npx mnlyr projects:branch-tracking:get \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1
+```
+
+2. **Run** the command using environment variables when you prefer session defaults.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="deploy_token_xxx" \
+npx mnlyr projects:branch-tracking:get --project-id proj-1
+```
+
+### Expected Result
+
+The command returns the branch tracking configuration as a JSON object.
+
+## `projects:branch-tracking:get` Reference
+
+This section lists command syntax, options, and sample output.
+
+### Command syntax
+
+```bash
+npx mnlyr projects:branch-tracking:get [options]
+```
+
+### Options
+
+| Option                 | Description                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| `--base-url <url>`     | Sets the control plane base URL. You can also set `MONOLAYER_BASE_URL`.         |
+| `--auth-token <token>` | Sets the project deployment auth token. You can also set `MONOLAYER_AUTH_TOKEN`. |
+| `--project-id <id>`    | The identifier of your project. This option is required.                        |
+| `-h`, `--help`         | Shows command help.                                                             |
+
+### Output
+
+```json
+{
+  "production": true,
+  "preview": true,
+  "branches": [
+    {
+      "feature-test": false
+    }
+  ]
+}
+```
+
+## Troubleshooting
+
+This section lists common command errors.
+
+- **Missing base URL:** `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- **Missing authentication token:** `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+- **Invalid token format:** `auth-token must start with "deploy_token_"`

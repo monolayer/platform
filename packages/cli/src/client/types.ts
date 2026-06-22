@@ -119,6 +119,46 @@ export type EnvironmentVariablesApi = {
   ) => Promise<{ readonly success: true }>;
 };
 
+export type BranchTrackingDto = {
+  readonly production: boolean;
+  readonly preview: boolean;
+  readonly branches: ReadonlyArray<Record<string, boolean>>;
+};
+
+export type GetBranchTrackingInput = {
+  readonly projectId: string;
+};
+
+export type UpsertBranchTrackingInput = {
+  readonly projectId: string;
+  readonly branch: string;
+  readonly enabled: boolean;
+};
+
+export type DeleteBranchTrackingInput = {
+  readonly projectId: string;
+  readonly branch: string;
+};
+
+export type BranchTrackingApi = {
+  get: (
+    input: GetBranchTrackingInput,
+  ) => Effect.Effect<BranchTrackingDto, ClientError>;
+  getPromise: (input: GetBranchTrackingInput) => Promise<BranchTrackingDto>;
+  upsert: (
+    input: UpsertBranchTrackingInput,
+  ) => Effect.Effect<{ readonly success: true }, ClientError>;
+  upsertPromise: (
+    input: UpsertBranchTrackingInput,
+  ) => Promise<{ readonly success: true }>;
+  delete: (
+    input: DeleteBranchTrackingInput,
+  ) => Effect.Effect<{ readonly success: true }, ClientError>;
+  deletePromise: (
+    input: DeleteBranchTrackingInput,
+  ) => Promise<{ readonly success: true }>;
+};
+
 export type MonolayerClient = {
   readonly config: {
     readonly baseUrl: string;
@@ -126,6 +166,7 @@ export type MonolayerClient = {
   readonly projects: ProjectsApi;
   readonly deployments: DeploymentsApi;
   readonly environmentVariables: EnvironmentVariablesApi;
+  readonly branchTracking: BranchTrackingApi;
 };
 
 export type CreateClientOptions = {

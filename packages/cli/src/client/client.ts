@@ -1,4 +1,5 @@
 import { normalizeBaseUrl, resolveAuthToken } from "./config.js";
+import { createBranchTrackingApi } from "./branch-tracking.js";
 import { createDeploymentsApi } from "./deployments.js";
 import { createEnvironmentVariablesApi } from "./environment-variables.js";
 import { createHttpTransport } from "./http-transport.js";
@@ -22,5 +23,6 @@ export const createClient = (options: CreateClientOptions): MonolayerClient => {
     projects: createProjectsApi(runtime),
     deployments: createDeploymentsApi(runtime),
     environmentVariables: createEnvironmentVariablesApi(runtime),
+    branchTracking: createBranchTrackingApi(runtime),
   };
 };

@@ -64,6 +64,26 @@ const initialEnvironmentVariables: ReadonlyArray<EnvironmentVariableDto> = [
   },
 ];
 
+const initialBranchTracking: Record<
+  string,
+  {
+    production: boolean;
+    preview: boolean;
+    branches: Array<{ name: string; enabled: boolean }>;
+  }
+> = {
+  "proj-1": {
+    production: true,
+    preview: true,
+    branches: [{ name: "feature-a", enabled: false }],
+  },
+  "proj-2": {
+    production: true,
+    preview: false,
+    branches: [],
+  },
+};
+
 const toNumber = (
   value: string | number | boolean | undefined,
   defaultValue: number,
@@ -117,6 +137,14 @@ export const createMockTransport = (): Transport => {
   const projects = [...initialProjects];
   const deployments = [...initialDeployments];
   const environmentVariables = [...initialEnvironmentVariables];
+  const branchTracking = JSON.parse(JSON.stringify(initialBranchTracking)) as Record<
+    string,
+    {
+      production: boolean;
+      preview: boolean;
+      branches: Array<{ name: string; enabled: boolean }>;
+    }
+  >;
   let deploymentSequence = deployments.length;
 
   return (request) =>
@@ -308,6 +336,110 @@ export const createMockTransport = (): Transport => {
           }
 
           environmentVariables.splice(index, 1);
+          return {
+            status: 200,
+            body: { success: true },
+          };
+        }
+
+        const getBtMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/branch-tracking$/,
+        );
+        if (request.method === "GET" && getBtMatch) {
+          const projectId = decodeURIComponent(getBtMatch[1] ?? "");
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+          const config = branchTracking[projectId] ?? {
+            production: true,
+            preview: true,
+            branches: [],
+          };
+          return {
+            status: 200,
+            body: {
+              production: config.production,
+              preview: config.preview,
+              branches: config.branches.map((b) => ({
+                [b.name]: b.enabled,
+              })),
+            },
+          };
+        }
+
+        const putBtMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/branch-tracking$/,
+        );
+        if (request.method === "PUT" && putBtMatch) {
+          const projectId = decodeURIComponent(putBtMatch[1] ?? "");
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+          const body =
+            typeof request.body === "object" && request.body !== null
+              ? request.body
+              : undefined;
+          const branch = body && "branch" in body && typeof body.branch === "string" ? body.branch : undefined;
+          const enabled = body && "enabled" in body && typeof body.enabled === "boolean" ? body.enabled : undefined;
+
+          if (!branch || enabled === undefined) {
+            return {
+              status: 400,
+              body: { message: "branch and enabled are required" },
+            };
+          }
+
+          if (!branchTracking[projectId]) {
+            branchTracking[projectId] = {
+              production: true,
+              preview: true,
+              branches: [],
+            };
+          }
+
+          const config = branchTracking[projectId]!;
+          if (branch === "production") {
+            config.production = enabled;
+          } else if (branch === "preview") {
+            config.preview = enabled;
+          } else {
+            const index = config.branches.findIndex((b) => b.name === branch);
+            if (index >= 0) {
+              const currentBranches = [...config.branches];
+              currentBranches[index] = { name: branch, enabled };
+              config.branches = currentBranches;
+            } else {
+              config.branches = [...config.branches, { name: branch, enabled }];
+            }
+          }
+
+          return {
+            status: 200,
+            body: { success: true },
+          };
+        }
+
+        const deleteBtMatch = request.path.match(
+          /^\/sdk\/projects\/([^/]+)\/branch-tracking\/([^/]+)$/,
+        );
+        if (request.method === "DELETE" && deleteBtMatch) {
+          const projectId = decodeURIComponent(deleteBtMatch[1] ?? "");
+          const branch = decodeURIComponent(deleteBtMatch[2] ?? "");
+
+          const projectExists = projects.some((p) => p.projectId === projectId);
+          if (!projectExists) {
+            return notFound(`Project not found: ${projectId}`);
+          }
+
+          if (branch !== "production" && branch !== "preview") {
+            const config = branchTracking[projectId];
+            if (config) {
+              config.branches = config.branches.filter((b) => b.name !== branch);
+            }
+          }
+
           return {
             status: 200,
             body: { success: true },

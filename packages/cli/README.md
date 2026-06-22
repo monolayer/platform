@@ -7,6 +7,9 @@ Documentation: https://monolayer.dev/docs/cli/overview
 Current command surface:
 
 - `projects:list`
+- `projects:branch-tracking:get`
+- `projects:branch-tracking:set`
+- `projects:branch-tracking:delete`
 - `deployments:deploy`
 - `env:list`
 - `env:set`
@@ -85,6 +88,69 @@ Example:
 
 ```bash
 mnlyr projects:list --base-url https://control-plane-domain --auth-token token_xxx --limit 10
+```
+
+### `projects:branch-tracking:get`
+
+Gets branch tracking rules for a project.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr projects:branch-tracking:get --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1
+```
+
+### `projects:branch-tracking:set`
+
+Creates or updates a branch tracking rule for the project.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+- `--branch <branch>` (required; e.g. production, preview, or a custom branch)
+- `--enabled / --no-enabled` (required)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr projects:branch-tracking:set --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1 --branch production --enabled
+```
+
+### `projects:branch-tracking:delete`
+
+Deletes a custom branch tracking rule from the project. Deleting production or preview rules has no effect.
+
+Flags:
+
+- `--base-url <url>`
+- `--auth-token <deploy_token_...>`
+- `--project-id <id>` (required)
+- `--branch <branch>` (required; key of the custom rule to delete)
+
+Output:
+
+- JSON to stdout
+
+Example:
+
+```bash
+mnlyr projects:branch-tracking:delete --base-url https://control-plane-domain --auth-token deploy_token_xxx --project-id proj-1 --branch feature-test
 ```
 
 ### `deployments:deploy`
@@ -186,6 +252,9 @@ mnlyr env:delete --base-url https://control-plane-domain --auth-token deploy_tok
 ```bash
 mnlyr --help
 mnlyr projects:list --help
+mnlyr projects:branch-tracking:get --help
+mnlyr projects:branch-tracking:set --help
+mnlyr projects:branch-tracking:delete --help
 mnlyr deployments:deploy --help
 mnlyr env:list --help
 mnlyr env:set --help

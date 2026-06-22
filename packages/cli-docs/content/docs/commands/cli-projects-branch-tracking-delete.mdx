@@ -1,0 +1,85 @@
+---
+title: projects:branch-tracking:delete
+---
+
+Use `projects:branch-tracking:delete` to delete a custom branch tracking rule from your project.
+
+## About `projects:branch-tracking:delete`
+
+This section describes how branch tracking rule deletions are performed.
+
+When you run this command, you specify the name of the custom branch rule you wish to delete. The system-reserved scopes (`production` and `preview`) cannot be deleted (deleting them is treated as a no-op). The command outputs `{ "success": true }` upon successful deletion.
+
+## Using `projects:branch-tracking:delete`
+
+This section provides a repeatable workflow for deleting a branch tracking rule.
+
+### Concept and Goal
+
+To remove custom branch tracking overrides and return to the default project behavior, use this procedure to delete custom branch tracking rules.
+
+### What you need
+
+- You installed the CLI package.
+- You set `MONOLAYER_BASE_URL` or plan to pass `--base-url`.
+- You set `MONOLAYER_AUTH_TOKEN` (must be a deployment token starting with `deploy_token_`) or plan to pass `--auth-token`.
+
+### Numbered Steps
+
+1. **Run** the command with explicit flags to delete a branch tracking rule.
+
+```bash
+npx mnlyr projects:branch-tracking:delete \
+  --base-url https://control-plane-domain \
+  --auth-token deploy_token_xxx \
+  --project-id proj-1 \
+  --branch feature-test
+```
+
+2. **Run** the command using environment variables when you prefer session defaults.
+
+```bash
+MONOLAYER_BASE_URL="https://control-plane-domain" \
+MONOLAYER_AUTH_TOKEN="deploy_token_xxx" \
+npx mnlyr projects:branch-tracking:delete --project-id proj-1 --branch feature-test
+```
+
+### Expected Result
+
+The command returns `{ "success": true }` on successful completion.
+
+## `projects:branch-tracking:delete` Reference
+
+This section lists command syntax, options, and sample output.
+
+### Command syntax
+
+```bash
+npx mnlyr projects:branch-tracking:delete [options]
+```
+
+### Options
+
+| Option                 | Description                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| `--base-url <url>`     | Sets the control plane base URL. You can also set `MONOLAYER_BASE_URL`.         |
+| `--auth-token <token>` | Sets the project deployment auth token. You can also set `MONOLAYER_AUTH_TOKEN`. |
+| `--project-id <id>`    | The identifier of your project. This option is required.                        |
+| `--branch <branch>`    | The branch name of the custom rule to delete. This is required.                 |
+| `-h`, `--help`         | Shows command help.                                                             |
+
+### Output
+
+```json
+{
+  "success": true
+}
+```
+
+## Troubleshooting
+
+This section lists common command errors.
+
+- **Missing base URL:** `Missing base URL. Pass --base-url explicitly or set MONOLAYER_BASE_URL.`
+- **Missing authentication token:** `Missing auth token. Pass --auth-token explicitly or set MONOLAYER_AUTH_TOKEN.`
+- **Invalid token format:** `auth-token must start with "deploy_token_"`
