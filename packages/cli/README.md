@@ -2,7 +2,7 @@
 
 Command-line interface for Monolayer control plane operations.
 
-Documentation: https://monolayer.dev/docs/cli/overview
+Documentation: https://app.monolayer.dev/docs/cli/overview
 
 Current command surface:
 
